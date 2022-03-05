@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "31413500791",
+    "project_id": "seguridad-notificaciones",
+    "storage_bucket": "seguridad-notificaciones.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31413500791:android:9f22f23b38a2d178fd7f72",
+        "android_client_info": {
+          "package_name": "com.wmwm.notificaciones"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "31413500791-2kq4r3mfi61tdvv69a0enc3acjq211j0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wmwm.notificaciones",
+            "certificate_hash": "5aa781f1bf7a8bd57d5e38fc02c416de0a4eba59"
+          }
+        },
+        {
+          "client_id": "31413500791-i339dmd47dh23d86c56en2dg5usnpgfm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQozqqytMcEbUCJoRJQC6NHrLoa2TbjC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "31413500791-i339dmd47dh23d86c56en2dg5usnpgfm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
