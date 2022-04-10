@@ -3,12 +3,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/user.dart';
+import 'package:flutter_application_1/services/push_notifications_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:http/http.dart' as http;
 
 class AuthService extends ChangeNotifier {
-  final String _baseUrl = '10.0.2.2:8000';
+  final String _baseUrl = 'acceso.seguridadunica.com';
 
   final storage = new FlutterSecureStorage();
 
@@ -56,18 +57,20 @@ class AuthService extends ChangeNotifier {
       'Accept': 'application/json'
     };
     try {
-      final url = Uri.http(_baseUrl, '/api/login');
+      final url = Uri.https(_baseUrl, '/api/login');
 
       final response = await http
           .post(url, headers: requestHeaders, body: json.encode(auhtData))
           .timeout(const Duration(seconds: 10));
       var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
-      print(jsonResponse['user']);
       if (jsonResponse.containsKey('token')) {
         // final Map<String, dynamic> decodeResp = json.decode(response.body);
         await storage.write(key: 'token', value: jsonResponse['token']);
         await storage.write(
             key: 'user', value: json.encode(jsonResponse['user']));
+
+        await diviceToken(true);
+
         return null;
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
@@ -90,7 +93,7 @@ class AuthService extends ChangeNotifier {
       'Accept': 'application/json'
     };
     try {
-      final url = Uri.http(_baseUrl, '/api/token');
+      final url = Uri.https(_baseUrl, '/api/token');
 
       final response = await http
           .post(url, headers: requestHeaders, body: json.encode(auhtData))
@@ -112,7 +115,9 @@ class AuthService extends ChangeNotifier {
   }
 
   Future logout() async {
+    await diviceToken(false);
     await storage.delete(key: 'token');
+    await storage.delete(key: 'user');
   }
 
   Future<String> readToken() async {
@@ -122,7 +127,45 @@ class AuthService extends ChangeNotifier {
   Future<User> readUser() async {
     var user = await storage.read(key: 'user') ?? '';
     var userDto = User.fromJson(jsonDecode(user) as Map<String, dynamic>);
-    print(userDto.email);
     return userDto;
+  }
+
+  diviceToken(bool up) async {
+    var user = await storage.read(key: 'user') ?? '';
+    String token = await storage.read(key: 'token') ?? '';
+
+    if (user != '' && token != '') {
+      var userDto = User.fromJson(jsonDecode(user) as Map<String, dynamic>);
+      var deviceToken = PushNotificationService.token;
+
+      final Map<String, dynamic> auhtData = {
+        'token_device': up ? deviceToken : 'x'
+      };
+
+      Map<String, String> requestHeaders = {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}'
+      };
+      try {
+        final url = Uri.https(_baseUrl, '/api/device');
+
+        final response = await http
+            .post(url, headers: requestHeaders, body: json.encode(auhtData))
+            .timeout(const Duration(seconds: 10));
+
+        // var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
+
+        if (response.statusCode == 201) {
+          //  return jsonResponse['message'];
+        } else {
+          print('Request failed with status: ${response.statusCode}.');
+          // return jsonResponse['error'];
+          ;
+        }
+      } on TimeoutException catch (e) {
+        // return 'Error de conexcion';
+      }
+    }
   }
 }

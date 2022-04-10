@@ -1,0 +1,62 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/aut_models.dart';
+import 'package:flutter_application_1/widgets/widgets.dart';
+
+class DetalleAutorizacionScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final Datum data = ModalRoute.of(context)!.settings.arguments as Datum;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+            "Para: ${data.autNombre == null ? 'No registrado' : data.autNombre}"),
+      ),
+      body: Stack(
+        children: [
+          Background(color2: Color(0xff6989F5), color1: Colors.white),
+          Container(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+              child: Column(
+                children: [
+                  FittedBox(
+                    child: Text(
+                      'De: ${data.email}\n'
+                      'Para: ${data.autNombre == null ? 'No registrado' : data.autNombre}\n'
+                      'Documento: ${data.autDocumento == null ? 'No registrado' : data.autDocumento}\n'
+                      'Desde: ${data.autDesde?.day}-${data.autDesde?.month}-${data.autDesde?.year}\n'
+                      'Hasta: ${data.autHasta?.day}-${data.autHasta?.month}-${data.autHasta?.year}\n',
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(),
+                    ),
+                  ),
+                  data.autTipo == 2
+                      ? FittedBox(
+                          child: Text(
+                            'Horarios:\n'
+                            'Domingos: ${data.autDomingo}\n'
+                            'Lunes: ${data.autLunes}\n'
+                            'Martes: ${data.autMartes}\n'
+                            'Miercoles: ${data.autMiercoles}\n'
+                            'Jueves: ${data.autJueves}\n'
+                            'Viernes: ${data.autViernes}\n'
+                            'Sabados: ${data.autSabado}\n',
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(),
+                          ),
+                        )
+                      : Text(''),
+                  FittedBox(
+                    child: Text(
+                      'Comentarios: ${data.autComentario == null ? 'Sin comentarios' : data.autComentario}\n'
+                      'Codigo: ${data.autCode}\n',
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(),
+                    ),
+                  ),
+                ],
+              ))
+        ],
+      ),
+    );
+  }
+}

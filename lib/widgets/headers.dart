@@ -43,22 +43,28 @@ class IconHeader extends StatelessWidget {
             height: 80,
             width: double.infinity,
           ),
-          Text(
-            this.country,
-            style: TextStyle(
-                fontSize: 40, color: colorBlanco, fontWeight: FontWeight.bold),
+          FittedBox(
+            child: Text(
+              this.country.toUpperCase(),
+              style: TextStyle(color: colorBlanco, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
           ),
-          Text(
-            '${this.name.toUpperCase()} ${this.apellido.toUpperCase()}',
-            style: TextStyle(fontSize: 20, color: colorBlanco),
+          FittedBox(
+            child: Text(
+                '${this.name.toUpperCase()} ${this.apellido.toUpperCase()}',
+                style: TextStyle(color: colorBlanco),
+                textAlign: TextAlign.center),
           ),
-          Text(
-            '${this.rol} - Lote: ${this.lote}',
-            style: TextStyle(fontSize: 20, color: colorBlanco),
+          FittedBox(
+            child: Text('${this.rol} - Lote: ${this.lote}',
+                style: TextStyle(color: colorBlanco),
+                textAlign: TextAlign.center),
           ),
-          Text(
-            '${this.email}',
-            style: TextStyle(fontSize: 20, color: colorBlanco),
+          FittedBox(
+            child: Text('${this.email}',
+                style: TextStyle(color: colorBlanco),
+                textAlign: TextAlign.center),
           ),
           SizedBox(
             height: 20,

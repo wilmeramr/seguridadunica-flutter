@@ -19,7 +19,8 @@ class AppState extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthService()),
-        ChangeNotifierProvider(create: (_) => AutService())
+        ChangeNotifierProvider(create: (_) => AutService()),
+        ChangeNotifierProvider(create: (_) => ServicioService()),
       ],
       child: MyApp(),
     );
@@ -56,7 +57,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Seguridad Unica',
-      initialRoute: "slider",
+      initialRoute: "checking",
       navigatorKey: NotificationsService.navigatorKey,
       scaffoldMessengerKey: NotificationsService.messengerKey,
       routes: {
@@ -67,9 +68,14 @@ class _MyAppState extends State<MyApp> {
         'checking': (_) => CheckAuthScreen(),
         'dash': (_) => DashBoardScreen(),
         'invitar': (_) => InvitarScreen(),
-        'invitarInicio': (_) => InvitarInicioScreen(),
+        'invitarInicio': (_) => SliderListScreen(),
+        'servicioInicio': (_) => ServicioInicioScreen(),
+        'invitarServicioInicio': (_) => InvitarServicioScreen(),
+        'notificacionInicio': (_) => NotificacionInicioScreen(),
+        'servicio': (_) => InvitarScreen(),
         'dash2': (_) => DashScreen(),
-        'slider': (_) => SliderListScreen()
+        'slider': (_) => SliderListScreen(),
+        'detalleautorizacion': (_) => DetalleAutorizacionScreen()
       },
       theme: ThemeData.light().copyWith(
           scaffoldBackgroundColor: Colors.grey[300],

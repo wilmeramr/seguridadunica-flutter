@@ -100,7 +100,7 @@ class Datum {
     this.autActivo,
     this.createdAt,
     this.updatedAt,
-    this.email,
+    required this.email,
   });
 
   int? id;
@@ -126,7 +126,7 @@ class Datum {
   int? autActivo;
   DateTime? createdAt;
   DateTime? updatedAt;
-  String? email;
+  String email;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
@@ -152,7 +152,7 @@ class Datum {
         autActivo: json["aut_activo"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
-        email: json["email"],
+        email: json["us_email"],
       );
 
   Map<String, dynamic> toJson() => {

@@ -8,7 +8,7 @@ import '../models/aut_models.dart';
 import '../services/services.dart';
 import '../widgets/widgets.dart';
 
-class SliderListScreen extends StatelessWidget {
+class ServicioInicioScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,9 +16,10 @@ class SliderListScreen extends StatelessWidget {
       Background(color2: Color(0xff6989F5), color1: Colors.white),
       _MainScroll(
         onNextPage: () async {
-          final autorizacionesService =
-              Provider.of<AutService>(context, listen: false);
-          await autorizacionesService.getTopAutScroll();
+          final servicioService =
+              Provider.of<ServicioService>(context, listen: false);
+          await servicioService.getTopAutScroll();
+          await servicioService.getServicioTipos();
         },
       ),
       Positioned(bottom: -10, right: 0, child: _BotonNewList())
@@ -38,10 +39,10 @@ class _BotonNewList extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(topLeft: Radius.circular(50))),
         onPressed: () {
-          Navigator.pushNamed(context, 'invitar');
+          Navigator.pushNamed(context, 'invitarServicioInicio');
         },
         child: Text(
-          'CREAR UNA INVITACION',
+          'CREAR UN SERVICIO',
           style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -88,6 +89,7 @@ class _MainScrollState extends State<_MainScroll> {
   void initState() {
     super.initState();
     startTimer();
+
     scrollController.addListener(() {
       if (scrollController.position.pixels >=
           scrollController.position.maxScrollExtent - 500) {
@@ -99,7 +101,6 @@ class _MainScrollState extends State<_MainScroll> {
 
   @override
   void dispose() {
-    _timer?.cancel();
     super.dispose();
   }
 
@@ -109,14 +110,14 @@ class _MainScrollState extends State<_MainScroll> {
 
   @override
   Widget build(BuildContext context) {
-    final autorizacionesService = Provider.of<AutService>(context);
-    final data = autorizacionesService.data;
-    items2 = data.map((e) => _ListItem(autorizaciones: e)).toList();
+    final servicioService = Provider.of<ServicioService>(context);
+    final data = servicioService.data;
+    items2 = data.map((e) => _ListItem(servicios: e)).toList();
 
     return RefreshIndicator(
       edgeOffset: 130,
       onRefresh: () async {
-        await autorizacionesService.getTopAut();
+        await servicioService.getTopAut();
       },
       child: CustomScrollView(
         controller: scrollController,
@@ -198,11 +199,11 @@ class _Titulo extends StatelessWidget {
             color: Colors.white,
             //  margin: EdgeInsets.only(top: 200),
             child: Hero(
-              tag: 'Autorizaciones',
+              tag: 'Servicios',
               child: BotonGordo(
-                iconL: FontAwesomeIcons.idCardAlt,
+                iconL: FontAwesomeIcons.taxi,
                 iconR: FontAwesomeIcons.chevronLeft,
-                texto: 'Autorizaciones',
+                texto: 'Servicios',
                 color1: Color(0xff6989F5),
                 color2: Color(0xff906EF5),
                 onPress: () => Navigator.of(context).pop(),
@@ -216,18 +217,22 @@ class _Titulo extends StatelessWidget {
 }
 
 class _ListItem extends StatelessWidget {
-  final Datum autorizaciones;
+  final Datum servicios;
 
-  const _ListItem({required this.autorizaciones});
+  const _ListItem({required this.servicios});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
+      padding: EdgeInsets.all(30),
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(30)),
       child: GestureDetector(
         onTap: () {
           Navigator.pushNamed(context, 'detalleautorizacion',
-              arguments: autorizaciones);
+              arguments: servicios);
         },
         child: Stack(children: [
           Row(
@@ -237,7 +242,7 @@ class _ListItem extends StatelessWidget {
                 children: [
                   FittedBox(
                     child: Text(
-                        "Para: ${this.autorizaciones.autNombre == null ? "No registrado" : this.autorizaciones.autNombre}",
+                        "Para: ${this.servicios.autNombre == null ? "No registrado" : this.servicios.autNombre}",
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -245,7 +250,7 @@ class _ListItem extends StatelessWidget {
                   ),
                   FittedBox(
                     child: Text(
-                        "De: ${this.autorizaciones.email == null ? "No registrado" : this.autorizaciones.email}",
+                        "De: ${this.servicios.email == null ? "No registrado" : this.servicios.email}",
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -253,9 +258,9 @@ class _ListItem extends StatelessWidget {
                   ),
                   FittedBox(
                     child: Text(
-                        this.autorizaciones.autDesde == null
+                        this.servicios.autDesde == null
                             ? "No registrado"
-                            : "Desde:  ${this.autorizaciones.autDesde?.day.toString()}-${this.autorizaciones.autDesde?.month.toString()}-${this.autorizaciones.autDesde?.year.toString()}",
+                            : "Desde:  ${this.servicios.autDesde?.day.toString()}-${this.servicios.autDesde?.month.toString()}-${this.servicios.autDesde?.year.toString()}",
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -263,9 +268,9 @@ class _ListItem extends StatelessWidget {
                   ),
                   FittedBox(
                     child: Text(
-                        this.autorizaciones.autDesde == null
+                        this.servicios.autDesde == null
                             ? "No registrado"
-                            : "Hasta:  ${this.autorizaciones.autHasta?.day.toString()}-${this.autorizaciones.autHasta?.month.toString()}-${this.autorizaciones.autHasta?.year.toString()}",
+                            : "Hasta:  ${this.servicios.autHasta?.day.toString()}-${this.servicios.autHasta?.month.toString()}-${this.servicios.autHasta?.year.toString()}",
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -285,10 +290,6 @@ class _ListItem extends StatelessWidget {
           ),
         ]),
       ),
-      padding: EdgeInsets.all(30),
-      margin: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(30)),
     );
   }
 }

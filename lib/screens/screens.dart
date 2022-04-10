@@ -11,3 +11,11 @@ export 'package:flutter_application_1/screens/invitar_screen.dart';
 export 'package:flutter_application_1/screens/dash_screen.dart';
 export 'package:flutter_application_1/screens/invitar_inicio_screen.dart';
 export 'package:flutter_application_1/screens/slider_list_screen.dart';
+
+export 'package:flutter_application_1/screens/detallesauntorizacion_screen.dart';
+
+export 'package:flutter_application_1/screens/servicio_inicio_screen.dart';
+
+export 'package:flutter_application_1/screens/invitar_servicio_screen.dart';
+
+export 'package:flutter_application_1/screens/notificacion_inicio_screen.dart';

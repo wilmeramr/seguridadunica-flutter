@@ -1,22 +1,22 @@
-import 'dart:async';
 import 'dart:convert';
+import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/notificacion_models.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import '../models/aut_models.dart';
-import '../models/invitacion_models.dart';
+
 import '../models/user.dart';
 
-class AutService with ChangeNotifier {
+class NotificacionController extends GetxController {
   final String _baseUrl = 'acceso.seguridadunica.com';
   final storage = new FlutterSecureStorage();
 
-  List<Datum> data = [];
-  int _page = 1;
+  var data = <Notificacion>[].obs;
+  var _page = 1.obs;
 
-  AutService() {
-    this.getTopAut();
+  NotificacionController() {
+    getTopNoti();
   }
 
   _getJsonData(String endpoint, [int page = 1]) async {
@@ -35,17 +35,16 @@ class AutService with ChangeNotifier {
     return response.body;
   }
 
-  getTopAut() async {
+  getTopNoti() async {
     try {
-      var jsonResponse = jsonDecode(await _getJsonData('/api/autorizacion/1'))
-          as Map<String, dynamic>;
+      var body = await _getJsonData('/api/notificacion');
+      print(body);
+      var jsonResponse = jsonDecode(body) as Map<String, dynamic>;
       if (jsonResponse.containsKey('data')) {
         // final Map<String, dynamic> decodeResp = json.decode(response.body);
-        var aut = AutorizacionResponse.fromJson(jsonResponse);
-        data = aut.data;
-
-        notifyListeners();
-
+        var aut = NotificacionesResponse.fromMap(jsonResponse).obs;
+        data = aut.value.data.obs;
+        print(aut);
         return null;
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
@@ -61,14 +60,13 @@ class AutService with ChangeNotifier {
     _page++;
     try {
       var jsonResponse =
-          jsonDecode(await _getJsonData('/api/autorizacion/1', _page))
+          jsonDecode(await _getJsonData('/api/notificacion', _page.value))
               as Map<String, dynamic>;
       if (jsonResponse.containsKey('data')) {
+        print(jsonResponse);
         // final Map<String, dynamic> decodeResp = json.decode(response.body);
-        var aut = AutorizacionResponse.fromJson(jsonResponse);
-        data = [...data, ...aut.data];
-        notifyListeners();
-
+        var aut = NotificacionesResponse.fromMap(jsonResponse).obs;
+        data.value = [...data, ...aut.value.data];
         return null;
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
@@ -107,13 +105,13 @@ class AutService with ChangeNotifier {
         var user = await storage.read(key: 'user') ?? '';
         var userDto = User.fromJson(jsonDecode(user) as Map<String, dynamic>);
         // final Map<String, dynamic> decodeResp = json.decode(response.body);
-        var aut = InvitacionResponse.fromJson(jsonResponse);
-        aut.link;
+        var aut = NotificacionesResponse.fromMap(jsonResponse);
+        //aut.link;
         // notifyListeners();
 
         return '${userDto.name} ${userDto.apellido} te a inviatdo a ${userDto.country}'
             'para el dia ${desde.day}/${desde.month}/${desde.year}.'
-            'completa tus datos en ${aut.link} para poder confirmar.';
+            'completa tus datos en  para poder confirmar.';
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
       } else {

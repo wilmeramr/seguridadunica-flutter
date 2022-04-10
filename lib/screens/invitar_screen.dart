@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/widgets/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
+
+import '../services/services.dart';
 
 class InvitarScreen extends StatefulWidget {
   @override
@@ -25,7 +29,7 @@ class _InvitarScreenState extends State<InvitarScreen> {
           Container(
             //  margin: EdgeInsets.only(top: 200),
             child: Hero(
-              tag: 'Boton',
+              tag: 'Autorizaciones',
               child: BotonGordo(
                 iconL: FontAwesomeIcons.idCardAlt,
                 iconR: FontAwesomeIcons.chevronLeft,
@@ -45,18 +49,41 @@ class _InvitarScreenState extends State<InvitarScreen> {
               data: Theme.of(context).copyWith(
                   colorScheme: ColorScheme.light(primary: Colors.green)),
               child: Stepper(
+                physics: ClampingScrollPhysics(),
                 steps: _getSteps(),
                 currentStep: currentStep,
-                onStepContinue: () {
+                onStepContinue: () async {
                   final isLastStep = currentStep == _getSteps().length - 1;
                   if (isLastStep) {
                     setState(() => isCompleted = true);
-                    print('Completed');
+                    final authService =
+                        Provider.of<AutService>(context, listen: false);
+
+                    final response = await authService.postRegistroInvitacion(
+                        1, dateRange!.start, dateRange!.end);
+
+                    if (response.contains('Error')) {
+                      NotificationsService.showSnackbar(response);
+                    } else {
+                      await Share.share(response);
+                    }
                   } else {
-                    setState(() => currentStep += 1);
+                    if (currentStep == 1 && dateRange == null) {
+                      NotificationsService.showSnackbar(
+                          'Debe seleccionar el rango de fecha.');
+                    } else {
+                      setState(() => currentStep += 1);
+                    }
                   }
                 },
-                onStepTapped: (step) => setState(() => currentStep = step),
+                onStepTapped: (step) {
+                  if (currentStep == 1 && dateRange == null) {
+                    NotificationsService.showSnackbar(
+                        'Debe seleccionar el rango de fecha.');
+                  } else {
+                    setState(() => currentStep = step);
+                  }
+                },
                 onStepCancel: currentStep == 0
                     ? null
                     : () => setState(() {
@@ -158,7 +185,7 @@ class _InvitarScreenState extends State<InvitarScreen> {
               ],
             ),
           )),
-      Step(
+/*       Step(
           state: currentStep > 2 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 2,
           title: Text('Forma de llegar'),
@@ -180,9 +207,9 @@ class _InvitarScreenState extends State<InvitarScreen> {
                   items: items.map(_buildMenuItem).toList(),
                   onChanged: (value) => setState(() => this.value = value),
                 )),
-          )),
+          )), */
       Step(
-          isActive: currentStep >= 3,
+          isActive: currentStep >= 2,
           title: Text('Comentarios'),
           content: Container(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),

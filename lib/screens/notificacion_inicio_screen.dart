@@ -1,14 +1,19 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controllers/notificacion_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../models/aut_models.dart';
+import '../models/notificacion_models.dart';
 import '../services/services.dart';
 import '../widgets/widgets.dart';
 
-class SliderListScreen extends StatelessWidget {
+class NotificacionInicioScreen extends StatelessWidget {
+  final notificacionCtrl = Get.put(NotificacionController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,9 +21,9 @@ class SliderListScreen extends StatelessWidget {
       Background(color2: Color(0xff6989F5), color1: Colors.white),
       _MainScroll(
         onNextPage: () async {
-          final autorizacionesService =
-              Provider.of<AutService>(context, listen: false);
-          await autorizacionesService.getTopAutScroll();
+          final notificacionCtrl = Get.find<NotificacionController>();
+
+          // await notificacionCtrl.getTopAutScroll();
         },
       ),
       Positioned(bottom: -10, right: 0, child: _BotonNewList())
@@ -38,10 +43,10 @@ class _BotonNewList extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(topLeft: Radius.circular(50))),
         onPressed: () {
-          Navigator.pushNamed(context, 'invitar');
+          Navigator.pushNamed(context, 'invitarServicioInicio');
         },
         child: Text(
-          'CREAR UNA INVITACION',
+          'CREAR UN SERVICIO',
           style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -88,6 +93,7 @@ class _MainScrollState extends State<_MainScroll> {
   void initState() {
     super.initState();
     startTimer();
+
     scrollController.addListener(() {
       if (scrollController.position.pixels >=
           scrollController.position.maxScrollExtent - 500) {
@@ -99,7 +105,6 @@ class _MainScrollState extends State<_MainScroll> {
 
   @override
   void dispose() {
-    _timer?.cancel();
     super.dispose();
   }
 
@@ -109,14 +114,12 @@ class _MainScrollState extends State<_MainScroll> {
 
   @override
   Widget build(BuildContext context) {
-    final autorizacionesService = Provider.of<AutService>(context);
-    final data = autorizacionesService.data;
-    items2 = data.map((e) => _ListItem(autorizaciones: e)).toList();
+    final notificacionCtrl = Get.find<NotificacionController>();
 
     return RefreshIndicator(
       edgeOffset: 130,
       onRefresh: () async {
-        await autorizacionesService.getTopAut();
+        await notificacionCtrl.getTopNoti();
       },
       child: CustomScrollView(
         controller: scrollController,
@@ -131,7 +134,7 @@ class _MainScrollState extends State<_MainScroll> {
                       alignment: Alignment.centerLeft,
                       color: Colors.white,
                       child: _Titulo()))),
-          items2.isEmpty && _start > 0
+          notificacionCtrl.data.isEmpty && _start > 0
               ? SliverList(
                   delegate: SliverChildListDelegate([
                   LinearProgressIndicator(
@@ -142,13 +145,15 @@ class _MainScrollState extends State<_MainScroll> {
                     height: 10,
                   )
                 ]))
-              : SliverList(
-                  delegate: SliverChildListDelegate([
-                  ...items2,
-                  SizedBox(
-                    height: 100,
-                  )
-                ]))
+              : Obx(() => SliverList(
+                      delegate: SliverChildListDelegate([
+                    ...notificacionCtrl.data
+                        .map((e) => _ListItem(noti: e))
+                        .toList(),
+                    SizedBox(
+                      height: 100,
+                    )
+                  ])))
         ],
       ),
     );
@@ -198,11 +203,11 @@ class _Titulo extends StatelessWidget {
             color: Colors.white,
             //  margin: EdgeInsets.only(top: 200),
             child: Hero(
-              tag: 'Autorizaciones',
+              tag: 'Servicios',
               child: BotonGordo(
-                iconL: FontAwesomeIcons.idCardAlt,
+                iconL: FontAwesomeIcons.taxi,
                 iconR: FontAwesomeIcons.chevronLeft,
-                texto: 'Autorizaciones',
+                texto: 'Servicios',
                 color1: Color(0xff6989F5),
                 color2: Color(0xff906EF5),
                 onPress: () => Navigator.of(context).pop(),
@@ -216,18 +221,21 @@ class _Titulo extends StatelessWidget {
 }
 
 class _ListItem extends StatelessWidget {
-  final Datum autorizaciones;
+  final Notificacion noti;
 
-  const _ListItem({required this.autorizaciones});
+  const _ListItem({required this.noti});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
+      padding: EdgeInsets.all(30),
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(30)),
       child: GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, 'detalleautorizacion',
-              arguments: autorizaciones);
+          Navigator.pushNamed(context, 'detalleautorizacion', arguments: noti);
         },
         child: Stack(children: [
           Row(
@@ -237,40 +245,12 @@ class _ListItem extends StatelessWidget {
                 children: [
                   FittedBox(
                     child: Text(
-                        "Para: ${this.autorizaciones.autNombre == null ? "No registrado" : this.autorizaciones.autNombre}",
+                        "Para: ${this.noti.notiBody == null ? "No registrado" : this.noti.notiBody}",
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         )),
-                  ),
-                  FittedBox(
-                    child: Text(
-                        "De: ${this.autorizaciones.email == null ? "No registrado" : this.autorizaciones.email}",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ),
-                  FittedBox(
-                    child: Text(
-                        this.autorizaciones.autDesde == null
-                            ? "No registrado"
-                            : "Desde:  ${this.autorizaciones.autDesde?.day.toString()}-${this.autorizaciones.autDesde?.month.toString()}-${this.autorizaciones.autDesde?.year.toString()}",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ),
-                  FittedBox(
-                    child: Text(
-                        this.autorizaciones.autDesde == null
-                            ? "No registrado"
-                            : "Hasta:  ${this.autorizaciones.autHasta?.day.toString()}-${this.autorizaciones.autHasta?.month.toString()}-${this.autorizaciones.autHasta?.year.toString()}",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ),
+                  )
                 ],
               ),
               SizedBox(
@@ -285,10 +265,6 @@ class _ListItem extends StatelessWidget {
           ),
         ]),
       ),
-      padding: EdgeInsets.all(30),
-      margin: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(30)),
     );
   }
 }
