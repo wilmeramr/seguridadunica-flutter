@@ -4,6 +4,9 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:get/get.dart';
+
+import '../controllers/controllers.dart';
 
 class PushNotificationService {
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -22,6 +25,7 @@ class PushNotificationService {
 
   static Future _onMessageHandler(RemoteMessage message) async {
     // print('_onMessageOpenApp handler ${message.messageId}');
+
     _messageStream.add(message.data['producto'] ?? 'no data');
   }
 

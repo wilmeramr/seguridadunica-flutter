@@ -198,7 +198,7 @@ class _Titulo extends StatelessWidget {
             color: Colors.white,
             //  margin: EdgeInsets.only(top: 200),
             child: Hero(
-              tag: 'Autorizaciones',
+              tag: Text('Autorizaciones'),
               child: BotonGordo(
                 iconL: FontAwesomeIcons.idCardAlt,
                 iconR: FontAwesomeIcons.chevronLeft,

@@ -101,6 +101,7 @@ class _MainScrollState extends State<_MainScroll> {
 
   @override
   void dispose() {
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -199,13 +200,13 @@ class _Titulo extends StatelessWidget {
             color: Colors.white,
             //  margin: EdgeInsets.only(top: 200),
             child: Hero(
-              tag: 'Servicios',
+              tag: Text('Servicios'),
               child: BotonGordo(
                 iconL: FontAwesomeIcons.taxi,
                 iconR: FontAwesomeIcons.chevronLeft,
                 texto: 'Servicios',
-                color1: Color(0xff6989F5),
-                color2: Color(0xff906EF5),
+                color1: Color(0xff66A9F2),
+                color2: Color(0xff536CF6),
                 onPress: () => Navigator.of(context).pop(),
               ),
             ),

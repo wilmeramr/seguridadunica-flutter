@@ -1,9 +1,12 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/services/services.dart';
 import 'package:flutter_application_1/widgets/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../controllers/controllers.dart';
 import '../models/user.dart';
 import '../services/auth_service.dart';
 import '../widgets/headers.dart';
@@ -21,29 +24,68 @@ class ItemBoton {
 class DashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final notificacionCtrl = Get.find<NotificacionController>();
+
+    final authService = Provider.of<AuthService>(context, listen: false);
     final items = <ItemBoton>[
-      new ItemBoton(
-          FontAwesomeIcons.idCardAlt,
-          'Autorizaciones',
-          Color(0xff6989F5),
-          Color(0xff906EF5),
-          () => Navigator.pushNamed(context, 'invitarInicio')),
+      new ItemBoton(FontAwesomeIcons.idCardAlt, 'Autorizaciones',
+          Color(0xff6989F5), Color(0xff906EF5), () async {
+        var conx = await authService.internetConnectivity();
+        if (conx)
+          Navigator.pushNamed(context, 'invitarInicio');
+        else
+          NotificationsService.showMyDialogAndroid(
+              context,
+              'No se pudo conectar a intenet',
+              'Debe asegurarse que el dipositivo tengo conexion a internet');
+      }),
+      new ItemBoton(FontAwesomeIcons.calendar, 'Servicios', Color(0xff317183),
+          Color(0xff46997D), () async {
+        var conx = await authService.internetConnectivity();
+        if (conx)
+          Navigator.pushNamed(context, 'servicioInicio');
+        else
+          NotificationsService.showMyDialogAndroid(
+              context,
+              'No se pudo conectar a intenet',
+              'Debe asegurarse que el dipositivo tengo conexion a internet');
+      }),
       new ItemBoton(
           FontAwesomeIcons.taxi,
-          'Servicios',
-          Color(0xff66A9F2),
-          Color(0xff536CF6),
-          () => Navigator.pushNamed(context, 'servicioInicio')),
-      new ItemBoton(
-          FontAwesomeIcons.bell,
-          'Notificaciones',
-          Color(0xff6989F5),
-          Color(0xff906EF5),
-          () => Navigator.pushNamed(context, 'notificacionInicio')),
+          'Delivery,Entregas,otros',
+          Color.fromARGB(255, 105, 245, 203),
+          Color.fromARGB(255, 129, 95, 232), () async {
+        var conx = await authService.internetConnectivity();
+        if (conx)
+          Navigator.pushNamed(context, 'deliveryInicio');
+        else
+          NotificationsService.showMyDialogAndroid(
+              context,
+              'No se pudo conectar a intenet',
+              'Debe asegurarse que el dipositivo tengo conexion a internet');
+      }),
       new ItemBoton(FontAwesomeIcons.paw, 'Mascotas', Color(0xffF2D572),
-          Color(0xffE06AA3), () {}),
+          Color(0xffE06AA3), () async {
+        var conx = await authService.internetConnectivity();
+        if (conx)
+          Navigator.pushNamed(context, 'mascotaInicio');
+        else
+          NotificationsService.showMyDialogAndroid(
+              context,
+              'No se pudo conectar a intenet',
+              'Debe asegurarse que el dipositivo tengo conexion a internet');
+      }),
       new ItemBoton(FontAwesomeIcons.calendar, 'Eventos', Color(0xff317183),
-          Color(0xff46997D), () {}),
+          Color(0xff46997D), () async {
+        var conx = await authService.internetConnectivity();
+        if (conx)
+          Navigator.pushNamed(context, 'eventoInicio');
+        else
+          NotificationsService.showMyDialogAndroid(
+              context,
+              'No se pudo conectar a intenet',
+              'Debe asegurarse que el dipositivo tengo conexion a internet');
+      }),
       new ItemBoton(FontAwesomeIcons.newspaper, 'Noticias', Color(0xff66A9F2),
           Color(0xff536CF6), () {}),
       new ItemBoton(FontAwesomeIcons.theaterMasks, 'Theft / Harrasement',
@@ -60,20 +102,20 @@ class DashScreen extends StatelessWidget {
           Color(0xff46997D), () {}),
     ];
 
-    List<Widget> itemMap = items
-        .map((item) => FadeInLeft(
-              child: Hero(
-                tag: item.texto,
-                child: BotonGordo(
-                  iconR: item.icon,
-                  texto: item.texto,
-                  color1: item.color1,
-                  color2: item.color2,
-                  onPress: item.onPress,
-                ),
-              ),
-            ))
-        .toList();
+    List<Widget> itemMap = items.map((item) {
+      return FadeInLeft(
+        child: Hero(
+          tag: Text(item.texto),
+          child: BotonGordo(
+            iconR: item.icon,
+            texto: item.texto,
+            color1: item.color1,
+            color2: item.color2,
+            onPress: item.onPress,
+          ),
+        ),
+      );
+    }).toList();
     return Scaffold(
       body: Stack(
         children: [
@@ -82,6 +124,27 @@ class DashScreen extends StatelessWidget {
             child: ListView(physics: BouncingScrollPhysics(), children: [
               SizedBox(
                 height: 80,
+              ),
+              FadeInLeft(
+                child: Hero(
+                  tag: Text('Notificaciones'),
+                  child: BotonGordoNoti(
+                    iconR: FontAwesomeIcons.bell,
+                    texto: 'Notificaciones',
+                    color1: Color.fromARGB(255, 105, 245, 203),
+                    color2: Color.fromARGB(255, 129, 95, 232),
+                    onPress: () async {
+                      var conx = await authService.internetConnectivity();
+                      if (conx)
+                        Navigator.pushNamed(context, 'notificacionInicio');
+                      else
+                        NotificationsService.showMyDialogAndroid(
+                            context,
+                            'No se pudo conectar a intenet',
+                            'Debe asegurarse que el dipositivo tengo conexion a internet');
+                    },
+                  ),
+                ),
               ),
               ...itemMap
             ]),
@@ -114,9 +177,13 @@ class _Encabezado extends StatelessWidget {
             right: 0,
             top: 45,
             child: RawMaterialButton(
-              onPressed: () {
-                authService.logout();
-                Navigator.pushReplacementNamed(context, 'login');
+              onPressed: () async {
+                var result = await authService.logout();
+                if (result!.contains('Ok'))
+                  Navigator.pushReplacementNamed(context, 'login');
+                else
+                  NotificationsService.showMyDialogAndroid(context, 'Log out',
+                      'Fallo la desconexión del servicio: Intentelo mas tarde. ');
               },
               shape: CircleBorder(),
               padding: EdgeInsets.all(15.0),

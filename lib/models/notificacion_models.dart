@@ -6,7 +6,7 @@ class NotificacionesResponse {
     required this.data,
     this.firstPageUrl,
     this.from,
-    this.lastPage,
+    required this.lastPage,
     this.lastPageUrl,
     required this.links,
     this.nextPageUrl,
@@ -21,7 +21,7 @@ class NotificacionesResponse {
   List<Notificacion> data;
   String? firstPageUrl;
   int? from;
-  int? lastPage;
+  int lastPage;
   String? lastPageUrl;
   List<Link> links;
   dynamic? nextPageUrl;

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/servicio_tipos_models.dart';
 import 'package:flutter_application_1/widgets/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:time_range_picker/time_range_picker.dart';
 import 'package:flutter_application_1/extension/timeofday.dart';
+import '../controllers/notificacion_controller.dart';
 import '../services/services.dart';
 
 class InvitarServicioScreen extends StatefulWidget {
@@ -110,6 +112,9 @@ class _InvitarServicioScreenState extends State<InvitarServicioScreen> {
                       NotificationsService.showSnackbar(response);
                     } else {
                       await Share.share(response);
+                      final notificacionCtrl =
+                          Get.find<NotificacionController>();
+                      await notificacionCtrl.getTopNoti();
 
                       Navigator.pop(context);
                     }

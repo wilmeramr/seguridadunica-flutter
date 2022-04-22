@@ -23,12 +23,21 @@ class DetalleAutorizacionScreen extends StatelessWidget {
                       'De: ${data.email}\n'
                       'Para: ${data.autNombre == null ? 'No registrado' : data.autNombre}\n'
                       'Documento: ${data.autDocumento == null ? 'No registrado' : data.autDocumento}\n'
-                      'Desde: ${data.autDesde?.day}-${data.autDesde?.month}-${data.autDesde?.year}\n'
-                      'Hasta: ${data.autHasta?.day}-${data.autHasta?.month}-${data.autHasta?.year}\n',
+                      'Desde: ${data.autDesde?.day.toString().padLeft(2, '0')}-${data.autDesde?.month.toString().padLeft(2, '0')}-${data.autDesde?.year}\n'
+                      'Hasta: ${data.autHasta?.day.toString().padLeft(2, '0')}-${data.autHasta?.month.toString().padLeft(2, '0')}-${data.autHasta?.year}\n',
                       textAlign: TextAlign.justify,
                       style: TextStyle(),
                     ),
                   ),
+                  data.autTipo == 3
+                      ? FittedBox(
+                          child: Text(
+                            'Vigencia: ${data.autLunes}\n',
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(),
+                          ),
+                        )
+                      : Text(''),
                   data.autTipo == 2
                       ? FittedBox(
                           child: Text(
@@ -46,12 +55,18 @@ class DetalleAutorizacionScreen extends StatelessWidget {
                         )
                       : Text(''),
                   FittedBox(
-                    child: Text(
-                      'Comentarios: ${data.autComentario == null ? 'Sin comentarios' : data.autComentario}\n'
-                      'Codigo: ${data.autCode}\n',
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(),
-                    ),
+                    child: data.autTipo == 3
+                        ? Text(
+                            'Codigo: ${data.autCode}\n',
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(),
+                          )
+                        : Text(
+                            'Comentarios: ${data.autComentario == null ? 'Sin comentarios' : data.autComentario}\n'
+                            'Codigo: ${data.autCode}\n',
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(),
+                          ),
                   ),
                 ],
               ))

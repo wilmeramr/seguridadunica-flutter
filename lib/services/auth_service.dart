@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/user.dart';
@@ -80,6 +81,8 @@ class AuthService extends ChangeNotifier {
       }
     } on TimeoutException catch (e) {
       return 'Error de conexcion';
+    } on Exception catch (e) {
+      return 'Error de conexcion';
     }
     //   final Map<String, dynamic> decodeResp = json.decode(resp.body);
     //print(resp);
@@ -108,16 +111,21 @@ class AuthService extends ChangeNotifier {
         ;
       }
     } on TimeoutException catch (e) {
-      return 'Error de conexcion';
+      return 'Error de conexcion: Intentalo mas tarde';
+    } on Exception catch (e) {
+      return 'Error de conexcion: Intentalo mas tarde';
     }
     //   final Map<String, dynamic> decodeResp = json.decode(resp.body);
     //print(resp);
   }
 
-  Future logout() async {
-    await diviceToken(false);
-    await storage.delete(key: 'token');
-    await storage.delete(key: 'user');
+  Future<String?> logout() async {
+    var result = await diviceToken(false);
+    if (result!.contains('Ok')) {
+      await storage.delete(key: 'token');
+      await storage.delete(key: 'user');
+    }
+    return result;
   }
 
   Future<String> readToken() async {
@@ -130,7 +138,7 @@ class AuthService extends ChangeNotifier {
     return userDto;
   }
 
-  diviceToken(bool up) async {
+  Future<String?> diviceToken(bool up) async {
     var user = await storage.read(key: 'user') ?? '';
     String token = await storage.read(key: 'token') ?? '';
 
@@ -157,15 +165,27 @@ class AuthService extends ChangeNotifier {
         // var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
 
         if (response.statusCode == 201) {
-          //  return jsonResponse['message'];
+          return 'Ok';
         } else {
-          print('Request failed with status: ${response.statusCode}.');
-          // return jsonResponse['error'];
-          ;
+          return 'Error de conexcion';
         }
       } on TimeoutException catch (e) {
-        // return 'Error de conexcion';
+        return 'Error de conexcion';
+      } on Exception catch (e) {
+        return 'Error de conexcion: Intentalo mas tarde';
       }
     }
+  }
+
+  Future<bool> internetConnectivity() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        return true;
+      }
+    } on SocketException catch (_) {
+      return false;
+    }
+    return false;
   }
 }

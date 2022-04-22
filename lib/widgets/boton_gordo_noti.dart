@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../controllers/controllers.dart';
 
-class BotonGordo extends StatelessWidget {
+class BotonGordoNoti extends StatelessWidget {
   final IconData iconR;
   final IconData iconL;
 
@@ -14,7 +14,7 @@ class BotonGordo extends StatelessWidget {
   final Color color2;
   final Function()? onPress;
 
-  const BotonGordo(
+  const BotonGordoNoti(
       {Key? key,
       this.iconR = FontAwesomeIcons.nimblr,
       required this.texto,
@@ -26,6 +26,7 @@ class BotonGordo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final badgeCtrl = Get.find<BadgeController>();
     return GestureDetector(
       onTap: this.onPress,
       child: Stack(
@@ -44,6 +45,11 @@ class BotonGordo extends StatelessWidget {
                 color: Colors.white,
                 size: 40,
               ),
+              Obx(() => badgeCtrl.badge.value > 0
+                  ? Badge(
+                      badgeContent: Text('${badgeCtrl.badge.value}'),
+                    )
+                  : Text('')),
               SizedBox(
                 width: 20,
               ),

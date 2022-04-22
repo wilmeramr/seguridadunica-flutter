@@ -39,7 +39,7 @@ class LoginScreen extends StatelessWidget {
           SizedBox(
             height: 50,
           ),
-          TextButton(
+          /* TextButton(
             onPressed: () =>
                 Navigator.pushReplacementNamed(context, 'register'),
             style: ButtonStyle(
@@ -50,7 +50,7 @@ class LoginScreen extends StatelessWidget {
               'Crear una nueva cuenta',
               style: TextStyle(fontSize: 18, color: Colors.black87),
             ),
-          ),
+          ), */
           SizedBox(
             height: 50,
           )
@@ -121,6 +121,17 @@ class _LoginForm extends StatelessWidget {
                               final authService = Provider.of<AuthService>(
                                   context,
                                   listen: false);
+
+                              var conx =
+                                  await authService.internetConnectivity();
+                              if (!conx) {
+                                NotificationsService.showMyDialogAndroid(
+                                    context,
+                                    'No se pudo conectar a intenet',
+                                    'Debe asegurarse que el dipositivo tengo conexion a internet');
+                                return;
+                              }
+
                               String pattern =
                                   r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
 
@@ -130,11 +141,15 @@ class _LoginForm extends StatelessWidget {
                                 loginForm.isLoadingToken = true;
                                 final response =
                                     await authService.token(loginForm.email);
-                                NotificationsService.showSnackbar(
+                                NotificationsService.showMyDialogAndroid(
+                                    context,
+                                    'Solicitud de Token',
                                     '${response}');
                                 loginForm.isLoadingToken = false;
                               } else {
-                                NotificationsService.showSnackbar(
+                                NotificationsService.showMyDialogAndroid(
+                                    context,
+                                    'Solicitud de Token',
                                     "El email incorrecto");
                                 loginForm.isLoadingToken = false;
                               }
@@ -165,9 +180,11 @@ class _LoginForm extends StatelessWidget {
                 onPressed: loginForm.isLoading
                     ? null
                     : () async {
-                        FocusScope.of(context).unfocus();
                         final authService =
                             Provider.of<AuthService>(context, listen: false);
+
+                        FocusScope.of(context).unfocus();
+
                         if (!loginForm.isValidForm()) return;
 
                         loginForm.isLoading = true;

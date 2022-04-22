@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/screens.dart';
 import 'package:flutter_application_1/services/services.dart';
 import 'package:flutter_application_1/services/push_notifications_service.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
+import 'controllers/controllers.dart';
 import 'screens/home_screen.dart';
 
 void main() async {
@@ -21,6 +23,7 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => AutService()),
         ChangeNotifierProvider(create: (_) => ServicioService()),
+        ChangeNotifierProvider(create: (_) => DeliveryService()),
       ],
       child: MyApp(),
     );
@@ -38,16 +41,23 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     super.initState();
     PushNotificationService.messageStream.listen((message) {
-      print('MyApp: $message');
+      final badgeCtrl = Get.find<BadgeController>();
+      badgeCtrl.badge.value += 1;
+      print(badgeCtrl.badge.value);
+      /*  print('MyApp: $message');
       if (message == 'message')
         NotificationsService.navigatorKey.currentState
             ?.pushNamed('message', arguments: message);
-      if (message == 'home')
+      if (message == 'invitacion')
         NotificationsService.navigatorKey.currentState
-            ?.pushNamed('home', arguments: message);
+            ?.pop('notificacionInicio');
+
+      if (message == 'Mascota')
+        NotificationsService.navigatorKey.currentState
+            ?.pushReplacementNamed('mascotaInicio');
 
       final snackBar = SnackBar(content: Text(message));
-      NotificationsService.messengerKey.currentState?.showSnackBar(snackBar);
+      NotificationsService.messengerKey.currentState?.showSnackBar(snackBar); */
     });
   }
 
@@ -72,6 +82,13 @@ class _MyAppState extends State<MyApp> {
         'servicioInicio': (_) => ServicioInicioScreen(),
         'invitarServicioInicio': (_) => InvitarServicioScreen(),
         'notificacionInicio': (_) => NotificacionInicioScreen(),
+        'evniarNotificacion': (_) => EnviarNotificacionScreen(),
+        'deliveryInicio': (_) => DeliveryInicioScreen(),
+        'invitarDeliveryInicio': (_) => InvitarDeliveryScreen(),
+        'eventoInicio': (_) => EventoInicioScreen(),
+        'invitarEventoInicio': (_) => InvitarEventoScreen(),
+        'mascotaInicio': (_) => MascotaInicioScreen(),
+        'mascotaEditar': (_) => MascotaEditarScreen(),
         'servicio': (_) => InvitarScreen(),
         'dash2': (_) => DashScreen(),
         'slider': (_) => SliderListScreen(),

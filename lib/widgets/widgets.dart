@@ -1,9 +1,10 @@
 export 'package:flutter_application_1/widgets/auth_background.dart';
 export 'package:flutter_application_1/widgets/card_container.dart';
-export 'package:flutter_application_1/widgets/product_card.dart';
-export 'package:flutter_application_1/widgets/product_image.dart';
+export 'package:flutter_application_1/widgets/mascota_card.dart';
+export 'package:flutter_application_1/widgets/mascota_image.dart';
 export 'package:flutter_application_1/widgets/background.dart';
 export 'package:flutter_application_1/widgets/page_title.dart';
 export 'package:flutter_application_1/widgets/custom_bottom_navigation.dart';
 export 'package:flutter_application_1/widgets/card_table.dart';
 export 'package:flutter_application_1/widgets/boton_gordo.dart';
+export 'package:flutter_application_1/widgets/boton_gordo_noti.dart';

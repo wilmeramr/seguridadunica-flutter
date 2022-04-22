@@ -111,9 +111,8 @@ class AutService with ChangeNotifier {
         aut.link;
         // notifyListeners();
 
-        return '${userDto.name} ${userDto.apellido} te a inviatdo a ${userDto.country}'
-            'para el dia ${desde.day}/${desde.month}/${desde.year}.'
-            'completa tus datos en ${aut.link} para poder confirmar.';
+        return aut.link;
+        ;
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
       } else {

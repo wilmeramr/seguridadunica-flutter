@@ -1,23 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controllers/controllers.dart';
+import 'package:flutter_application_1/models/masc_models.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
-class ProductCard extends StatelessWidget {
+class MascotaCard extends StatelessWidget {
+  final Mascota masc;
+  final MascotaController ctrl;
+
+  const MascotaCard(
+      {Key? key, required this.masc, required MascotaController this.ctrl})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final mascotaCtrl = Get.put(MascotaController());
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Container(
-        margin: EdgeInsets.only(top: 30, bottom: 50),
-        width: double.infinity,
-        height: 400,
-        decoration: _cardBorders(),
-        child: Stack(
-          alignment: Alignment.bottomLeft,
-          children: [
-            _BackgroundImage(),
-            _ProductDetails(),
-            Positioned(top: 0, right: 0, child: _PriceTag()),
-            Positioned(top: 0, left: 0, child: _NotAvailable())
-          ],
+      child: GestureDetector(
+        onTap: () {
+          final mascotaCtrl = Get.find<MascotaController>();
+          mascotaCtrl.mascotaSelected = this.masc.copy();
+          Navigator.pushNamed(
+            context,
+            'mascotaEditar',
+          );
+        },
+        child: Container(
+          margin: EdgeInsets.only(top: 30, bottom: 50),
+          width: double.infinity,
+          height: 400,
+          decoration: _cardBorders(),
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              _BackgroundImage(masc, ctrl),
+              _ProductDetails(masc),
+              // Positioned(top: 0, right: 0, child: _PriceTag()),
+              //Positioned(top: 0, left: 0, child: _NotAvailable())
+            ],
+          ),
         ),
       ),
     );
@@ -82,6 +103,10 @@ class _PriceTag extends StatelessWidget {
 }
 
 class _ProductDetails extends StatelessWidget {
+  final Mascota _mascota;
+
+  _ProductDetails(this._mascota);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -94,7 +119,7 @@ class _ProductDetails extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'Disco duro G',
+              _mascota.mascName,
               style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,
@@ -102,14 +127,15 @@ class _ProductDetails extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            Text(
-              'Id disco',
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.white,
+            FittedBox(
+              child: Text(
+                'Ult.Vacunación: ${_mascota.mascFechaVacunacion.day}/${_mascota.mascFechaVacunacion.month}/${_mascota.mascFechaVacunacion.year}',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             )
           ],
         ),
@@ -124,6 +150,10 @@ class _ProductDetails extends StatelessWidget {
 }
 
 class _BackgroundImage extends StatelessWidget {
+  final Mascota _mascota;
+  final MascotaController ctrl;
+  _BackgroundImage(this._mascota, MascotaController this.ctrl);
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -131,10 +161,16 @@ class _BackgroundImage extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: 400,
-        child: FadeInImage(
-          placeholder: AssetImage('assets/jar-loading.gif'),
-          image: NetworkImage('https://via.placeholder.com/400x300/f6f6f6'),
-        ),
+        child: _mascota.mascUrlFoto != null
+            ? FadeInImage(
+                placeholder: AssetImage('assets/jar-loading.gif'),
+                image: NetworkImage(_mascota.mascUrlFoto!),
+                fit: BoxFit.cover,
+              )
+            : FadeInImage(
+                placeholder: AssetImage('assets/jar-loading.gif'),
+                image: AssetImage('assets/no-image.png'),
+                fit: BoxFit.cover),
       ),
     );
   }

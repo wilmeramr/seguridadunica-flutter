@@ -16,7 +16,7 @@ class AutorizacionResponse {
     required this.data,
     this.firstPageUrl,
     this.from,
-    this.lastPage,
+    required this.lastPage,
     this.lastPageUrl,
     required this.links,
     this.nextPageUrl,
@@ -31,7 +31,7 @@ class AutorizacionResponse {
   List<Datum> data;
   String? firstPageUrl;
   int? from;
-  int? lastPage;
+  int lastPage;
   String? lastPageUrl;
   List<Link> links;
   dynamic? nextPageUrl;
@@ -97,6 +97,9 @@ class Datum {
     this.autSabado,
     this.autDomingo,
     this.autComentario,
+    required this.autCantidadInvitado,
+    this.autFechaEvento,
+    this.autFechaEventoHasta,
     this.autActivo,
     this.createdAt,
     this.updatedAt,
@@ -123,6 +126,9 @@ class Datum {
   dynamic autSabado;
   dynamic autDomingo;
   dynamic autComentario;
+  int autCantidadInvitado;
+  DateTime? autFechaEvento;
+  DateTime? autFechaEventoHasta;
   int? autActivo;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -149,6 +155,13 @@ class Datum {
         autSabado: json["aut_sabado"],
         autDomingo: json["aut_domingo"],
         autComentario: json["aut_comentario"],
+        autCantidadInvitado: json["aut_cantidad_invitado"],
+        autFechaEvento: json["aut_fecha_evento"] == null
+            ? null
+            : DateTime.parse(json["aut_fecha_evento"]),
+        autFechaEventoHasta: json["aut_fecha_evento_hasta"] == null
+            ? null
+            : DateTime.parse(json["aut_fecha_evento_hasta"]),
         autActivo: json["aut_activo"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
@@ -178,6 +191,9 @@ class Datum {
         "aut_sabado": autSabado,
         "aut_domingo": autDomingo,
         "aut_comentario": autComentario,
+        "aut_cantidad_invitado": autCantidadInvitado,
+        "aut_fecha_evento": autFechaEvento,
+        "aut_fecha_evento_hasta": autFechaEventoHasta,
         "aut_activo": autActivo,
         "created_at": createdAt,
         "updated_at": updatedAt,
