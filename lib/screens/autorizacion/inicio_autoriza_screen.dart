@@ -2,17 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import '../../controllers/controllers.dart';
 import '../../models/aut_models.dart';
 import '../../services/services.dart';
 import '../../widgets/widgets.dart';
 
-class DeliveryInicioScreen extends StatelessWidget {
-  final deliveryService = Get.put(DeliveryController());
-
+class InicioAutorizaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,13 +20,13 @@ class DeliveryInicioScreen extends StatelessWidget {
 
           var conx = await authService.internetConnectivity();
           if (conx) {
-            final deliveryService = Get.find<DeliveryController>();
-
-            var result = await deliveryService.getTopDeliScroll();
+            final autorizacionesService =
+                Provider.of<AutService>(context, listen: false);
+            var result = await autorizacionesService.getTopAutScroll();
 
             if (!result.contains('Ok'))
               NotificationsService.showMyDialogAndroid(
-                  context, 'Delivery', result);
+                  context, 'Autorizacion', result);
           } else
             NotificationsService.showMyDialogAndroid(
                 context,
@@ -59,7 +55,7 @@ class _BotonNewList extends StatelessWidget {
 
           var conx = await authService.internetConnectivity();
           if (conx) {
-            Navigator.pushNamed(context, 'invitarDeliveryInicio');
+            Navigator.pushNamed(context, 'autorizaInvita');
           } else
             NotificationsService.showMyDialogAndroid(
                 context,
@@ -67,7 +63,7 @@ class _BotonNewList extends StatelessWidget {
                 'Debe asegurarse que el dipositivo tengo conexion a internet');
         },
         child: Text(
-          'CREAR UNA ENTRADA',
+          'CREAR UNA INVITACION',
           style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -89,7 +85,6 @@ class _MainScroll extends StatefulWidget {
 
 class _MainScrollState extends State<_MainScroll> {
   final ScrollController scrollController = ScrollController();
-
   Timer? _timer;
   int _start = 5;
 
@@ -118,6 +113,7 @@ class _MainScrollState extends State<_MainScroll> {
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
+        print('addListener');
         widget.onNextPage();
       }
       ;
@@ -136,8 +132,9 @@ class _MainScrollState extends State<_MainScroll> {
 
   @override
   Widget build(BuildContext context) {
-    // final deliveryService = Provider.of<DeliveryService>(context);
-    final deliveryService = Get.find<DeliveryController>();
+    final autorizacionesService = Provider.of<AutService>(context);
+    final data = autorizacionesService.data;
+    items2 = data.map((e) => _ListItem(autorizaciones: e)).toList();
 
     return RefreshIndicator(
       edgeOffset: 130,
@@ -146,53 +143,55 @@ class _MainScrollState extends State<_MainScroll> {
 
         var conx = await authService.internetConnectivity();
         if (conx) {
-          var result = await deliveryService.getTopDeli();
+          var result = await autorizacionesService.getTopAut();
 
           if (!result.contains('Ok'))
             NotificationsService.showMyDialogAndroid(
-                context, 'Delivery', result);
+                context, 'Autorizacion', result);
         } else
           NotificationsService.showMyDialogAndroid(
               context,
               'No se pudo conectar a intenet',
               'Debe asegurarse que el dipositivo tengo conexion a internet');
       },
-      child: Obx(() => CustomScrollView(
-            controller: scrollController,
-            physics:
-                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-            slivers: [
-              SliverPersistentHeader(
-                  floating: true,
-                  delegate: _SliverCustomHeaderDelegate(
-                      minHeight: 170,
-                      maxHeight: 200,
-                      child: Container(
-                          alignment: Alignment.centerLeft,
-                          color: Colors.white,
-                          child: _Titulo()))),
-              deliveryService.data.isEmpty && _start > 0
-                  ? SliverList(
-                      delegate: SliverChildListDelegate([
-                      LinearProgressIndicator(
-                        color: Colors.green,
-                      ),
-                      Center(child: Text('Espere por favor')),
-                      SizedBox(
-                        height: 10,
-                      )
-                    ]))
-                  : SliverList(
-                      delegate: SliverChildListDelegate([
-                      ...deliveryService.data
-                          .map((e) => _ListItem(delivery: e))
-                          .toList(),
-                      SizedBox(
-                        height: 100,
-                      )
-                    ]))
-            ],
-          )),
+      child: CustomScrollView(
+        controller: scrollController,
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        slivers: [
+          SliverPersistentHeader(
+              floating: true,
+              delegate: _SliverCustomHeaderDelegate(
+                  minHeight: 170,
+                  maxHeight: 200,
+                  child: Container(
+                      alignment: Alignment.centerLeft,
+                      color: Colors.white,
+                      child: _Titulo()))),
+          items2.isEmpty && _start > 0
+              ? SliverList(
+                  delegate: SliverChildListDelegate([
+                  LinearProgressIndicator(
+                    color: Colors.green,
+                  ),
+                  Center(child: Text('Espere por favor')),
+                  SizedBox(
+                    height: 10,
+                  )
+                ]))
+              : SliverList(
+                  delegate: SliverChildListDelegate([
+                  ...items2,
+                  autorizacionesService.isLoading
+                      ? CircularProgressIndicator(
+                          color: Colors.red,
+                        )
+                      : Text(""),
+                  SizedBox(
+                    height: 100,
+                  )
+                ]))
+        ],
+      ),
     );
   }
 }
@@ -240,13 +239,13 @@ class _Titulo extends StatelessWidget {
             color: Colors.white,
             //  margin: EdgeInsets.only(top: 200),
             child: Hero(
-              tag: Text('Delivery,Entregas,otros'),
+              tag: Text('Autorizaciones'),
               child: BotonGordo(
-                iconL: FontAwesomeIcons.taxi,
+                iconL: FontAwesomeIcons.idCardAlt,
                 iconR: FontAwesomeIcons.chevronLeft,
-                texto: 'Delivery,Entregas,otros',
-                color1: Color.fromARGB(255, 105, 245, 203),
-                color2: Color.fromARGB(255, 129, 95, 232),
+                texto: 'Autorizaciones',
+                color1: Color(0xff6989F5),
+                color2: Color(0xff906EF5),
                 onPress: () => Navigator.of(context).pop(),
               ),
             ),
@@ -258,9 +257,9 @@ class _Titulo extends StatelessWidget {
 }
 
 class _ListItem extends StatelessWidget {
-  final Datum delivery;
+  final Datum autorizaciones;
 
-  const _ListItem({required this.delivery});
+  const _ListItem({required this.autorizaciones});
 
   @override
   Widget build(BuildContext context) {
@@ -268,7 +267,7 @@ class _ListItem extends StatelessWidget {
       GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, 'detalleautorizacion',
-                arguments: delivery);
+                arguments: autorizaciones);
           },
           child: Container(
             margin: EdgeInsets.all(10),
@@ -276,18 +275,22 @@ class _ListItem extends StatelessWidget {
                 color: Colors.white, borderRadius: BorderRadius.circular(15)),
             child: Column(
               children: [
+                _NotificacionTitulo(
+                  autorizaciones,
+                ),
                 SizedBox(
                   height: 10,
                 ),
-                _NotificacionBody(delivery),
-                SizedBox(
-                  height: 0,
+                _NotificacionBody(
+                  autorizaciones,
                 ),
-                _NotificacionVigencia(delivery),
-                _NotificacionCreado(delivery),
+                SizedBox(
+                  height: 10,
+                ),
+                _NotificacionStatus(autorizaciones),
                 Divider(),
                 SizedBox(
-                  height: 0,
+                  height: 10,
                 ),
               ],
             ),
@@ -296,10 +299,38 @@ class _ListItem extends StatelessWidget {
   }
 }
 
+class _NotificacionStatus extends StatelessWidget {
+  final Datum autorizaciones;
+
+  const _NotificacionStatus(this.autorizaciones);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        RawMaterialButton(
+          onPressed: () {},
+          //  fillColor: this.noti.notiEnvio == 1 ? Colors.green : Colors.red,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          child: Row(
+            children: [
+              Text(
+                  'Fecha de creación: ${autorizaciones.createdAt?.day.toString().padLeft(2, '0')}/${autorizaciones.createdAt?.month.toString().padLeft(2, '0')}/${autorizaciones.createdAt?.year.toString().padLeft(4, '0')}')
+            ],
+          ),
+        )
+      ],
+    ));
+  }
+}
+
 class _NotificacionBody extends StatelessWidget {
-  final Datum delivery;
+  final Datum autorizaciones;
 
-  const _NotificacionBody(this.delivery);
+  const _NotificacionBody(this.autorizaciones);
 
   @override
   Widget build(BuildContext context) {
@@ -308,60 +339,62 @@ class _NotificacionBody extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: Text(
-          'Autorizo a: ${delivery.autNombre} ',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-          textAlign: TextAlign.justify,
+        child: Column(
+          children: [
+            FittedBox(
+              child: Text(
+                  this.autorizaciones.autDesde == null
+                      ? "No registrado"
+                      : "Desde:  ${this.autorizaciones.autDesde?.day.toString()}-${this.autorizaciones.autDesde?.month.toString()}-${this.autorizaciones.autDesde?.year.toString()}",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ),
+            FittedBox(
+              child: Text(
+                  this.autorizaciones.autDesde == null
+                      ? "No registrado"
+                      : "Hasta:  ${this.autorizaciones.autHasta?.day.toString()}-${this.autorizaciones.autHasta?.month.toString()}-${this.autorizaciones.autHasta?.year.toString()}",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ),
+          ],
         ));
   }
 }
 
-class _NotificacionVigencia extends StatelessWidget {
-  final Datum delivery;
+class _NotificacionTitulo extends StatelessWidget {
+  final Datum autorizaciones;
 
-  const _NotificacionVigencia(this.delivery);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: Text(
-          'Tiempo Vigencia: ${delivery.autLunes}',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-          textAlign: TextAlign.justify,
-        ));
-  }
-}
-
-class _NotificacionCreado extends StatelessWidget {
-  final Datum delivery;
-
-  const _NotificacionCreado(this.delivery);
+  const _NotificacionTitulo(this.autorizaciones);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: Text(
-          'Creado por: ${delivery.email}\n'
-          'Fecha de Creacion: ${delivery.autDesde?.day.toString().padLeft(2, '0')}-${delivery.autDesde?.month.toString().padLeft(2, '0')}-${delivery.autDesde?.year}\n',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
+      padding: EdgeInsets.only(top: 10),
+      child: Column(
+        children: [
+          FittedBox(
+            child: Text(
+                "Para: ${this.autorizaciones.autNombre == null ? "No registrado" : this.autorizaciones.autNombre}",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                )),
           ),
-          textAlign: TextAlign.justify,
-        ));
+          FittedBox(
+            child: Text(
+                "De: ${this.autorizaciones.email == null ? "No registrado" : this.autorizaciones.email}",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                )),
+          ),
+        ],
+      ),
+    );
   }
 }

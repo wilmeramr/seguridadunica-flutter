@@ -4,20 +4,22 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../services/services.dart';
+import '../../services/services.dart';
 
-class InvitarScreen extends StatefulWidget {
+class InvitaAutorizaScreen extends StatefulWidget {
   @override
-  State<InvitarScreen> createState() => _InvitarScreenState();
+  State<InvitaAutorizaScreen> createState() => _InvitarScreenState();
 }
 
-class _InvitarScreenState extends State<InvitarScreen> {
+class _InvitarScreenState extends State<InvitaAutorizaScreen> {
   int currentStep = 0;
   DateTime? date;
   DateTimeRange? dateRange;
   final items = ['Items 1', 'Items 2'];
   String? value;
   bool isCompleted = false;
+
+  String? comentarios;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -57,16 +59,29 @@ class _InvitarScreenState extends State<InvitarScreen> {
                   if (isLastStep) {
                     setState(() => isCompleted = true);
                     final authService =
-                        Provider.of<AutService>(context, listen: false);
+                        Provider.of<AuthService>(context, listen: false);
 
-                    final response = await authService.postRegistroInvitacion(
-                        1, dateRange!.start, dateRange!.end);
+                    var conx = await authService.internetConnectivity();
+                    if (conx) {
+                      final authService =
+                          Provider.of<AutService>(context, listen: false);
 
-                    if (response.contains('Error')) {
-                      NotificationsService.showSnackbar(response);
-                    } else {
-                      await Share.share(response);
-                    }
+                      final response = await authService.postRegistroInvitacion(
+                          1, dateRange!.start, dateRange!.end, comentarios);
+
+                      if (response.contains('Error')) {
+                        NotificationsService.showSnackbar(response);
+                      } else {
+                        await Share.share(response);
+                        await authService.getTopAut();
+
+                        Navigator.pop(context);
+                      }
+                    } else
+                      NotificationsService.showMyDialogAndroid(
+                          context,
+                          'No se pudo conectar a intenet',
+                          'Debe asegurarse que el dipositivo tengo conexion a internet');
                   } else {
                     if (currentStep == 1 && dateRange == null) {
                       NotificationsService.showSnackbar(
@@ -75,6 +90,7 @@ class _InvitarScreenState extends State<InvitarScreen> {
                       setState(() => currentStep += 1);
                     }
                   }
+                  setState(() => isCompleted = false);
                 },
                 onStepTapped: (step) {
                   if (currentStep == 1 && dateRange == null) {
@@ -98,8 +114,20 @@ class _InvitarScreenState extends State<InvitarScreen> {
                       children: [
                         Expanded(
                             child: ElevatedButton(
-                          child: Text(isLastStep ? 'ENVIAR' : 'SIGUIENTE'),
-                          onPressed: details.onStepContinue,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              !isCompleted
+                                  ? Container()
+                                  : Image(
+                                      width: size.width * 0.05,
+                                      image: AssetImage('assets/loading.gif'),
+                                    ),
+                              Text(isLastStep ? 'ENVIAR' : 'SIGUIENTE'),
+                            ],
+                          ),
+                          onPressed:
+                              !isCompleted ? details.onStepContinue : null,
                         )),
                         SizedBox(
                           width: 12,
@@ -117,15 +145,6 @@ class _InvitarScreenState extends State<InvitarScreen> {
               ),
             )),
           ),
-          !isCompleted
-              ? Container()
-              : Positioned(
-                  bottom: size.height * 0.2,
-                  left: size.width * 0.4,
-                  child: Image(
-                    width: size.width * 0.3,
-                    image: AssetImage('assets/loading.gif'),
-                  ))
         ]),
       ),
     );
@@ -218,6 +237,8 @@ class _InvitarScreenState extends State<InvitarScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: TextFormField(
               //maxLines: 1,
+              onChanged: (value) => this.comentarios = value,
+
               style: TextStyle(color: Colors.black),
             ),
           )),

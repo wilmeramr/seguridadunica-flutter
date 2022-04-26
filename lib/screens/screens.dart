@@ -6,14 +6,13 @@ export 'package:flutter_application_1/screens/check_auth_screen.dart';
 
 export 'package:flutter_application_1/screens/dashboard_screen.dart';
 
-export 'package:flutter_application_1/screens/invitar_screen.dart';
+export 'package:flutter_application_1/screens/autorizacion/invita_autoriza_screen.dart';
 
 export 'package:flutter_application_1/screens/dash_screen.dart';
-export 'package:flutter_application_1/screens/invitar_inicio_screen.dart';
-export 'package:flutter_application_1/screens/slider_list_screen.dart';
+export 'package:flutter_application_1/screens/autorizacion/inicio_autoriza_screen.dart';
 export 'package:flutter_application_1/screens/detallesauntorizacion_screen.dart';
-export 'package:flutter_application_1/screens/servicio_inicio_screen.dart';
-export 'package:flutter_application_1/screens/invitar_servicio_screen.dart';
+export 'package:flutter_application_1/screens/servicio/inicio_servicio_screen.dart';
+export 'package:flutter_application_1/screens/servicio/invita_servicio_screen.dart';
 export 'package:flutter_application_1/screens/notificacion/notificacion_inicio_screen.dart';
 export 'package:flutter_application_1/screens/notificacion/enviar_notificacion_screen.dart';
 export 'package:flutter_application_1/screens/delivery/delivery_inicio_screen.dart';

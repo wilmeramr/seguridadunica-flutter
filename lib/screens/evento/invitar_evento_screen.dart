@@ -66,24 +66,33 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
                   if (isLastStep) {
                     setState(() => isCompleted = true);
 
-                    final eventoCtrl = Get.find<EventoController>();
+                    final authService =
+                        Provider.of<AuthService>(context, listen: false);
 
-                    final response = await eventoCtrl.postRegistroEvento(
-                        4,
-                        dtdesde!,
-                        dthasta!,
-                        cantInvitados,
-                        autorizoA,
-                        comentarios);
+                    var conx = await authService.internetConnectivity();
+                    if (conx) {
+                      final eventoCtrl = Get.find<EventoController>();
 
-                    if (response.contains('Error')) {
-                      NotificationsService.showSnackbar(response);
-                    } else {
-                      await Share.share(response);
+                      final response = await eventoCtrl.postRegistroEvento(
+                          4,
+                          dtdesde!,
+                          dthasta!,
+                          cantInvitados,
+                          autorizoA,
+                          comentarios);
 
-                      await eventoCtrl.getTopEvento();
-                      Navigator.pop(context);
-                    }
+                      if (response.contains('Error')) {
+                        NotificationsService.showSnackbar(response);
+                      } else {
+                        await eventoCtrl.getTopEvento();
+                        Navigator.pop(context);
+                      }
+                    } else
+                      NotificationsService.showMyDialogAndroid(
+                          context,
+                          'No se pudo conectar a intenet',
+                          'Debe asegurarse que el dipositivo tengo conexion a internet');
+                    setState(() => isCompleted = false);
                   } else {
                     if (currentStep == 1 && autorizoA.isEmpty) {
                       NotificationsService.showSnackbar(
@@ -143,9 +152,22 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
                       children: [
                         Expanded(
                             child: ElevatedButton(
-                          child: Text(isLastStep ? 'ENVIAR' : 'SIGUIENTE'),
-                          onPressed: details.onStepContinue,
-                        )),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    !isCompleted
+                                        ? Container()
+                                        : Image(
+                                            width: size.width * 0.05,
+                                            image: AssetImage(
+                                                'assets/loading.gif'),
+                                          ),
+                                    Text(isLastStep ? 'ENVIAR' : 'SIGUIENTE'),
+                                  ],
+                                ),
+                                onPressed: !isCompleted
+                                    ? details.onStepContinue
+                                    : null)),
                         SizedBox(
                           width: 12,
                         ),
@@ -162,15 +184,6 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
               ),
             )),
           ),
-          !isCompleted
-              ? Container()
-              : Positioned(
-                  bottom: size.height * 0.2,
-                  left: size.width * 0.4,
-                  child: Image(
-                    width: size.width * 0.3,
-                    image: AssetImage('assets/loading.gif'),
-                  ))
         ]),
       ),
     );

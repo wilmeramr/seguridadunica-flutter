@@ -8,15 +8,15 @@ import 'package:share_plus/share_plus.dart';
 
 import 'package:time_range_picker/time_range_picker.dart';
 import 'package:flutter_application_1/extension/timeofday.dart';
-import '../controllers/notificacion_controller.dart';
-import '../services/services.dart';
+import '../../controllers/notificacion_controller.dart';
+import '../../services/services.dart';
 
-class InvitarServicioScreen extends StatefulWidget {
+class InvitaServicioScreen extends StatefulWidget {
   @override
-  State<InvitarServicioScreen> createState() => _InvitarServicioScreenState();
+  State<InvitaServicioScreen> createState() => _InvitarServicioScreenState();
 }
 
-class _InvitarServicioScreenState extends State<InvitarServicioScreen> {
+class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
   int currentStep = 0;
   DateTime? date;
   DateTimeRange? dateRange;
@@ -25,7 +25,7 @@ class _InvitarServicioScreenState extends State<InvitarServicioScreen> {
   bool isCompleted = false;
   bool isActive = true;
   List<bool> _isActive = [false, false, false, false, false, false, false];
-
+  String? comentario;
   List<TimeRange> timeRanges = [
     TimeRange(
         startTime: TimeOfDay(hour: 00, minute: 00),
@@ -96,28 +96,38 @@ class _InvitarServicioScreenState extends State<InvitarServicioScreen> {
                       currentStep == _getSteps(context).length - 1;
                   if (isLastStep) {
                     setState(() => isCompleted = true);
-                    final servicioService =
-                        Provider.of<ServicioService>(context, listen: false);
 
-                    final response =
-                        await servicioService.postRegistroInvitacion(
-                            2,
-                            dateRange!.start,
-                            dateRange!.end,
-                            _isActive,
-                            timeRanges,
-                            valueServiciotipos);
+                    final authService =
+                        Provider.of<AuthService>(context, listen: false);
 
-                    if (response.contains('Error')) {
-                      NotificationsService.showSnackbar(response);
-                    } else {
-                      await Share.share(response);
-                      final notificacionCtrl =
-                          Get.find<NotificacionController>();
-                      await notificacionCtrl.getTopNoti();
+                    var conx = await authService.internetConnectivity();
+                    if (conx) {
+                      final servicioService =
+                          Provider.of<ServicioService>(context, listen: false);
 
-                      Navigator.pop(context);
-                    }
+                      final response =
+                          await servicioService.postRegistroInvitacion(
+                              2,
+                              dateRange!.start,
+                              dateRange!.end,
+                              _isActive,
+                              timeRanges,
+                              valueServiciotipos,
+                              this.comentario);
+
+                      if (response.contains('Error')) {
+                        NotificationsService.showSnackbar(response);
+                      } else {
+                        await Share.share(response);
+                        await servicioService.getTopAut();
+
+                        Navigator.pop(context);
+                      }
+                    } else
+                      NotificationsService.showMyDialogAndroid(
+                          context,
+                          'No se pudo conectar a intenet',
+                          'Debe asegurarse que el dipositivo tengo conexion a internet');
                   } else {
                     if (currentStep == 1 && dateRange == null) {
                       NotificationsService.showSnackbar(
@@ -132,6 +142,7 @@ class _InvitarServicioScreenState extends State<InvitarServicioScreen> {
                       setState(() => currentStep += 1);
                     }
                   }
+                  setState(() => isCompleted = false);
                 },
                 onStepTapped: (step) {
                   if (currentStep < step) {
@@ -166,8 +177,20 @@ class _InvitarServicioScreenState extends State<InvitarServicioScreen> {
                       children: [
                         Expanded(
                             child: ElevatedButton(
-                          child: Text(isLastStep ? 'ENVIAR' : 'SIGUIENTE'),
-                          onPressed: details.onStepContinue,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              !isCompleted
+                                  ? Container()
+                                  : Image(
+                                      width: size.width * 0.05,
+                                      image: AssetImage('assets/loading.gif'),
+                                    ),
+                              Text(isLastStep ? 'ENVIAR' : 'SIGUIENTE'),
+                            ],
+                          ),
+                          onPressed:
+                              !isCompleted ? details.onStepContinue : null,
                         )),
                         SizedBox(
                           width: 12,
@@ -185,15 +208,6 @@ class _InvitarServicioScreenState extends State<InvitarServicioScreen> {
               ),
             )),
           ),
-          !isCompleted
-              ? Container()
-              : Positioned(
-                  bottom: size.height * 0.2,
-                  left: size.width * 0.4,
-                  child: Image(
-                    width: size.width * 0.3,
-                    image: AssetImage('assets/loading.gif'),
-                  ))
         ]),
       ),
     );
@@ -303,6 +317,7 @@ class _InvitarServicioScreenState extends State<InvitarServicioScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: TextFormField(
               //maxLines: 1,
+              onChanged: (value) => this.comentario = value,
               style: TextStyle(color: Colors.black),
             ),
           )),

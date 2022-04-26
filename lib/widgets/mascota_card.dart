@@ -1,8 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/controllers/controllers.dart';
 import 'package:flutter_application_1/models/masc_models.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+
+import '../services/services.dart';
 
 class MascotaCard extends StatelessWidget {
   final Mascota masc;
@@ -17,13 +21,22 @@ class MascotaCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GestureDetector(
-        onTap: () {
-          final mascotaCtrl = Get.find<MascotaController>();
-          mascotaCtrl.mascotaSelected = this.masc.copy();
-          Navigator.pushNamed(
-            context,
-            'mascotaEditar',
-          );
+        onTap: () async {
+          final authService = Provider.of<AuthService>(context, listen: false);
+
+          var conx = await authService.internetConnectivity();
+          if (conx) {
+            final mascotaCtrl = Get.find<MascotaController>();
+            mascotaCtrl.mascotaSelected = this.masc.copy();
+            Navigator.pushNamed(
+              context,
+              'mascotaEditar',
+            );
+          } else
+            NotificationsService.showMyDialogAndroid(
+                context,
+                'No se pudo conectar a intenet',
+                'Debe asegurarse que el dipositivo tengo conexion a internet');
         },
         child: Container(
           margin: EdgeInsets.only(top: 30, bottom: 50),
@@ -164,13 +177,20 @@ class _BackgroundImage extends StatelessWidget {
         child: _mascota.mascUrlFoto != null
             ? FadeInImage(
                 placeholder: AssetImage('assets/jar-loading.gif'),
-                image: NetworkImage(_mascota.mascUrlFoto!),
+                image: CachedNetworkImageProvider(_mascota.mascUrlFoto!),
                 fit: BoxFit.cover,
+                imageErrorBuilder: (context, error, stackTrace) {
+                  return Image.asset('assets/no-image.png', fit: BoxFit.cover);
+                },
               )
             : FadeInImage(
                 placeholder: AssetImage('assets/jar-loading.gif'),
                 image: AssetImage('assets/no-image.png'),
-                fit: BoxFit.cover),
+                fit: BoxFit.cover,
+                imageErrorBuilder: (context, error, stackTrace) {
+                  return Image.asset('assets/no-image.png', fit: BoxFit.cover);
+                },
+              ),
       ),
     );
   }

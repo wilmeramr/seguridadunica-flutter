@@ -12,11 +12,13 @@ import '../models/invitacion_models.dart';
 import '../models/user.dart';
 
 class DeliveryService with ChangeNotifier {
-  final String _baseUrl = 'acceso.seguridadunica.com';
+  final String _baseUrl = 'acceso.seguridaunica.com';
   final storage = new FlutterSecureStorage();
 
   List<Datum> data = [];
-  int _page = 1;
+
+  var isLoading = false;
+  var _page = 1;
   var _last_page = 1;
 
   DeliveryService() {
@@ -39,9 +41,10 @@ class DeliveryService with ChangeNotifier {
     return response.body;
   }
 
-  getTopDeli() async {
-    _page = 1;
+  Future<String> getTopDeli() async {
     try {
+      _page = 1;
+
       var jsonResponse = jsonDecode(await _getJsonData('/api/autorizacion/3'))
           as Map<String, dynamic>;
       if (jsonResponse.containsKey('data')) {
@@ -53,21 +56,26 @@ class DeliveryService with ChangeNotifier {
         _last_page = aut.lastPage;
         notifyListeners();
 
-        return null;
+        return 'Ok';
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
       } else {
-        return "Error en la conexion";
+        return "Error en la conexion: Intentelo mas tarde";
       }
     } on TimeoutException catch (e) {
-      return 'Error de conexcion';
+      return 'Error en la conexion: Intentelo mas tarde';
+    } on Exception catch (e) {
+      return 'Error en la conexion: Intentelo mas tarde';
     }
   }
 
-  getTopDeliScroll() async {
-    if (_page < _last_page) {
-      _page++;
+  Future<String> getTopDeliScroll() async {
+    _page += 1;
+
+    if (_page <= _last_page) {
       try {
+        isLoading = true;
+
         var jsonResponse =
             jsonDecode(await _getJsonData('/api/autorizacion/3', _page))
                 as Map<String, dynamic>;
@@ -77,15 +85,29 @@ class DeliveryService with ChangeNotifier {
           data = [...data, ...aut.data];
           notifyListeners();
 
-          return null;
+          isLoading = false;
+
+          return 'Ok';
           //var itemCount = jsonResponse['totalItems'];
           // print('Number of books about http: $itemCount.');
         } else {
-          return "Error en la conexion";
+          _page -= 1;
+          isLoading = false;
+          return "Error en la conexion: Intentelo mas tarde";
         }
       } on TimeoutException catch (e) {
-        return 'Error de conexcion';
+        _page -= 1;
+        isLoading = false;
+
+        return 'Error en la conexion: Intentelo mas tarde';
+      } on Exception catch (e) {
+        _page -= 1;
+        isLoading = false;
+
+        return 'Error en la conexion: Intentelo mas tarde';
       }
+    } else {
+      return "Ok";
     }
   }
 
@@ -133,11 +155,12 @@ class DeliveryService with ChangeNotifier {
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
       } else {
-        return "Error en la conexion";
+        return "Error en la conexion: Intentelo mas tarde";
       }
     } on TimeoutException catch (e) {
-      print(e);
-      return 'Error de conexcion';
+      return 'Error en la conexion: Intentelo mas tarde';
+    } on Exception catch (e) {
+      return 'Error en la conexion: Intentelo mas tarde';
     }
   }
 }

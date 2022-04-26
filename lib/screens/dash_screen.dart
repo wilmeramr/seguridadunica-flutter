@@ -32,7 +32,7 @@ class DashScreen extends StatelessWidget {
           Color(0xff6989F5), Color(0xff906EF5), () async {
         var conx = await authService.internetConnectivity();
         if (conx)
-          Navigator.pushNamed(context, 'invitarInicio');
+          Navigator.pushNamed(context, 'autorizaInicio');
         else
           NotificationsService.showMyDialogAndroid(
               context,

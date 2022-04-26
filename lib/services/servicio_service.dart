@@ -17,6 +17,8 @@ class ServicioService with ChangeNotifier {
 
   List<Datum> data = [];
   List<ServicioTipos> servicioTipos = [];
+  var isLoading = false;
+  var _last_page = 1;
 
   int _page = 1;
 
@@ -41,49 +43,71 @@ class ServicioService with ChangeNotifier {
     return response.body;
   }
 
-  getTopAut() async {
+  Future<String> getTopAut() async {
     try {
+      _page = 1;
+
       var jsonResponse = jsonDecode(await _getJsonData('/api/autorizacion/2'))
           as Map<String, dynamic>;
       if (jsonResponse.containsKey('data')) {
         // final Map<String, dynamic> decodeResp = json.decode(response.body);
         var aut = AutorizacionResponse.fromJson(jsonResponse);
-        print(aut.data);
-
-        data = aut.data;
+        data.clear();
+        data.addAll(aut.data);
+        _last_page = aut.lastPage;
         notifyListeners();
 
-        return null;
+        return 'Ok';
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
       } else {
-        return "Error en la conexion";
+        return "Error en la conexion: Intentelo mas tarde";
       }
     } on TimeoutException catch (e) {
-      return 'Error de conexcion';
+      return 'Error en la conexion: Intentelo mas tarde';
+    } on Exception catch (e) {
+      return 'Error en la conexion: Intentelo mas tarde';
     }
   }
 
-  getTopAutScroll() async {
-    _page++;
-    try {
-      var jsonResponse =
-          jsonDecode(await _getJsonData('/api/autorizacion/2', _page))
-              as Map<String, dynamic>;
-      if (jsonResponse.containsKey('data')) {
-        // final Map<String, dynamic> decodeResp = json.decode(response.body);
-        var aut = AutorizacionResponse.fromJson(jsonResponse);
-        data = [...data, ...aut.data];
-        notifyListeners();
+  Future<String> getTopAutScroll() async {
+    _page += 1;
 
-        return null;
-        //var itemCount = jsonResponse['totalItems'];
-        // print('Number of books about http: $itemCount.');
-      } else {
-        return "Error en la conexion";
+    if (_page <= _last_page) {
+      try {
+        isLoading = true;
+        var jsonResponse =
+            jsonDecode(await _getJsonData('/api/autorizacion/2', _page))
+                as Map<String, dynamic>;
+        if (jsonResponse.containsKey('data')) {
+          // final Map<String, dynamic> decodeResp = json.decode(response.body);
+          var aut = AutorizacionResponse.fromJson(jsonResponse);
+          data = [...data, ...aut.data];
+          notifyListeners();
+
+          isLoading = false;
+
+          return 'Ok';
+          //var itemCount = jsonResponse['totalItems'];
+          // print('Number of books about http: $itemCount.');
+        } else {
+          _page -= 1;
+          isLoading = false;
+          return "Error en la conexion: Intentelo mas tarde";
+        }
+      } on TimeoutException catch (e) {
+        _page -= 1;
+        isLoading = false;
+
+        return 'Error en la conexion: Intentelo mas tarde';
+      } on Exception catch (e) {
+        _page -= 1;
+        isLoading = false;
+
+        return 'Error en la conexion: Intentelo mas tarde';
       }
-    } on TimeoutException catch (e) {
-      return 'Error de conexcion';
+    } else {
+      return "Ok";
     }
   }
 
@@ -93,7 +117,8 @@ class ServicioService with ChangeNotifier {
       DateTime hasta,
       List<bool> isActive,
       List<TimeRange> timeRanges,
-      ServicioTipos? valueServiciotipos) async {
+      ServicioTipos? valueServiciotipos,
+      String? comentarios) async {
     try {
       String token = await storage.read(key: 'token') ?? '';
 
@@ -122,9 +147,10 @@ class ServicioService with ChangeNotifier {
         'aut_viernes': isActive[5]
             ? '${timeRanges[5].startTime.to24hours()} - ${timeRanges[5].endTime.to24hours()}'
             : '00:00 - 00:00',
-        'aut_sabado': isActive[5]
+        'aut_sabado': isActive[6]
             ? '${timeRanges[6].startTime.to24hours()} - ${timeRanges[6].endTime.to24hours()}'
             : '00:00 - 00:00',
+        'aut_comentario': comentarios == null ? null : '$comentarios',
       };
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
@@ -149,15 +175,16 @@ class ServicioService with ChangeNotifier {
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
       } else {
-        return "Error en la conexion";
+        return "Error en la conexion: Intentelo mas tarde";
       }
     } on TimeoutException catch (e) {
-      print(e);
-      return 'Error de conexcion';
+      return 'Error en la conexion: Intentelo mas tarde';
+    } on Exception catch (e) {
+      return 'Error en la conexion: Intentelo mas tarde';
     }
   }
 
-  getServicioTipos() async {
+  Future<String> getServicioTipos() async {
     try {
       String token = await storage.read(key: 'token') ?? '';
 
@@ -179,16 +206,14 @@ class ServicioService with ChangeNotifier {
         var servicioTiposResponse =
             ServicioTiposResponse.fromJson(response.body);
         servicioTipos = servicioTiposResponse.data;
-        //  notifyListeners();
-        print(servicioTipos);
-        // notifyListeners();
-        //var itemCount = jsonResponse['totalItems'];
-        // print('Number of books about http: $itemCount.');
+        return "Ok";
       } else {
-        // return "Error en la conexion";
+        return "Error en la conexion: Intentelo mas tarde";
       }
     } on TimeoutException catch (e) {
-      //return 'Error de conexcion';
+      return 'Error en la conexion: Intentelo mas tarde';
+    } on Exception catch (e) {
+      return 'Error en la conexion: Intentelo mas tarde';
     }
   }
 }

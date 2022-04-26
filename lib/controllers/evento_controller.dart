@@ -19,6 +19,7 @@ class EventoController extends GetxController {
   var data = <Datum>[].obs;
   var _page = 1.obs;
   var _last_page = 1.obs;
+  var isLoading = false.obs;
 
   EventoController() {
     getTopEvento();
@@ -40,7 +41,7 @@ class EventoController extends GetxController {
     return response.body;
   }
 
-  getTopEvento() async {
+  Future<String> getTopEvento() async {
     _page = 1.obs;
     try {
       var jsonResponse = jsonDecode(await _getJsonData('/api/autorizacion/4'))
@@ -53,21 +54,25 @@ class EventoController extends GetxController {
         data.clear();
         data.addAll(aut.data);
         _last_page = aut.lastPage.obs;
-        return null;
+        return 'Ok';
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
       } else {
-        return "Error en la conexion";
+        return "Error en la conexion: Intentelo mas tarde";
       }
     } on TimeoutException catch (e) {
-      return 'Error de conexcion';
+      return 'Error en la conexion: Intentelo mas tarde';
+    } on Exception catch (e) {
+      return 'Error en la conexion: Intentelo mas tarde';
     }
   }
 
-  getTopEventoScroll() async {
-    if (_page.value < _last_page.value) {
-      _page++;
+  Future<String> getTopEventoScroll() async {
+    _page.value += 1;
+
+    if (_page.value <= _last_page.value) {
       try {
+        isLoading.value = true;
         var jsonResponse =
             jsonDecode(await _getJsonData('/api/autorizacion/4', _page.value))
                 as Map<String, dynamic>;
@@ -75,15 +80,29 @@ class EventoController extends GetxController {
           // final Map<String, dynamic> decodeResp = json.decode(response.body);
           var aut = AutorizacionResponse.fromJson(jsonResponse);
           data.value = [...data, ...aut.data];
-          return null;
+          isLoading.value = false;
+          return 'Ok';
           //var itemCount = jsonResponse['totalItems'];
           // print('Number of books about http: $itemCount.');
         } else {
-          return "Error en la conexion";
+          _page.value -= 1;
+          isLoading.value = false;
+
+          return "Error en la conexion: Intentelo mas tarde";
         }
       } on TimeoutException catch (e) {
+        _page.value -= 1;
+        isLoading.value = false;
+
         return 'Error de conexcion';
+      } on Exception catch (e) {
+        _page.value -= 1;
+        isLoading.value = false;
+
+        return 'Error en la conexion: Intentelo mas tarde';
       }
+    } else {
+      return 'Ok';
     }
   }
 
@@ -135,11 +154,12 @@ class EventoController extends GetxController {
       } else if (jsonResponse.containsKey('error')) {
         return 'Error: ' + jsonResponse['error'];
       } else {
-        return "Error en la conexion";
+        return "Error en la conexion: Intentelo mas tarde";
       }
     } on TimeoutException catch (e) {
-      print(e);
-      return 'Error de conexcion';
+      return 'Error en la conexion: Intentelo mas tarde';
+    } on Exception catch (e) {
+      return 'Error en la conexion: Intentelo mas tarde';
     }
   }
 }

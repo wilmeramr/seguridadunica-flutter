@@ -20,9 +20,22 @@ class EventoInicioScreen extends StatelessWidget {
       Background(color2: Color(0xff6989F5), color1: Colors.white),
       _MainScroll(
         onNextPage: () async {
-          final eventoCtrl = Get.find<EventoController>();
+          final authService = Provider.of<AuthService>(context, listen: false);
 
-          await eventoCtrl.getTopEventoScroll();
+          var conx = await authService.internetConnectivity();
+          if (conx) {
+            final eventoCtrl = Get.find<EventoController>();
+
+            var result = await eventoCtrl.getTopEventoScroll();
+
+            if (!result.contains('Ok'))
+              NotificationsService.showMyDialogAndroid(
+                  context, 'Evento', result);
+          } else
+            NotificationsService.showMyDialogAndroid(
+                context,
+                'No se pudo conectar a intenet',
+                'Debe asegurarse que el dipositivo tengo conexion a internet');
         },
       ),
       Positioned(bottom: -10, right: 0, child: _BotonNewList())
@@ -41,8 +54,17 @@ class _BotonNewList extends StatelessWidget {
         color: Colors.blue,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(topLeft: Radius.circular(50))),
-        onPressed: () {
-          Navigator.pushNamed(context, 'invitarEventoInicio');
+        onPressed: () async {
+          final authService = Provider.of<AuthService>(context, listen: false);
+
+          var conx = await authService.internetConnectivity();
+          if (conx) {
+            Navigator.pushNamed(context, 'invitarEventoInicio');
+          } else
+            NotificationsService.showMyDialogAndroid(
+                context,
+                'No se pudo conectar a intenet',
+                'Debe asegurarse que el dipositivo tengo conexion a internet');
         },
         child: Text(
           'CREAR UN EVENTO',
@@ -70,7 +92,7 @@ class _MainScrollState extends State<_MainScroll> {
   final eventoCtrl = Get.find<EventoController>();
 
   Timer? _timer;
-  int _start = 10;
+  int _start = 5;
 
   void startTimer() {
     const oneSec = const Duration(seconds: 1);
@@ -95,8 +117,8 @@ class _MainScrollState extends State<_MainScroll> {
     super.initState();
     startTimer();
     scrollController.addListener(() {
-      if (scrollController.position.pixels >=
-          scrollController.position.maxScrollExtent - 500) {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
         widget.onNextPage();
       }
       ;
@@ -121,7 +143,19 @@ class _MainScrollState extends State<_MainScroll> {
     return RefreshIndicator(
       edgeOffset: 130,
       onRefresh: () async {
-        await eventoCtrl.getTopEvento();
+        final authService = Provider.of<AuthService>(context, listen: false);
+
+        var conx = await authService.internetConnectivity();
+        if (conx) {
+          var result = await eventoCtrl.getTopEvento();
+
+          if (!result.contains('Ok'))
+            NotificationsService.showMyDialogAndroid(context, 'Evento', result);
+        } else
+          NotificationsService.showMyDialogAndroid(
+              context,
+              'No se pudo conectar a intenet',
+              'Debe asegurarse que el dipositivo tengo conexion a internet');
       },
       child: Obx(() => CustomScrollView(
             controller: scrollController,

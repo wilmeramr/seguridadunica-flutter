@@ -18,7 +18,6 @@ class MascotaFormController extends GetxController {
 
   MascotaFormController(this.mascota) {}
   bool isValidForm() {
-    print(mascota.value.mascPeso);
     return formKey.currentState?.validate() ?? false;
   }
 
@@ -59,6 +58,8 @@ class MascotaFormController extends GetxController {
       }
     } on TimeoutException catch (e) {
       return 'Error de conexcion';
+    } on Exception catch (e) {
+      return 'Error de conexcion';
     }
   }
 
@@ -88,6 +89,8 @@ class MascotaFormController extends GetxController {
       }
     } on TimeoutException catch (e) {
       return 'Error de conexcion';
+    } on Exception catch (e) {
+      return 'Error de conexcion';
     }
   }
 
@@ -97,33 +100,38 @@ class MascotaFormController extends GetxController {
 
   Future<String?> uploadImage() async {
     if (this.newPictureFile == null) return null;
+    try {
+      String token = await storage.read(key: 'token') ?? '';
 
-    String token = await storage.read(key: 'token') ?? '';
+      Map<String, String> requestHeaders = {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}'
+      };
 
-    Map<String, String> requestHeaders = {
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
-    };
+      final url = Uri.https(_baseUrl, '/api/mascota/uploadImg');
 
-    final url = Uri.https(_baseUrl, '/api/mascota/uploadImg');
+      final imageUploadRequest = http.MultipartRequest('POST', url);
 
-    final imageUploadRequest = http.MultipartRequest('POST', url);
+      final file =
+          await http.MultipartFile.fromPath('imagen', newPictureFile!.path)
+              .timeout(const Duration(seconds: 10));
 
-    final file =
-        await http.MultipartFile.fromPath('imagen', newPictureFile!.path)
-            .timeout(const Duration(seconds: 10));
+      imageUploadRequest.headers.addAll(requestHeaders);
+      imageUploadRequest.files.add(file);
 
-    imageUploadRequest.headers.addAll(requestHeaders);
-    imageUploadRequest.files.add(file);
-
-    final streamResponse = await imageUploadRequest.send();
-    final resp = await http.Response.fromStream(streamResponse);
-    if (resp.statusCode != 200 && resp.statusCode != 201) {
-      return null;
+      final streamResponse = await imageUploadRequest.send();
+      final resp = await http.Response.fromStream(streamResponse);
+      if (resp.statusCode != 200 && resp.statusCode != 201) {
+        return null;
+      }
+      this.newPictureFile = null;
+      final decodeData = json.decode(resp.body);
+      return decodeData['link'];
+    } on TimeoutException catch (e) {
+      return 'Error de conexcion';
+    } on Exception catch (e) {
+      return 'Error de conexcion';
     }
-    this.newPictureFile = null;
-    final decodeData = json.decode(resp.body);
-    return decodeData['link'];
   }
 }

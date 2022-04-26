@@ -182,7 +182,6 @@ class _MainScrollState extends State<_MainScroll> {
         if (conx) {
           final badgeCtrl = Get.find<BadgeController>();
           badgeCtrl.badge.value = 0;
-          await notificacionCtrl.getTopNoti();
           var result = await notificacionCtrl.getTopNoti();
           if (!result!.contains('Ok'))
             NotificationsService.showMyDialogAndroid(
@@ -223,6 +222,11 @@ class _MainScrollState extends State<_MainScroll> {
                       ...notificacionCtrl.data
                           .map((e) => _ListItem(noti: e))
                           .toList(),
+                      notificacionCtrl.isLoading.value
+                          ? CircularProgressIndicator(
+                              color: Colors.red,
+                            )
+                          : Text(""),
                       SizedBox(
                         height: 100,
                       )

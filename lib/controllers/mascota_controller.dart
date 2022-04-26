@@ -21,6 +21,7 @@ class MascotaController extends GetxController {
   var _page = 1.obs;
   var _last_page = 1.obs;
   Rx<Mascota>? mascotaSelected;
+  var isLoading = false.obs;
 
   var galleryOCamare = 0.obs;
 
@@ -46,7 +47,7 @@ class MascotaController extends GetxController {
     return response.body;
   }
 
-  getTopMascota() async {
+  Future<String> getTopMascota() async {
     _page = 1.obs;
     try {
       var jsonResponse = jsonDecode(await _getJsonData('/api/mascota'))
@@ -58,22 +59,25 @@ class MascotaController extends GetxController {
         data.addAll(masc.data);
         _last_page = masc.lastPage.obs;
 
-        return null;
+        return 'Ok';
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
       } else {
-        return "Error en la conexion";
+        return "Error en la conexion: Intentelo mas tarde";
       }
     } on TimeoutException catch (e) {
-      return 'Error de conexcion';
+      return 'Error en la conexion: Intentelo mas tarde';
+    } on Exception catch (e) {
+      return 'Error en la conexion: Intentelo mas tarde';
     }
   }
 
-  getTopMascotaScroll() async {
-    if (_page.value < _last_page.value) {
-      _page++;
+  Future<String> getTopMascotaScroll() async {
+    _page.value += 1;
+
+    if (_page.value <= _last_page.value) {
       try {
-        print('Busco pagina ${_page}');
+        isLoading.value = true;
         var jsonResponse =
             jsonDecode(await _getJsonData('/api/mascota', _page.value))
                 as Map<String, dynamic>;
@@ -81,19 +85,33 @@ class MascotaController extends GetxController {
           // final Map<String, dynamic> decodeResp = json.decode(response.body);
           var aut = MascotasResponse.fromMap(jsonResponse);
           data.value = [...data, ...aut.data];
-          return null;
+          isLoading.value = false;
+          return 'Ok';
           //var itemCount = jsonResponse['totalItems'];
           // print('Number of books about http: $itemCount.');
         } else {
+          _page.value -= 1;
+          isLoading.value = false;
+
           return "Error en la conexion";
         }
       } on TimeoutException catch (e) {
+        _page.value -= 1;
+        isLoading.value = false;
+
+        return 'Error de conexcion';
+      } on Exception catch (e) {
+        _page.value -= 1;
+        isLoading.value = false;
+
         return 'Error de conexcion';
       }
+    } else {
+      return 'Ok';
     }
   }
 
-  getTopMascotaEspecie() async {
+  Future<String> getTopMascotaEspecie() async {
     try {
       String token = await storage.read(key: 'token') ?? '';
 
@@ -112,8 +130,7 @@ class MascotaController extends GetxController {
         // final Map<String, dynamic> decodeResp = json.decode(response.body);
         var aut = MascotasEspeciesResponse.fromMap(jsonResponse);
         dataEspeccies = aut.especies;
-        print(dataEspeccies.toString());
-        return null;
+        return 'Ok';
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
       } else {
@@ -121,10 +138,12 @@ class MascotaController extends GetxController {
       }
     } on TimeoutException catch (e) {
       return 'Error de conexcion';
+    } on Exception catch (e) {
+      return 'Error de conexcion';
     }
   }
 
-  getTopMascotaGeneros() async {
+  Future<String> getTopMascotaGeneros() async {
     try {
       String token = await storage.read(key: 'token') ?? '';
 
@@ -137,7 +156,6 @@ class MascotaController extends GetxController {
       final response = await http
           .get(url, headers: requestHeaders)
           .timeout(const Duration(seconds: 10));
-      print(response.body);
       var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
       if (jsonResponse.containsKey('generos')) {
         // final Map<String, dynamic> decodeResp = json.decode(response.body);
@@ -145,7 +163,7 @@ class MascotaController extends GetxController {
         datagenero = aut.generos;
         carga.value = 1;
 
-        return null;
+        return 'Ok';
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
       } else {
@@ -153,13 +171,21 @@ class MascotaController extends GetxController {
       }
     } on TimeoutException catch (e) {
       return 'Error de conexcion';
+    } on Exception catch (e) {
+      return 'Error de conexcion';
     }
   }
 
   Future<bool> checkUrl(String urlv) async {
     final url = Uri(path: urlv);
-    final response = await http.get(url).timeout(const Duration(seconds: 10));
+    try {
+      final response = await http.get(url).timeout(const Duration(seconds: 10));
 
-    return response.statusCode == 200;
+      return response.statusCode == 200;
+    } on TimeoutException catch (e) {
+      return false;
+    } on Exception catch (e) {
+      return false;
+    }
   }
 }

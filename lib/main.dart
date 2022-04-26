@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
     PushNotificationService.messageStream.listen((message) {
       final badgeCtrl = Get.find<BadgeController>();
       badgeCtrl.badge.value += 1;
-      print(badgeCtrl.badge.value);
+      print('MyApp: $message');
       /*  print('MyApp: $message');
       if (message == 'message')
         NotificationsService.navigatorKey.currentState
@@ -77,10 +77,10 @@ class _MyAppState extends State<MyApp> {
         'product': (_) => ProductScreen(),
         'checking': (_) => CheckAuthScreen(),
         'dash': (_) => DashBoardScreen(),
-        'invitar': (_) => InvitarScreen(),
-        'invitarInicio': (_) => SliderListScreen(),
-        'servicioInicio': (_) => ServicioInicioScreen(),
-        'invitarServicioInicio': (_) => InvitarServicioScreen(),
+        'autorizaInvita': (_) => InvitaAutorizaScreen(),
+        'autorizaInicio': (_) => InicioAutorizaScreen(),
+        'servicioInicio': (_) => InicioServicioScreen(),
+        'invitarServicio': (_) => InvitaServicioScreen(),
         'notificacionInicio': (_) => NotificacionInicioScreen(),
         'evniarNotificacion': (_) => EnviarNotificacionScreen(),
         'deliveryInicio': (_) => DeliveryInicioScreen(),
@@ -89,9 +89,8 @@ class _MyAppState extends State<MyApp> {
         'invitarEventoInicio': (_) => InvitarEventoScreen(),
         'mascotaInicio': (_) => MascotaInicioScreen(),
         'mascotaEditar': (_) => MascotaEditarScreen(),
-        'servicio': (_) => InvitarScreen(),
+        'servicio': (_) => InvitaAutorizaScreen(),
         'dash2': (_) => DashScreen(),
-        'slider': (_) => SliderListScreen(),
         'detalleautorizacion': (_) => DetalleAutorizacionScreen()
       },
       theme: ThemeData.light().copyWith(

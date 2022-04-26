@@ -23,9 +23,21 @@ class MascotaInicioScreen extends StatelessWidget {
       Background(color2: Color(0xff6989F5), color1: Colors.white),
       _MainScroll(
         onNextPage: () async {
-          final mascotaCtrl = Get.find<MascotaController>();
+          final authService = Provider.of<AuthService>(context, listen: false);
 
-          await mascotaCtrl.getTopMascotaScroll();
+          var conx = await authService.internetConnectivity();
+          if (conx) {
+            final mascotaCtrl = Get.find<MascotaController>();
+
+            var result = await mascotaCtrl.getTopMascotaScroll();
+            if (!result.contains('Ok'))
+              NotificationsService.showMyDialogAndroid(
+                  context, 'Mascota', result);
+          } else
+            NotificationsService.showMyDialogAndroid(
+                context,
+                'No se pudo conectar a intenet',
+                'Debe asegurarse que el dipositivo tengo conexion a internet');
         },
       ),
       Obx(() => mascotaCtrl.carga == 1
@@ -46,19 +58,28 @@ class _BotonNewList extends StatelessWidget {
         color: Colors.blue,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(topLeft: Radius.circular(50))),
-        onPressed: () {
-          final mascotaCtrl = Get.find<MascotaController>();
-          mascotaCtrl.mascotaSelected = Mascota(
-                  mascId: null,
-                  mascUserId: 0,
-                  mascName: '',
-                  mascEspecieId: 1,
-                  mascGeneroId: 2,
-                  mascPeso: 0.00,
-                  mascFechaNacimiento: DateTime.now(),
-                  mascFechaVacunacion: DateTime.now())
-              .obs;
-          Navigator.pushNamed(context, 'mascotaEditar');
+        onPressed: () async {
+          final authService = Provider.of<AuthService>(context, listen: false);
+
+          var conx = await authService.internetConnectivity();
+          if (conx) {
+            final mascotaCtrl = Get.find<MascotaController>();
+            mascotaCtrl.mascotaSelected = Mascota(
+                    mascId: null,
+                    mascUserId: 0,
+                    mascName: '',
+                    mascEspecieId: 1,
+                    mascGeneroId: 2,
+                    mascPeso: 0.00,
+                    mascFechaNacimiento: DateTime.now(),
+                    mascFechaVacunacion: DateTime.now())
+                .obs;
+            Navigator.pushNamed(context, 'mascotaEditar');
+          } else
+            NotificationsService.showMyDialogAndroid(
+                context,
+                'No se pudo conectar a intenet',
+                'Debe asegurarse que el dipositivo tengo conexion a internet');
         },
         child: Text(
           'REGISTRAR UNA MASCOTA',
@@ -85,7 +106,7 @@ class _MainScrollState extends State<_MainScroll> {
   final ScrollController scrollController = ScrollController();
 
   Timer? _timer;
-  int _start = 10;
+  int _start = 5;
 
   void startTimer() {
     const oneSec = const Duration(seconds: 1);
@@ -110,9 +131,8 @@ class _MainScrollState extends State<_MainScroll> {
     super.initState();
     startTimer();
     scrollController.addListener(() {
-      if (scrollController.position.pixels >=
-          scrollController.position.maxScrollExtent - 500) {
-        print('busco pagina');
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
         widget.onNextPage();
       }
       ;
@@ -137,7 +157,20 @@ class _MainScrollState extends State<_MainScroll> {
     return RefreshIndicator(
       edgeOffset: 130,
       onRefresh: () async {
-        await mascotaCtrl.getTopMascota();
+        final authService = Provider.of<AuthService>(context, listen: false);
+
+        var conx = await authService.internetConnectivity();
+        if (conx) {
+          var result = await mascotaCtrl.getTopMascota();
+
+          if (!result.contains('Ok'))
+            NotificationsService.showMyDialogAndroid(
+                context, 'Delivery', result);
+        } else
+          NotificationsService.showMyDialogAndroid(
+              context,
+              'No se pudo conectar a intenet',
+              'Debe asegurarse que el dipositivo tengo conexion a internet');
       },
       child: Obx(() => CustomScrollView(
             controller: scrollController,

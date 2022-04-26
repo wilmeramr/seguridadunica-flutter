@@ -126,7 +126,7 @@ class Datum {
   dynamic autSabado;
   dynamic autDomingo;
   dynamic autComentario;
-  int autCantidadInvitado;
+  int? autCantidadInvitado;
   DateTime? autFechaEvento;
   DateTime? autFechaEventoHasta;
   int? autActivo;

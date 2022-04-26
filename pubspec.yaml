@@ -28,6 +28,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   animate_do: ^2.1.0
+  animated_toggle_switch: ^0.5.2
   badges: ^2.0.2
   cached_network_image: ^3.2.0
   cupertino_icons: ^1.0.2

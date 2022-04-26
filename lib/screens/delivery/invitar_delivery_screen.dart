@@ -63,24 +63,34 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
                   if (isLastStep) {
                     setState(() => isCompleted = true);
 
-                    final deliveryService = Get.find<DeliveryController>();
+                    final authService =
+                        Provider.of<AuthService>(context, listen: false);
 
-                    final response = await deliveryService.postRegistroDelivery(
-                        3,
-                        DateTime.now(),
-                        DateTime.now(),
-                        valueVigencia,
-                        autorizoA,
-                        email);
+                    var conx = await authService.internetConnectivity();
+                    if (conx) {
+                      final deliveryService = Get.find<DeliveryController>();
 
-                    if (response.contains('Error')) {
-                      NotificationsService.showSnackbar(response);
-                    } else {
-                      await Share.share(response);
+                      final response =
+                          await deliveryService.postRegistroDelivery(
+                              3,
+                              DateTime.now(),
+                              DateTime.now(),
+                              valueVigencia,
+                              autorizoA,
+                              email);
 
-                      await deliveryService.getTopDeli();
-                      Navigator.pop(context);
-                    }
+                      if (response.contains('Error')) {
+                        NotificationsService.showSnackbar(response);
+                      } else {
+                        await deliveryService.getTopDeli();
+                        Navigator.pop(context);
+                      }
+                    } else
+                      NotificationsService.showMyDialogAndroid(
+                          context,
+                          'No se pudo conectar a intenet',
+                          'Debe asegurarse que el dipositivo tengo conexion a internet');
+                    setState(() => isCompleted = false);
                   } else {
                     if (currentStep == 1 && autorizoA.isEmpty) {
                       NotificationsService.showSnackbar(
@@ -118,9 +128,22 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
                       children: [
                         Expanded(
                             child: ElevatedButton(
-                          child: Text(isLastStep ? 'ENVIAR' : 'SIGUIENTE'),
-                          onPressed: details.onStepContinue,
-                        )),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    !isCompleted
+                                        ? Container()
+                                        : Image(
+                                            width: size.width * 0.05,
+                                            image: AssetImage(
+                                                'assets/loading.gif'),
+                                          ),
+                                    Text(isLastStep ? 'ENVIAR' : 'SIGUIENTE'),
+                                  ],
+                                ),
+                                onPressed: !isCompleted
+                                    ? details.onStepContinue
+                                    : null)),
                         SizedBox(
                           width: 12,
                         ),
@@ -137,15 +160,6 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
               ),
             )),
           ),
-          !isCompleted
-              ? Container()
-              : Positioned(
-                  bottom: size.height * 0.2,
-                  left: size.width * 0.4,
-                  child: Image(
-                    width: size.width * 0.3,
-                    image: AssetImage('assets/loading.gif'),
-                  ))
         ]),
       ),
     );

@@ -2,17 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import '../../controllers/controllers.dart';
 import '../../models/aut_models.dart';
 import '../../services/services.dart';
 import '../../widgets/widgets.dart';
 
-class DeliveryInicioScreen extends StatelessWidget {
-  final deliveryService = Get.put(DeliveryController());
-
+class InicioServicioScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,13 +20,14 @@ class DeliveryInicioScreen extends StatelessWidget {
 
           var conx = await authService.internetConnectivity();
           if (conx) {
-            final deliveryService = Get.find<DeliveryController>();
-
-            var result = await deliveryService.getTopDeliScroll();
+            final servicioService =
+                Provider.of<ServicioService>(context, listen: false);
+            var result = await servicioService.getTopAutScroll();
+            await servicioService.getServicioTipos();
 
             if (!result.contains('Ok'))
               NotificationsService.showMyDialogAndroid(
-                  context, 'Delivery', result);
+                  context, 'Servicios', result);
           } else
             NotificationsService.showMyDialogAndroid(
                 context,
@@ -59,7 +56,7 @@ class _BotonNewList extends StatelessWidget {
 
           var conx = await authService.internetConnectivity();
           if (conx) {
-            Navigator.pushNamed(context, 'invitarDeliveryInicio');
+            Navigator.pushNamed(context, 'invitarServicio');
           } else
             NotificationsService.showMyDialogAndroid(
                 context,
@@ -67,7 +64,7 @@ class _BotonNewList extends StatelessWidget {
                 'Debe asegurarse que el dipositivo tengo conexion a internet');
         },
         child: Text(
-          'CREAR UNA ENTRADA',
+          'CREAR UN SERVICIO',
           style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -89,7 +86,6 @@ class _MainScroll extends StatefulWidget {
 
 class _MainScrollState extends State<_MainScroll> {
   final ScrollController scrollController = ScrollController();
-
   Timer? _timer;
   int _start = 5;
 
@@ -115,6 +111,7 @@ class _MainScrollState extends State<_MainScroll> {
   void initState() {
     super.initState();
     startTimer();
+
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
@@ -136,8 +133,9 @@ class _MainScrollState extends State<_MainScroll> {
 
   @override
   Widget build(BuildContext context) {
-    // final deliveryService = Provider.of<DeliveryService>(context);
-    final deliveryService = Get.find<DeliveryController>();
+    final servicioService = Provider.of<ServicioService>(context);
+    final data = servicioService.data;
+    items2 = data.map((e) => _ListItem(servicios: e)).toList();
 
     return RefreshIndicator(
       edgeOffset: 130,
@@ -146,53 +144,53 @@ class _MainScrollState extends State<_MainScroll> {
 
         var conx = await authService.internetConnectivity();
         if (conx) {
-          var result = await deliveryService.getTopDeli();
+          final servicioService =
+              Provider.of<ServicioService>(context, listen: false);
+          var result = await servicioService.getTopAut();
+          await servicioService.getServicioTipos();
 
           if (!result.contains('Ok'))
             NotificationsService.showMyDialogAndroid(
-                context, 'Delivery', result);
+                context, 'Servicios', result);
         } else
           NotificationsService.showMyDialogAndroid(
               context,
               'No se pudo conectar a intenet',
               'Debe asegurarse que el dipositivo tengo conexion a internet');
       },
-      child: Obx(() => CustomScrollView(
-            controller: scrollController,
-            physics:
-                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-            slivers: [
-              SliverPersistentHeader(
-                  floating: true,
-                  delegate: _SliverCustomHeaderDelegate(
-                      minHeight: 170,
-                      maxHeight: 200,
-                      child: Container(
-                          alignment: Alignment.centerLeft,
-                          color: Colors.white,
-                          child: _Titulo()))),
-              deliveryService.data.isEmpty && _start > 0
-                  ? SliverList(
-                      delegate: SliverChildListDelegate([
-                      LinearProgressIndicator(
-                        color: Colors.green,
-                      ),
-                      Center(child: Text('Espere por favor')),
-                      SizedBox(
-                        height: 10,
-                      )
-                    ]))
-                  : SliverList(
-                      delegate: SliverChildListDelegate([
-                      ...deliveryService.data
-                          .map((e) => _ListItem(delivery: e))
-                          .toList(),
-                      SizedBox(
-                        height: 100,
-                      )
-                    ]))
-            ],
-          )),
+      child: CustomScrollView(
+        controller: scrollController,
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        slivers: [
+          SliverPersistentHeader(
+              floating: true,
+              delegate: _SliverCustomHeaderDelegate(
+                  minHeight: 170,
+                  maxHeight: 200,
+                  child: Container(
+                      alignment: Alignment.centerLeft,
+                      color: Colors.white,
+                      child: _Titulo()))),
+          items2.isEmpty && _start > 0
+              ? SliverList(
+                  delegate: SliverChildListDelegate([
+                  LinearProgressIndicator(
+                    color: Colors.green,
+                  ),
+                  Center(child: Text('Espere por favor')),
+                  SizedBox(
+                    height: 10,
+                  )
+                ]))
+              : SliverList(
+                  delegate: SliverChildListDelegate([
+                  ...items2,
+                  SizedBox(
+                    height: 100,
+                  )
+                ]))
+        ],
+      ),
     );
   }
 }
@@ -240,13 +238,13 @@ class _Titulo extends StatelessWidget {
             color: Colors.white,
             //  margin: EdgeInsets.only(top: 200),
             child: Hero(
-              tag: Text('Delivery,Entregas,otros'),
+              tag: Text('Servicios'),
               child: BotonGordo(
                 iconL: FontAwesomeIcons.taxi,
                 iconR: FontAwesomeIcons.chevronLeft,
-                texto: 'Delivery,Entregas,otros',
-                color1: Color.fromARGB(255, 105, 245, 203),
-                color2: Color.fromARGB(255, 129, 95, 232),
+                texto: 'Servicios',
+                color1: Color(0xff66A9F2),
+                color2: Color(0xff536CF6),
                 onPress: () => Navigator.of(context).pop(),
               ),
             ),
@@ -258,9 +256,9 @@ class _Titulo extends StatelessWidget {
 }
 
 class _ListItem extends StatelessWidget {
-  final Datum delivery;
+  final Datum servicios;
 
-  const _ListItem({required this.delivery});
+  const _ListItem({required this.servicios});
 
   @override
   Widget build(BuildContext context) {
@@ -268,7 +266,7 @@ class _ListItem extends StatelessWidget {
       GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, 'detalleautorizacion',
-                arguments: delivery);
+                arguments: servicios);
           },
           child: Container(
             margin: EdgeInsets.all(10),
@@ -276,18 +274,22 @@ class _ListItem extends StatelessWidget {
                 color: Colors.white, borderRadius: BorderRadius.circular(15)),
             child: Column(
               children: [
+                _NotificacionTitulo(
+                  servicios,
+                ),
                 SizedBox(
                   height: 10,
                 ),
-                _NotificacionBody(delivery),
-                SizedBox(
-                  height: 0,
+                _NotificacionBody(
+                  servicios,
                 ),
-                _NotificacionVigencia(delivery),
-                _NotificacionCreado(delivery),
+                SizedBox(
+                  height: 10,
+                ),
+                _NotificacionStatus(servicios),
                 Divider(),
                 SizedBox(
-                  height: 0,
+                  height: 10,
                 ),
               ],
             ),
@@ -296,10 +298,38 @@ class _ListItem extends StatelessWidget {
   }
 }
 
+class _NotificacionStatus extends StatelessWidget {
+  final Datum servicios;
+
+  const _NotificacionStatus(this.servicios);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        RawMaterialButton(
+          onPressed: () {},
+          //  fillColor: this.noti.notiEnvio == 1 ? Colors.green : Colors.red,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          child: Row(
+            children: [
+              Text(
+                  'Fecha de Creación: ${servicios.createdAt?.day.toString().padLeft(2, '0')}/${servicios.createdAt?.month.toString().padLeft(2, '0')}/${servicios.createdAt?.year.toString().padLeft(4, '0')}')
+            ],
+          ),
+        )
+      ],
+    ));
+  }
+}
+
 class _NotificacionBody extends StatelessWidget {
-  final Datum delivery;
+  final Datum servicios;
 
-  const _NotificacionBody(this.delivery);
+  const _NotificacionBody(this.servicios);
 
   @override
   Widget build(BuildContext context) {
@@ -308,60 +338,62 @@ class _NotificacionBody extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: Text(
-          'Autorizo a: ${delivery.autNombre} ',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-          textAlign: TextAlign.justify,
+        child: Column(
+          children: [
+            FittedBox(
+              child: Text(
+                  this.servicios.autDesde == null
+                      ? "No registrado"
+                      : "Desde:  ${this.servicios.autDesde?.day.toString()}-${this.servicios.autDesde?.month.toString()}-${this.servicios.autDesde?.year.toString()}",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ),
+            FittedBox(
+              child: Text(
+                  this.servicios.autDesde == null
+                      ? "No registrado"
+                      : "Hasta:  ${this.servicios.autHasta?.day.toString()}-${this.servicios.autHasta?.month.toString()}-${this.servicios.autHasta?.year.toString()}",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ),
+          ],
         ));
   }
 }
 
-class _NotificacionVigencia extends StatelessWidget {
-  final Datum delivery;
+class _NotificacionTitulo extends StatelessWidget {
+  final Datum servicios;
 
-  const _NotificacionVigencia(this.delivery);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: Text(
-          'Tiempo Vigencia: ${delivery.autLunes}',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-          textAlign: TextAlign.justify,
-        ));
-  }
-}
-
-class _NotificacionCreado extends StatelessWidget {
-  final Datum delivery;
-
-  const _NotificacionCreado(this.delivery);
+  const _NotificacionTitulo(this.servicios);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: Text(
-          'Creado por: ${delivery.email}\n'
-          'Fecha de Creacion: ${delivery.autDesde?.day.toString().padLeft(2, '0')}-${delivery.autDesde?.month.toString().padLeft(2, '0')}-${delivery.autDesde?.year}\n',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
+      padding: EdgeInsets.only(top: 10),
+      child: Column(
+        children: [
+          FittedBox(
+            child: Text(
+                "Para: ${this.servicios.autNombre == null ? "No registrado" : this.servicios.autNombre}",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                )),
           ),
-          textAlign: TextAlign.justify,
-        ));
+          FittedBox(
+            child: Text(
+                "De: ${this.servicios.email == null ? "No registrado" : this.servicios.email}",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                )),
+          ),
+        ],
+      ),
+    );
   }
 }

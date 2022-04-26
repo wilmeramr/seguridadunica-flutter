@@ -8,9 +8,11 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../../controllers/controllers.dart';
 import '../../models/masc_esp_models.dart';
+import '../../services/services.dart';
 
 class MascotaEditarScreen extends StatelessWidget {
   @override
@@ -115,8 +117,8 @@ class _MascotaScreenBody extends StatelessWidget {
           floatingActionButtonLocation:
               FloatingActionButtonLocation.miniEndDocked,
           floatingActionButton: ButtonTheme(
-            minWidth: size.width * 0.6,
-            height: 70,
+            minWidth: size.width * 0.2,
+            height: 50,
             child: MaterialButton(
               color: Colors.blue,
               shape: RoundedRectangleBorder(
@@ -130,37 +132,50 @@ class _MascotaScreenBody extends StatelessWidget {
               onPressed: mascotaFormCtrl.isSaving.value
                   ? () {}
                   : () async {
-                      if (!mascotaFormCtrl.isValidForm()) return;
+                      final authService =
+                          Provider.of<AuthService>(context, listen: false);
 
-                      mascotaFormCtrl.isSaving.value = true;
-                      final String? imageUrl =
-                          await mascotaFormCtrl.uploadImage();
-                      if (imageUrl != null) {
-                        mascotaFormCtrl.mascota.value.mascUrlFoto = imageUrl;
-                      }
+                      var conx = await authService.internetConnectivity();
+                      if (conx) {
+                        if (!mascotaFormCtrl.isValidForm()) return;
 
-                      var result = await mascotaFormCtrl.saveOrCreateMascota();
-                      mascotaFormCtrl.isSaving.value = false;
+                        mascotaFormCtrl.isSaving.value = true;
+                        final String? imageUrl =
+                            await mascotaFormCtrl.uploadImage();
+                        if (imageUrl != null) {
+                          mascotaFormCtrl.mascota.value.mascUrlFoto = imageUrl;
+                        }
 
-                      if (result.contains('update')) {
-                        mascotaCtrl.data.value =
-                            mascotaCtrl.data.value.map((e) {
-                          if (e.mascId ==
-                              mascotaFormCtrl.mascota.value.mascId) {
-                            e = mascotaFormCtrl.mascota.value;
-                          }
-                          return e;
-                        }).toList();
-                      } else if (result.contains('create')) {
-                        mascotaCtrl.mascotaSelected!.update((val) {
-                          val?.mascId = int.parse(result.split(':')[1]);
-                          mascotaCtrl.data
-                              .insert(0, mascotaCtrl.mascotaSelected!.value);
-                          mascotaCtrl.data.refresh();
-                        });
-
-                        print(mascotaCtrl.mascotaSelected!.value.mascId);
-                      }
+                        var result =
+                            await mascotaFormCtrl.saveOrCreateMascota();
+                        mascotaFormCtrl.isSaving.value = false;
+                        if (result.contains('error')) {
+                          NotificationsService.showMyDialogAndroid(
+                              context, 'Mascota', result);
+                          return;
+                        }
+                        if (result.contains('update')) {
+                          mascotaCtrl.data.value =
+                              mascotaCtrl.data.value.map((e) {
+                            if (e.mascId ==
+                                mascotaFormCtrl.mascota.value.mascId) {
+                              e = mascotaFormCtrl.mascota.value;
+                            }
+                            return e;
+                          }).toList();
+                        } else if (result.contains('create')) {
+                          mascotaCtrl.mascotaSelected!.update((val) {
+                            val?.mascId = int.parse(result.split(':')[1]);
+                            mascotaCtrl.data
+                                .insert(0, mascotaCtrl.mascotaSelected!.value);
+                            mascotaCtrl.data.refresh();
+                          });
+                        }
+                      } else
+                        NotificationsService.showMyDialogAndroid(
+                            context,
+                            'No se pudo conectar a intenet',
+                            'Debe asegurarse que el dipositivo tengo conexion a internet');
                     },
             ),
           ),
@@ -346,11 +361,6 @@ class _ProductForm extends StatelessWidget {
                   SizedBox(
                     height: 30,
                   ),
-                  SwitchListTile.adaptive(
-                      value: true,
-                      title: Text('Disponible'),
-                      activeColor: Colors.blue,
-                      onChanged: (value) {}),
                   SizedBox(
                     height: 30,
                   )

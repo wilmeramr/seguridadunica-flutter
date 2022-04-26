@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/notificacion_models.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -9,14 +10,22 @@ import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
 class NotificacionController extends GetxController {
+  GlobalKey<FormState> formKey = new GlobalKey<FormState>();
   final String _baseUrl = 'acceso.seguridadunica.com';
   final storage = new FlutterSecureStorage();
 
   var data = <Notificacion>[].obs;
+  var isLoading = false.obs;
+  var isSaving = false.obs;
+
   var _page = 1.obs;
   var _last_page = 1.obs;
 
   var badgeNoti = 'Notificaciones'.obs;
+
+  var enviaA = false.obs;
+  var titulo = "".obs;
+  var body = "".obs;
 
   NotificacionController() {
     onInit();
@@ -26,6 +35,10 @@ class NotificacionController extends GetxController {
   void onInit() {
     super.onInit();
     getTopNoti();
+  }
+
+  bool isValidForm() {
+    return formKey.currentState?.validate() ?? false;
   }
 
   _getJsonData(String endpoint, [int page = 1]) async {
@@ -75,6 +88,7 @@ class NotificacionController extends GetxController {
 
     if (_page.value <= _last_page.value) {
       try {
+        isLoading.value = true;
         var jsonResponse =
             jsonDecode(await _getJsonData('/api/notificacion', _page.value))
                 as Map<String, dynamic>;
@@ -83,22 +97,26 @@ class NotificacionController extends GetxController {
           // final Map<String, dynamic> decodeResp = json.decode(response.body);
           var aut = NotificacionesResponse.fromMap(jsonResponse).obs;
           data.value = [...data, ...aut.value.data];
-
           update();
-          print(_page);
-
+          isLoading.value = false;
           return 'Ok';
           //var itemCount = jsonResponse['totalItems'];
           // print('Number of books about http: $itemCount.');
         } else {
           _page.value -= 1;
+          isLoading.value = false;
+
           return "Error en la conexion";
         }
       } on TimeoutException catch (e) {
         _page.value -= 1;
+        isLoading.value = false;
+
         return 'Error de conexcion';
       } on Exception catch (e) {
         _page.value -= 1;
+        isLoading.value = false;
+
         return 'Error de conexcion';
       }
     } else {
@@ -146,6 +164,8 @@ class NotificacionController extends GetxController {
         return "Error en la conexion";
       }
     } on TimeoutException catch (e) {
+      return 'Error de conexcion';
+    } on Exception catch (e) {
       return 'Error de conexcion';
     }
   }
