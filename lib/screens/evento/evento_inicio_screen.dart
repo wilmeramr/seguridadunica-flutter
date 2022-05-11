@@ -166,7 +166,7 @@ class _MainScrollState extends State<_MainScroll> {
                   floating: true,
                   delegate: _SliverCustomHeaderDelegate(
                       minHeight: 170,
-                      maxHeight: 200,
+                      maxHeight: 222,
                       child: Container(
                           alignment: Alignment.centerLeft,
                           color: Colors.white,

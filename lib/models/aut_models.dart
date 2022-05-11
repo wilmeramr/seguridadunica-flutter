@@ -165,7 +165,7 @@ class Datum {
         autActivo: json["aut_activo"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
-        email: json["us_email"],
+        email: json["email"],
       );
 
   Map<String, dynamic> toJson() => {

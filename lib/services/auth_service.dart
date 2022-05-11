@@ -141,10 +141,10 @@ class AuthService extends ChangeNotifier {
   Future<String?> diviceToken(bool up) async {
     var user = await storage.read(key: 'user') ?? '';
     String token = await storage.read(key: 'token') ?? '';
-
     if (user != '' && token != '') {
       var userDto = User.fromJson(jsonDecode(user) as Map<String, dynamic>);
       var deviceToken = PushNotificationService.token;
+      print(deviceToken);
 
       final Map<String, dynamic> auhtData = {
         'token_device': up ? deviceToken : 'x'

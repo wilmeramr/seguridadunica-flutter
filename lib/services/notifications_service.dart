@@ -61,6 +61,14 @@ class NotificationsService {
                     )
                   ],
                 ),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('Cancelar'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
               );
             });
   }
