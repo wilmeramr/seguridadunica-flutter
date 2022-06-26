@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/masc_models.dart';
-import 'package:flutter_application_1/services/services.dart';
-import 'package:flutter_application_1/widgets/mascota_card.dart';
+import 'package:Unikey/models/masc_models.dart';
+import 'package:Unikey/services/services.dart';
+import 'package:Unikey/widgets/mascota_card.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';

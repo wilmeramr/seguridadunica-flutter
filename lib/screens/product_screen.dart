@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/ui/input_decorations.dart';
-import 'package:flutter_application_1/widgets/widgets.dart';
+import 'package:Unikey/ui/input_decorations.dart';
+import 'package:Unikey/widgets/widgets.dart';
 
 class ProductScreen extends StatelessWidget {
   @override

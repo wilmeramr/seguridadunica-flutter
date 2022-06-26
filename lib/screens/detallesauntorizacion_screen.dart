@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/aut_models.dart';
-import 'package:flutter_application_1/widgets/widgets.dart';
+import 'package:Unikey/models/aut_models.dart';
+import 'package:Unikey/widgets/widgets.dart';
 
 class DetalleAutorizacionScreen extends StatelessWidget {
   @override

@@ -1,7 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/services/services.dart';
-import 'package:flutter_application_1/widgets/widgets.dart';
+import 'package:Unikey/services/services.dart';
+import 'package:Unikey/widgets/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';

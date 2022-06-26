@@ -1,8 +1,9 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/providers/login_form_provider.dart';
-import 'package:flutter_application_1/services/services.dart';
-import 'package:flutter_application_1/ui/input_decorations.dart';
-import 'package:flutter_application_1/widgets/widgets.dart';
+import 'package:Unikey/providers/login_form_provider.dart';
+import 'package:Unikey/services/services.dart';
+import 'package:Unikey/ui/input_decorations.dart';
+import 'package:Unikey/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -194,7 +195,10 @@ class _LoginForm extends StatelessWidget {
                         if (errorMessage == null) {
                           Navigator.pushReplacementNamed(context, 'dash2');
                         } else {
-                          NotificationsService.showSnackbar(errorMessage);
+                          NotificationsService.showSnackbar(
+                              'Oh Ocurrio un error',
+                              errorMessage,
+                              ContentType.failure);
                           loginForm.isLoading = false;
                         }
                         loginForm.isLoading = false;

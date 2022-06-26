@@ -1,7 +1,11 @@
+import 'dart:async';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/screens.dart';
-import 'package:flutter_application_1/services/services.dart';
-import 'package:flutter_application_1/services/push_notifications_service.dart';
+import 'package:Unikey/screens/screens.dart';
+import 'package:Unikey/services/services.dart';
+import 'package:Unikey/services/push_notifications_service.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
@@ -10,9 +14,51 @@ import 'controllers/controllers.dart';
 import 'screens/home_screen.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await PushNotificationService.initializeApp();
-  runApp(AppState());
+  /*  FlutterError.onError = (details) {
+    final exception = details.exception;
+    final stackTrace = details.stack;
+    print('hola');
+
+    if (kReleaseMode) {
+      Zone.current.handleUncaughtError(exception, stackTrace!);
+    } else {
+      FlutterError.dumpErrorToConsole(details);
+    }
+  }; */
+
+  await runZonedGuarded<Future<void>>(() async {
+    // WidgetsFlutterBinding.ensureInitialized();
+    WidgetsFlutterBinding.ensureInitialized();
+    //   await PushNotificationService.initializeApp();
+    //  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+    //FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    FlutterError.onError = (FlutterErrorDetails details) {
+      print(details.toString());
+      final exception = details.exception;
+      final stackTrace = details.stack ?? StackTrace.fromString('');
+
+      if (!kReleaseMode) {
+        Zone.current.handleUncaughtError(exception, stackTrace);
+      } else {
+        FlutterError.dumpErrorToConsole(details);
+      }
+    };
+
+    if (!kReleaseMode) {
+      // await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+    }
+
+    runApp(AppState());
+  }, (error, stackTrace) {
+    print('Capturo un Dart Error!');
+    FirebaseCrashlytics.instance.recordError(error, stackTrace);
+
+    if (kReleaseMode) {
+      print('$error');
+      print('$stackTrace');
+    } else {}
+  });
 }
 
 class AppState extends StatelessWidget {

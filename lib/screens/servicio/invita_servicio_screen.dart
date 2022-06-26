@@ -1,13 +1,14 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/servicio_tipos_models.dart';
-import 'package:flutter_application_1/widgets/widgets.dart';
+import 'package:Unikey/models/servicio_tipos_models.dart';
+import 'package:Unikey/widgets/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:time_range_picker/time_range_picker.dart';
-import 'package:flutter_application_1/extension/timeofday.dart';
+import 'package:Unikey/extension/timeofday.dart';
 import '../../controllers/notificacion_controller.dart';
 import '../../services/services.dart';
 
@@ -116,7 +117,10 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
                               this.comentario);
 
                       if (response.contains('Error')) {
-                        NotificationsService.showSnackbar(response);
+                        NotificationsService.showSnackbar(
+                            'Oh! Ocurrio un problema',
+                            response,
+                            ContentType.failure);
                       } else {
                         await Share.share(response);
                         await servicioService.getTopAut();
@@ -131,13 +135,19 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
                   } else {
                     if (currentStep == 1 && dateRange == null) {
                       NotificationsService.showSnackbar(
-                          'Debe seleccionar el rango de fecha.');
+                          'Oh!',
+                          'Debe seleccionar el rango de fecha.',
+                          ContentType.help);
                     } else if (currentStep == 2 && valueServiciotipos == null) {
                       NotificationsService.showSnackbar(
-                          'Debe seleccionar el tipo del servicio');
+                          'Oh!',
+                          'Debe seleccionar el tipo del servicio',
+                          ContentType.help);
                     } else if (currentStep == 3 && !_isActive.contains(true)) {
                       NotificationsService.showSnackbar(
-                          'Debe activar un dia en los horarios');
+                          'Oh!',
+                          'Debe activar un dia en los horarios',
+                          ContentType.help);
                     } else {
                       setState(() => currentStep += 1);
                     }
@@ -148,13 +158,19 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
                   if (currentStep < step) {
                     if (currentStep == 1 && dateRange == null) {
                       NotificationsService.showSnackbar(
-                          'Debe seleccionar el rango de fecha.');
+                          'Oh!',
+                          'Debe seleccionar el rango de fecha.',
+                          ContentType.help);
                     } else if (currentStep == 2 && valueServiciotipos == null) {
                       NotificationsService.showSnackbar(
-                          'Debe seleccionar el tipo del servicio');
+                          'Oh!',
+                          'Debe seleccionar el tipo del servicio',
+                          ContentType.help);
                     } else if (currentStep == 3 && !_isActive.contains(true)) {
                       NotificationsService.showSnackbar(
-                          'Debe activar un dia en los horarios');
+                          'Oh!',
+                          'Debe activar un dia en los horarios',
+                          ContentType.help);
                     } else {
                       setState(() => currentStep = step);
                     }

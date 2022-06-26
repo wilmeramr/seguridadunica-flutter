@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -97,12 +98,16 @@ class NotificationsService {
         });
   }
 
-  static showSnackbar(String message) {
+  static showSnackbar(String title, String message, ContentType contentType) {
     final snackBar = new SnackBar(
-        content: Text(
-      message,
-      style: TextStyle(color: Colors.white, fontSize: 20),
-    ));
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: title,
+          message: message,
+          contentType: contentType,
+        ));
 
     messengerKey.currentState!.showSnackBar(snackBar);
   }

@@ -1,5 +1,6 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/widgets/widgets.dart';
+import 'package:Unikey/widgets/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -80,7 +81,10 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
                               email);
 
                       if (response.contains('Error')) {
-                        NotificationsService.showSnackbar(response);
+                        NotificationsService.showSnackbar(
+                            'Oh! Ocurrio un problema',
+                            response,
+                            ContentType.failure);
                       } else {
                         await deliveryService.getTopDeli();
                         Navigator.pop(context);
@@ -94,10 +98,12 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
                   } else {
                     if (currentStep == 1 && autorizoA.isEmpty) {
                       NotificationsService.showSnackbar(
-                          'Debes escribir a quien autorizas.');
+                          'Oh!',
+                          'Debes escribir a quien autorizas.',
+                          ContentType.help);
                     } else if (currentStep == 2 && valueVigencia == null) {
-                      NotificationsService.showSnackbar(
-                          'Debes seleccionar la vigencia.');
+                      NotificationsService.showSnackbar('Oh!',
+                          'Debes seleccionar la vigencia.', ContentType.help);
                     } else {
                       setState(() => currentStep += 1);
                     }
@@ -105,11 +111,11 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
                 },
                 onStepTapped: (step) {
                   if (currentStep == 1 && autorizoA.isEmpty) {
-                    NotificationsService.showSnackbar(
-                        'Debes escribir a quien autorizas.');
+                    NotificationsService.showSnackbar('Oh!',
+                        'Debes escribir a quien autorizas.', ContentType.help);
                   } else if (currentStep == 2 && valueVigencia == null) {
-                    NotificationsService.showSnackbar(
-                        'Debes seleccionar la vigencia.');
+                    NotificationsService.showSnackbar('Oh!',
+                        'Debes seleccionar la vigencia.', ContentType.help);
                   } else {
                     setState(() => currentStep = step);
                   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/screens.dart';
-import 'package:flutter_application_1/services/services.dart';
+import 'package:Unikey/screens/screens.dart';
+import 'package:Unikey/services/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 

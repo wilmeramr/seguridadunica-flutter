@@ -2,15 +2,17 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:Unikey/services/globalkey_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/user.dart';
-import 'package:flutter_application_1/services/push_notifications_service.dart';
+import 'package:Unikey/models/user.dart';
+import 'package:Unikey/services/push_notifications_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:http/http.dart' as http;
 
 class AuthService extends ChangeNotifier {
-  final String _baseUrl = 'acceso.seguridadunica.com';
+  final String _baseUrl = GlobalKeyService.urlApiKey;
+  final String _baseUrlVersion = GlobalKeyService.urlVersion;
 
   final storage = new FlutterSecureStorage();
 
@@ -28,7 +30,7 @@ class AuthService extends ChangeNotifier {
       'Content-type': 'application/json',
       'Accept': 'application/json'
     };
-    final url = Uri.http(_baseUrl, '/api/register');
+    final url = Uri.https(_baseUrl, '${_baseUrlVersion}/register');
 
     final response = await http.post(url,
         headers: requestHeaders, body: json.encode(auhtData));
@@ -58,7 +60,8 @@ class AuthService extends ChangeNotifier {
       'Accept': 'application/json'
     };
     try {
-      final url = Uri.https(_baseUrl, '/api/login');
+      print(_baseUrl);
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/login');
 
       final response = await http
           .post(url, headers: requestHeaders, body: json.encode(auhtData))
@@ -82,6 +85,7 @@ class AuthService extends ChangeNotifier {
     } on TimeoutException catch (e) {
       return 'Error de conexcion';
     } on Exception catch (e) {
+      print(e);
       return 'Error de conexcion';
     }
     //   final Map<String, dynamic> decodeResp = json.decode(resp.body);
@@ -96,7 +100,7 @@ class AuthService extends ChangeNotifier {
       'Accept': 'application/json'
     };
     try {
-      final url = Uri.https(_baseUrl, '/api/token');
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/token');
 
       final response = await http
           .post(url, headers: requestHeaders, body: json.encode(auhtData))
@@ -111,8 +115,10 @@ class AuthService extends ChangeNotifier {
         ;
       }
     } on TimeoutException catch (e) {
+      print(e);
       return 'Error de conexcion: Intentalo mas tarde';
     } on Exception catch (e) {
+      print(e);
       return 'Error de conexcion: Intentalo mas tarde';
     }
     //   final Map<String, dynamic> decodeResp = json.decode(resp.body);
@@ -156,7 +162,7 @@ class AuthService extends ChangeNotifier {
         'Authorization': 'Bearer ${token}'
       };
       try {
-        final url = Uri.https(_baseUrl, '/api/device');
+        final url = Uri.https(_baseUrl, '${_baseUrlVersion}/device');
 
         final response = await http
             .post(url, headers: requestHeaders, body: json.encode(auhtData))

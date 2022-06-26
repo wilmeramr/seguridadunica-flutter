@@ -1,6 +1,7 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/extension/timeofday.dart';
-import 'package:flutter_application_1/widgets/widgets.dart';
+import 'package:Unikey/extension/timeofday.dart';
+import 'package:Unikey/widgets/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -82,7 +83,10 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
                           comentarios);
 
                       if (response.contains('Error')) {
-                        NotificationsService.showSnackbar(response);
+                        NotificationsService.showSnackbar(
+                            'Oh! Ocurrio un problema',
+                            response,
+                            ContentType.failure);
                       } else {
                         await eventoCtrl.getTopEvento();
                         Navigator.pop(context);
@@ -96,21 +100,29 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
                   } else {
                     if (currentStep == 1 && autorizoA.isEmpty) {
                       NotificationsService.showSnackbar(
-                          'Debes escribir a quien autorizas.');
+                          'Oh!',
+                          'Debes escribir a quien autorizas.',
+                          ContentType.help);
                     } else if (currentStep == 2 &&
                         (dtdesde == null || dthasta == null)) {
                       NotificationsService.showSnackbar(
-                          'Debes seleccionar las fechas desde y hasta.');
+                          'Oh!',
+                          'Debes seleccionar las fechas desde y hasta.',
+                          ContentType.help);
                     } else if (currentStep == 2 &&
                         dtdesde!
                             .add(const Duration(minutes: 20))
                             .isAfter(dthasta!)) {
                       NotificationsService.showSnackbar(
-                          'El rango de fechas debe ser mayor a 20 minutos.');
+                          'Oh!',
+                          'El rango de fechas debe ser mayor a 20 minutos.',
+                          ContentType.help);
                     } else if (currentStep == 3 &&
                         (cantInvitados.isEmpty || cantInvitados == '0')) {
                       NotificationsService.showSnackbar(
-                          'Debe ingresar la cantidad de invitados.');
+                          'Oh!',
+                          'Debe ingresar la cantidad de invitados.',
+                          ContentType.help);
                     } else {
                       setState(() => currentStep += 1);
                     }
@@ -118,22 +130,26 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
                 },
                 onStepTapped: (step) {
                   if (currentStep == 1 && autorizoA.isEmpty) {
-                    NotificationsService.showSnackbar(
-                        'Debes escribir a quien autorizas.');
+                    NotificationsService.showSnackbar('Oh!',
+                        'Debes escribir a quien autorizas.', ContentType.help);
                   } else if (currentStep == 2 &&
                       (dtdesde == null || dthasta == null)) {
-                    NotificationsService.showSnackbar(
-                        'Debes seleccionar la vigencia.');
+                    NotificationsService.showSnackbar('Oh!',
+                        'Debes seleccionar la vigencia.', ContentType.help);
                   } else if (currentStep == 2 &&
                       dtdesde!
                           .add(const Duration(minutes: 20))
                           .isAfter(dthasta!)) {
                     NotificationsService.showSnackbar(
-                        'El rango de fechas debe ser mayor a 20 minutos.');
+                        'Oh!',
+                        'El rango de fechas debe ser mayor a 20 minutos.',
+                        ContentType.help);
                   } else if (currentStep == 3 &&
                       (cantInvitados.isEmpty || cantInvitados == '0')) {
                     NotificationsService.showSnackbar(
-                        'Debe ingresar la cantidad de invitados.');
+                        'Oh!',
+                        'Debe ingresar la cantidad de invitados.',
+                        ContentType.help);
                   } else {
                     setState(() => currentStep = step);
                   }

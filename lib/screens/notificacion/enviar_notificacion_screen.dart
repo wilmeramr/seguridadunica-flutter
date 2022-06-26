@@ -1,7 +1,7 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/controllers/controllers.dart';
-import 'package:flutter_application_1/widgets/widgets.dart';
+import 'package:Unikey/controllers/controllers.dart';
+import 'package:Unikey/widgets/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';

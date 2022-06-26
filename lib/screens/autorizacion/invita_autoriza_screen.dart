@@ -1,5 +1,6 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/widgets/widgets.dart';
+import 'package:Unikey/widgets/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -70,7 +71,10 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
                           1, dateRange!.start, dateRange!.end, comentarios);
 
                       if (response.contains('Error')) {
-                        NotificationsService.showSnackbar(response);
+                        NotificationsService.showSnackbar(
+                            'Oh! Ocurrio un problema',
+                            response,
+                            ContentType.failure);
                       } else {
                         await Share.share(response);
                         await authService.getTopAut();
@@ -85,7 +89,9 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
                   } else {
                     if (currentStep == 1 && dateRange == null) {
                       NotificationsService.showSnackbar(
-                          'Debe seleccionar el rango de fecha.');
+                          'Oh!',
+                          'Debe seleccionar el rango de fecha.',
+                          ContentType.help);
                     } else {
                       setState(() => currentStep += 1);
                     }
@@ -95,7 +101,9 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
                 onStepTapped: (step) {
                   if (currentStep == 1 && dateRange == null) {
                     NotificationsService.showSnackbar(
-                        'Debe seleccionar el rango de fecha.');
+                        'Oh!',
+                        'Debe seleccionar el rango de fecha.',
+                        ContentType.help);
                   } else {
                     setState(() => currentStep = step);
                   }
