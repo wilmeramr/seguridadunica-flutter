@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:Unikey/services/services.dart';
 import 'package:Unikey/widgets/widgets.dart';
@@ -28,78 +29,87 @@ class DashScreen extends StatelessWidget {
 
     final authService = Provider.of<AuthService>(context, listen: false);
     final items = <ItemBoton>[
-      new ItemBoton(FontAwesomeIcons.idCardAlt, 'Autorizaciones',
-          Color(0xff6989F5), Color(0xff906EF5), () async {
+      new ItemBoton(
+          FontAwesomeIcons.photoVideo,
+          'Selfie Propietario',
+          Color.fromARGB(255, 90, 31, 226),
+          Color.fromARGB(255, 201, 133, 212), () async {
+        var conx = await authService.internetConnectivity();
+        if (conx)
+          Navigator.pushNamed(context, 'inicioSelfie');
+        else
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tengo conexion a internet",
+              ContentType.failure);
+      }),
+      new ItemBoton(
+          FontAwesomeIcons.idCardAlt,
+          'Autorizaciones',
+          Color.fromARGB(255, 70, 109, 236),
+          Color.fromARGB(255, 117, 221, 145), () async {
         var conx = await authService.internetConnectivity();
         if (conx)
           Navigator.pushNamed(context, 'autorizaInicio');
         else
-          NotificationsService.showMyDialogAndroid(
-              context,
-              'No se pudo conectar a intenet',
-              'Debe asegurarse que el dipositivo tengo conexion a internet');
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tengo conexion a internet",
+              ContentType.failure);
       }),
-      new ItemBoton(FontAwesomeIcons.calendar, 'Servicios', Color(0xff317183),
-          Color(0xff46997D), () async {
+      new ItemBoton(FontAwesomeIcons.recycle, 'Vistas recurrentes',
+          Color(0xff317183), Color.fromARGB(255, 152, 70, 153), () async {
         var conx = await authService.internetConnectivity();
         if (conx)
           Navigator.pushNamed(context, 'servicioInicio');
         else
-          NotificationsService.showMyDialogAndroid(
-              context,
-              'No se pudo conectar a intenet',
-              'Debe asegurarse que el dipositivo tengo conexion a internet');
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tengo conexion a internet",
+              ContentType.failure);
       }),
       new ItemBoton(
           FontAwesomeIcons.taxi,
           'Delivery,Entregas,otros',
-          Color.fromARGB(255, 105, 245, 203),
+          Color.fromARGB(255, 215, 8, 8),
           Color.fromARGB(255, 129, 95, 232), () async {
         var conx = await authService.internetConnectivity();
         if (conx)
           Navigator.pushNamed(context, 'deliveryInicio');
         else
-          NotificationsService.showMyDialogAndroid(
-              context,
-              'No se pudo conectar a intenet',
-              'Debe asegurarse que el dipositivo tengo conexion a internet');
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tengo conexion a internet",
+              ContentType.failure);
       }),
-      new ItemBoton(FontAwesomeIcons.paw, 'Mascotas', Color(0xffF2D572),
-          Color(0xffE06AA3), () async {
+      new ItemBoton(
+          FontAwesomeIcons.paw,
+          'Mascotas',
+          Color.fromARGB(255, 223, 181, 42),
+          Color.fromARGB(255, 208, 58, 130), () async {
         var conx = await authService.internetConnectivity();
         if (conx)
           Navigator.pushNamed(context, 'mascotaInicio');
         else
-          NotificationsService.showMyDialogAndroid(
-              context,
-              'No se pudo conectar a intenet',
-              'Debe asegurarse que el dipositivo tengo conexion a internet');
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tengo conexion a internet",
+              ContentType.failure);
       }),
-      new ItemBoton(FontAwesomeIcons.calendar, 'Eventos', Color(0xff317183),
-          Color(0xff46997D), () async {
+      new ItemBoton(
+          FontAwesomeIcons.calendar,
+          'Eventos',
+          Color.fromARGB(255, 45, 56, 207),
+          Color.fromARGB(255, 39, 142, 108), () async {
         var conx = await authService.internetConnectivity();
         if (conx)
           Navigator.pushNamed(context, 'eventoInicio');
         else
-          NotificationsService.showMyDialogAndroid(
-              context,
-              'No se pudo conectar a intenet',
-              'Debe asegurarse que el dipositivo tengo conexion a internet');
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tengo conexion a internet",
+              ContentType.failure);
       }),
-      new ItemBoton(FontAwesomeIcons.newspaper, 'Noticias', Color(0xff66A9F2),
-          Color(0xff536CF6), () {}),
-      new ItemBoton(FontAwesomeIcons.theaterMasks, 'Theft / Harrasement',
-          Color(0xffF2D572), Color(0xffE06AA3), () {}),
-      new ItemBoton(FontAwesomeIcons.biking, 'Awards', Color(0xff317183),
-          Color(0xff46997D), () {}),
-      new ItemBoton(FontAwesomeIcons.carCrash, 'Motor Accident',
-          Color(0xff6989F5), Color(0xff906EF5), () {}),
-      new ItemBoton(FontAwesomeIcons.plus, 'Medical Emergency',
-          Color(0xff66A9F2), Color(0xff536CF6), () {}),
-      new ItemBoton(FontAwesomeIcons.theaterMasks, 'Theft / Harrasement',
-          Color(0xffF2D572), Color(0xffE06AA3), () {}),
-      new ItemBoton(FontAwesomeIcons.biking, 'Awards', Color(0xff317183),
-          Color(0xff46997D), () {}),
     ];
 
     List<Widget> itemMap = items.map((item) {
@@ -120,28 +130,28 @@ class DashScreen extends StatelessWidget {
       body: Stack(
         children: [
           Container(
-            margin: EdgeInsets.only(top: 200),
-            child: ListView(physics: BouncingScrollPhysics(), children: [
-              SizedBox(
+            margin: const EdgeInsets.only(top: 200),
+            child: ListView(physics: const BouncingScrollPhysics(), children: [
+              const SizedBox(
                 height: 80,
               ),
               FadeInLeft(
                 child: Hero(
-                  tag: Text('Notificaciones'),
+                  tag: const Text('Notificaciones'),
                   child: BotonGordoNoti(
                     iconR: FontAwesomeIcons.bell,
                     texto: 'Notificaciones',
-                    color1: Color.fromARGB(255, 105, 245, 203),
-                    color2: Color.fromARGB(255, 129, 95, 232),
+                    color1: const Color.fromARGB(255, 27, 85, 219),
+                    color2: const Color.fromARGB(255, 28, 209, 237),
                     onPress: () async {
                       var conx = await authService.internetConnectivity();
                       if (conx)
                         Navigator.pushNamed(context, 'notificacionInicio');
                       else
-                        NotificationsService.showMyDialogAndroid(
-                            context,
-                            'No se pudo conectar a intenet',
-                            'Debe asegurarse que el dipositivo tengo conexion a internet');
+                        NotificationsService.showSnackbar(
+                            'Oh!',
+                            "Debe asegurarse que el dipositivo tengo conexion a internet",
+                            ContentType.failure);
                     },
                   ),
                 ),
@@ -167,7 +177,7 @@ class _Encabezado extends StatelessWidget {
           future: _dataTitle(context),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (!snapshot.hasData) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             }
 
             return snapshot.data;
@@ -182,12 +192,14 @@ class _Encabezado extends StatelessWidget {
                 if (result!.contains('Ok'))
                   Navigator.pushReplacementNamed(context, 'login');
                 else
-                  NotificationsService.showMyDialogAndroid(context, 'Log out',
-                      'Fallo la desconexión del servicio: Intentelo mas tarde. ');
+                  NotificationsService.showSnackbar(
+                      'Oh!',
+                      "Fallo la desconexión del servicio: Intentelo mas tarde. ",
+                      ContentType.failure);
               },
-              shape: CircleBorder(),
-              padding: EdgeInsets.all(15.0),
-              child: FaIcon(
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(15.0),
+              child: const FaIcon(
                 Icons.login_outlined,
                 color: Colors.white,
               ),
@@ -208,27 +220,9 @@ class _Encabezado extends StatelessWidget {
       apellido: sur.apellido,
       email: sur.email,
       rol: sur.rol,
-      color1: Color(0xff6989F5),
-      color2: Color(0xff906EF5),
-    );
-  }
-}
-
-class BotonGordoTemp extends StatelessWidget {
-  const BotonGordoTemp({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BotonGordo(
-      iconR: FontAwesomeIcons.carCrash,
-      texto: 'Motro Acciden',
-      color1: Color(0xff6989F5),
-      color2: Color(0xff906EF5),
-      onPress: () {
-        print('Click');
-      },
+      image: const AssetImage('assets/LogoSeguridadUnica.png'),
+      color1: const Color.fromARGB(255, 22, 85, 232),
+      color2: const Color.fromARGB(255, 67, 107, 195),
     );
   }
 }

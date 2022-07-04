@@ -11,7 +11,10 @@
 
 		<key>NSMicrophoneUsageDescription</key>
 	<string>Necesito acceso al micrófono para grabar video</string>
-
+			<key>LSApplicationQueriesSchemes</key>
+			<array>
+			<string>url</string>
+			</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

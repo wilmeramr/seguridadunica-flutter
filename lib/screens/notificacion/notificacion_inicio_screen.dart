@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:Unikey/controllers/notificacion_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -30,23 +31,23 @@ class NotificacionInicioScreen extends StatelessWidget {
           if (conx) {
             final notificacionCtrl = Get.find<NotificacionController>();
 
-            var result = await notificacionCtrl.getTopAutScroll();
+            var result = await notificacionCtrl.getTopNotiScroll();
             if (!result!.contains('Ok'))
-              NotificationsService.showMyDialogAndroid(
-                  context, 'Notificaciones', result);
+              NotificationsService.showSnackbar(
+                  'Oh! ', "${result}", ContentType.failure);
           } else
-            NotificationsService.showMyDialogAndroid(
-                context,
-                'No se pudo conectar a intenet',
-                'Debe asegurarse que el dipositivo tengo conexion a internet');
+            NotificationsService.showSnackbar(
+                'Oh!',
+                "Debe asegurarse que el dipositivo tengo conexion a internet",
+                ContentType.failure);
         },
         onInitNoti: () async {
           final notificacionCtrl = Get.find<NotificacionController>();
 
           var result = await notificacionCtrl.getTopNoti();
           if (!result!.contains('Ok'))
-            NotificationsService.showMyDialogAndroid(
-                context, 'Notificaciones', result);
+            NotificationsService.showSnackbar(
+                'Oh! ', "${result}", ContentType.failure);
         },
       ),
       Positioned(
@@ -85,13 +86,13 @@ class _BotonNewList extends StatelessWidget {
           if (conx) {
             Navigator.pushNamed(context, 'evniarNotificacion');
           } else
-            NotificationsService.showMyDialogAndroid(
-                context,
-                'No se pudo conectar a intenet',
-                'Debe asegurarse que el dipositivo tengo conexion a internet');
+            NotificationsService.showSnackbar(
+                'Oh!',
+                "Debe asegurarse que el dipositivo tengo conexión a internet",
+                ContentType.failure);
         },
         child: Text(
-          'CREAR UNA NOTIFICACICON',
+          'CREAR UNA NOTIFICACIÓN',
           style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -184,13 +185,13 @@ class _MainScrollState extends State<_MainScroll> {
           badgeCtrl.badge.value = 0;
           var result = await notificacionCtrl.getTopNoti();
           if (!result!.contains('Ok'))
-            NotificationsService.showMyDialogAndroid(
-                context, 'Notificaciones', result);
+            NotificationsService.showSnackbar(
+                'Oh!', "$result", ContentType.failure);
         } else
-          NotificationsService.showMyDialogAndroid(
-              context,
-              'No se pudo conectar a intenet',
-              'Debe asegurarse que el dipositivo tengo conexion a internet');
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tengo conexión a internet",
+              ContentType.failure);
       },
       child: Obx(() => CustomScrollView(
             controller: scrollController,
@@ -201,7 +202,7 @@ class _MainScrollState extends State<_MainScroll> {
                   floating: true,
                   delegate: _SliverCustomHeaderDelegate(
                       minHeight: 170,
-                      maxHeight: 200,
+                      maxHeight: 225,
                       child: Container(
                           alignment: Alignment.centerLeft,
                           color: Colors.white,
@@ -285,8 +286,8 @@ class _Titulo extends StatelessWidget {
                 iconL: FontAwesomeIcons.bell,
                 iconR: FontAwesomeIcons.chevronLeft,
                 texto: 'Notificaciones',
-                color1: Color.fromARGB(255, 105, 245, 203),
-                color2: Color.fromARGB(255, 129, 95, 232),
+                color1: Color.fromARGB(255, 27, 85, 219),
+                color2: Color.fromARGB(255, 28, 209, 237),
                 onPress: () {
                   Navigator.of(context).pop();
                 },
@@ -365,7 +366,7 @@ class _NotificacionStatus extends StatelessWidget {
               ),
               this.noti.notiEnvio == 1
                   ? Text(
-                      'Fecha de envio: ${noti.updatedAt.day.toString().padLeft(2, '0')}/${noti.updatedAt.month.toString().padLeft(2, '0')}/${noti.updatedAt.year.toString().padLeft(4, '0')}')
+                      'Fecha de envío: ${noti.updatedAt.day.toString().padLeft(2, '0')}/${noti.updatedAt.month.toString().padLeft(2, '0')}/${noti.updatedAt.year.toString().padLeft(4, '0')}')
                   : Text('No Enviado')
             ],
           ),
@@ -388,7 +389,7 @@ class _NotificacionBody extends StatelessWidget {
         ),
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: Text(
-          '${noti.notiBody}${noti.notiBody}${noti.notiBody}${noti.notiBody}${noti.notiBody}',
+          '${noti.notiBody}',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,

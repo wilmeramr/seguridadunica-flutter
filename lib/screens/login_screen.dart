@@ -14,30 +14,30 @@ class LoginScreen extends StatelessWidget {
             child: SingleChildScrollView(
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 250,
           ),
           CardContainer(
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Text(
-                  'Login',
+                  'Bienvenido',
                   style: Theme.of(context).textTheme.headline4,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 ChangeNotifierProvider(
                   create: (_) => LoginFormProvider(),
-                  child: _LoginForm(),
+                  child: const _LoginForm(),
                 ),
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           /* TextButton(
@@ -52,7 +52,7 @@ class LoginScreen extends StatelessWidget {
               style: TextStyle(fontSize: 18, color: Colors.black87),
             ),
           ), */
-          SizedBox(
+          const SizedBox(
             height: 50,
           )
         ],
@@ -93,7 +93,7 @@ class _LoginForm extends StatelessWidget {
                     : "El valor es incorrecto";
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Stack(
@@ -108,7 +108,7 @@ class _LoginForm extends StatelessWidget {
                       prefixIcon: Icons.lock_outline),
                   onChanged: (value) => loginForm.password = value,
                   validator: (value) {
-                    if (value != null && value.length == 8) return null;
+                    if (value != null && value.length >= 8) return null;
 
                     return 'La token debe ser de 8 caracteres';
                   },
@@ -126,10 +126,11 @@ class _LoginForm extends StatelessWidget {
                               var conx =
                                   await authService.internetConnectivity();
                               if (!conx) {
-                                NotificationsService.showMyDialogAndroid(
-                                    context,
-                                    'No se pudo conectar a intenet',
-                                    'Debe asegurarse que el dipositivo tengo conexion a internet');
+                                NotificationsService.showSnackbar(
+                                    'Oh!',
+                                    'Debe asegurarse que el dispositivo tengo conexión a internet.',
+                                    ContentType.warning);
+
                                 return;
                               }
 
@@ -142,27 +143,36 @@ class _LoginForm extends StatelessWidget {
                                 loginForm.isLoadingToken = true;
                                 final response =
                                     await authService.token(loginForm.email);
-                                NotificationsService.showMyDialogAndroid(
+                                /*   NotificationsService.showMyDialogAndroid(
                                     context,
                                     'Solicitud de Token',
-                                    '${response}');
+                                    '${response}'); */
                                 loginForm.isLoadingToken = false;
-                              } else {
-                                NotificationsService.showMyDialogAndroid(
-                                    context,
+
+                                NotificationsService.showSnackbar(
                                     'Solicitud de Token',
-                                    "El email incorrecto");
+                                    response["r"] as String,
+                                    response["valido"]
+                                        ? ContentType.success
+                                        : ContentType.failure);
+                              } else {
+                                NotificationsService.showSnackbar(
+                                    'Solicitud de Token',
+                                    "Es un email incorrecto",
+                                    ContentType.failure);
                                 loginForm.isLoadingToken = false;
                               }
+                              loginForm.isLoadingToken = false;
                             },
                       child: Text(
                         loginForm.isLoadingToken ? 'Espere..' : 'Solicitar',
-                        style: TextStyle(fontSize: 18, color: Colors.indigo),
+                        style:
+                            const TextStyle(fontSize: 18, color: Colors.indigo),
                       )),
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             MaterialButton(
@@ -172,15 +182,17 @@ class _LoginForm extends StatelessWidget {
                 elevation: 0,
                 color: Colors.blue,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                   child: Text(
                     loginForm.isLoading ? 'Espere..' : 'Ingresar',
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
                 onPressed: loginForm.isLoading
                     ? null
                     : () async {
+                        // throw new Exception('erro login');
                         final authService =
                             Provider.of<AuthService>(context, listen: false);
 
@@ -196,9 +208,7 @@ class _LoginForm extends StatelessWidget {
                           Navigator.pushReplacementNamed(context, 'dash2');
                         } else {
                           NotificationsService.showSnackbar(
-                              'Oh Ocurrio un error',
-                              errorMessage,
-                              ContentType.failure);
+                              'Oh!', errorMessage, ContentType.failure);
                           loginForm.isLoading = false;
                         }
                         loginForm.isLoading = false;

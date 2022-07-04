@@ -1,4 +1,5 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:Unikey/controllers/controllers.dart';
 import 'package:Unikey/widgets/widgets.dart';
@@ -6,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../../search/usuario_delegate.dart';
 import '../../services/services.dart';
 import '../../ui/input_decorations.dart';
 
@@ -37,35 +39,49 @@ class ScaffoldBody extends StatelessWidget {
         floatingActionButton: ButtonTheme(
           minWidth: size.width * 0.2,
           height: 50,
-          child: MaterialButton(
-            color: Colors.blue,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(50))),
-            child: notificaiconesCtrl.isSaving.value
-                ? CircularProgressIndicator(
-                    color: Colors.white,
-                  )
-                : Text('GUARDAR', style: TextStyle(color: Colors.white)),
-            onPressed: notificaiconesCtrl.isSaving.value
-                ? () {}
-                : () async {
-                    final authService =
-                        Provider.of<AuthService>(context, listen: false);
+          child: Obx(() => MaterialButton(
+                color: Colors.blue,
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.only(topLeft: Radius.circular(50))),
+                child: notificaiconesCtrl.isSaving.value
+                    ? CircularProgressIndicator(
+                        color: Colors.white,
+                      )
+                    : Text('GUARDAR', style: TextStyle(color: Colors.white)),
+                onPressed: notificaiconesCtrl.isSaving.value
+                    ? () {}
+                    : () async {
+                        final authService =
+                            Provider.of<AuthService>(context, listen: false);
 
-                    var conx = await authService.internetConnectivity();
-                    if (conx) {
-                      if (!notificaiconesCtrl.isValidForm()) return;
+                        var conx = await authService.internetConnectivity();
+                        if (conx) {
+                          if (!notificaiconesCtrl.isValidForm()) return;
 
-                      notificaiconesCtrl.isSaving.value = true;
-                      print('llego');
-                      notificaiconesCtrl.isSaving.value = false;
-                    } else
-                      NotificationsService.showMyDialogAndroid(
-                          context,
-                          'No se pudo conectar a intenet',
-                          'Debe asegurarse que el dipositivo tengo conexion a internet');
-                  },
-          ),
+                          notificaiconesCtrl.isSaving.value = true;
+                          var result =
+                              await notificaiconesCtrl.RegistroNotificacion();
+
+                          if (result == 'OK') {
+                            NotificationsService.showSnackbar(
+                                'Notificación',
+                                "La notificacion fue enviada.",
+                                ContentType.success);
+                          } else {
+                            NotificationsService.showSnackbar(
+                                'Oh! ',
+                                "La notificación no fue enviada, $result",
+                                ContentType.failure);
+                          }
+                          notificaiconesCtrl.isSaving.value = false;
+                        } else
+                          NotificationsService.showSnackbar(
+                              'Oh! Conexión a intenet',
+                              "Debe asegurarse que el dipositivo tengo conexión a internet",
+                              ContentType.failure);
+                      },
+              )),
         ));
   }
 }
@@ -77,7 +93,7 @@ class _MainScroll extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mascotaCtrl = Get.find<NotificacionController>();
+    final notificacionCtrl = Get.find<NotificacionController>();
 
     TextEditingController eviarAController = new TextEditingController();
     return Obx(() => CustomScrollView(
@@ -96,7 +112,7 @@ class _MainScroll extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Seleccione el modo a enviar:',
+                  'Seleccione el modo a enviar: Todos / Grupo',
                   style: TextStyle(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
@@ -104,7 +120,7 @@ class _MainScroll extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50),
                 child: AnimatedToggleSwitch<bool>.dual(
-                  current: mascotaCtrl.enviaA.value,
+                  current: notificacionCtrl.enviaA.value,
                   first: false,
                   second: true,
                   dif: 50.0,
@@ -119,7 +135,10 @@ class _MainScroll extends StatelessWidget {
                       offset: Offset(0, 1.5),
                     ),
                   ],
-                  onChanged: (b) => mascotaCtrl.enviaA.value = b,
+                  onChanged: (b) {
+                    notificacionCtrl.enviaA.value = b;
+                    notificacionCtrl.initUsers();
+                  },
                   colorBuilder: (b) => b ? Colors.blue : Colors.green,
                   iconBuilder: (value) => value
                       ? Icon(Icons.people_outline)
@@ -144,24 +163,54 @@ class _MainScroll extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   decoration: _buildDecoration(),
                   child: Form(
-                    key: mascotaCtrl.formKey,
+                    key: notificacionCtrl.formKey,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: Column(
                       children: [
-                        mascotaCtrl.enviaA.value
+                        notificacionCtrl.enviaA.value
                             ? TextFormField(
                                 controller: eviarAController,
                                 onTap: () async {
-                                  print('TO DO SEARCH');
+                                  final authService = Provider.of<AuthService>(
+                                      context,
+                                      listen: false);
+
+                                  var conx =
+                                      await authService.internetConnectivity();
+                                  if (conx) {
+                                    showSearch(
+                                        context: context,
+                                        delegate: UsuarioSearchDelegate());
+                                  } else
+                                    NotificationsService.showSnackbar(
+                                        'Oh! Conexión a intenet',
+                                        "Debe asegurarse que el dipositivo tengo conexión a internet",
+                                        ContentType.failure);
                                 },
                                 readOnly: true,
                                 keyboardType: TextInputType.number,
-                                decoration: InputDecorations.authInputDecoration(
-                                    hintText: 'Seleccione un usuario',
-                                    labelText:
-                                        'Seleccione un ususario del grupo familiar'),
+                                decoration:
+                                    InputDecorations.authInputDecoration(
+                                  labelText: notificacionCtrl
+                                              .userIdSelected.value.usrId ==
+                                          0
+                                      ? 'Seleccione un usuario'
+                                      : notificacionCtrl
+                                              .userIdSelected.value.usrName +
+                                          ' ' +
+                                          notificacionCtrl
+                                              .userIdSelected.value.usrApellido,
+                                  hintText: notificacionCtrl
+                                              .userIdSelected.value.usrId ==
+                                          0
+                                      ? 'Seleccione un usuario'
+                                      : notificacionCtrl
+                                          .userIdSelected.value.usEmail,
+                                ),
                                 validator: (value) {
-                                  if (value == null || value.length < 1) {
+                                  if (notificacionCtrl
+                                          .userIdSelected.value.usrId ==
+                                      0) {
                                     return 'Debe seleccionar un usuario';
                                   }
                                 })
@@ -174,16 +223,15 @@ class _MainScroll extends StatelessWidget {
                           maxLength: 50,
                           validator: (value) {
                             if (value == null || value.length < 1) {
-                              return 'El titulo es obligatorio';
+                              return 'El título es obligatorio';
                             }
                           },
                           onChanged: (value) {
-                            if (double.tryParse(value) == null) {
-                            } else {}
+                            notificacionCtrl.titulo.value = value;
                           },
                           decoration: InputDecorations.authInputDecoration(
-                              hintText: 'Titulo de la notificación',
-                              labelText: 'Titulo'),
+                              hintText: 'Título de la notificación',
+                              labelText: 'Título'),
                         ),
                         TextFormField(
                           keyboardType: TextInputType.text,
@@ -191,12 +239,11 @@ class _MainScroll extends StatelessWidget {
                           maxLength: 250,
                           validator: (value) {
                             if (value == null || value.length < 1) {
-                              return 'El cuerpo de la notificacion es obligatorio';
+                              return 'El cuerpo de la notificación es obligatorio';
                             }
                           },
                           onChanged: (value) {
-                            if (double.tryParse(value) == null) {
-                            } else {}
+                            notificacionCtrl.body.value = value;
                           },
                           decoration: InputDecorations.authInputDecoration(
                               hintText: 'Cuerpo de la notificación',
@@ -267,8 +314,8 @@ class _Titulo extends StatelessWidget {
                   iconL: FontAwesomeIcons.bell,
                   iconR: FontAwesomeIcons.chevronLeft,
                   texto: 'Crear Notificación',
-                  color1: Color.fromARGB(255, 105, 245, 203),
-                  color2: Color.fromARGB(255, 129, 95, 232),
+                  color1: Color.fromARGB(255, 27, 85, 219),
+                  color2: Color.fromARGB(255, 28, 209, 237),
                   onPress: () => Navigator.of(context).pop(),
                 ),
               )),

@@ -10,9 +10,11 @@ import 'package:time_range_picker/time_range_picker.dart';
 import '../models/aut_models.dart';
 import '../models/invitacion_models.dart';
 import '../models/user.dart';
+import 'globalkey_service.dart';
 
 class ServicioService with ChangeNotifier {
-  final String _baseUrl = 'acceso.seguridadunica.com';
+  final String _baseUrl = GlobalKeyService.urlApiKey;
+  final String _baseUrlVersion = GlobalKeyService.urlVersion;
   final storage = new FlutterSecureStorage();
 
   List<Datum> data = [];
@@ -47,8 +49,9 @@ class ServicioService with ChangeNotifier {
     try {
       _page = 1;
 
-      var jsonResponse = jsonDecode(await _getJsonData('/api/autorizacion/2'))
-          as Map<String, dynamic>;
+      var jsonResponse =
+          jsonDecode(await _getJsonData('${_baseUrlVersion}/autorizacion/2'))
+              as Map<String, dynamic>;
       if (jsonResponse.containsKey('data')) {
         // final Map<String, dynamic> decodeResp = json.decode(response.body);
         var aut = AutorizacionResponse.fromJson(jsonResponse);
@@ -61,12 +64,12 @@ class ServicioService with ChangeNotifier {
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
       } else {
-        return "Error en la conexion: Intentelo mas tarde";
+        return 'Error de conexión: Intentalo mas tarde';
       }
     } on TimeoutException catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return 'Error de conexión: Intentalo mas tarde';
     } on Exception catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return 'Error de conexión: Intentalo mas tarde';
     }
   }
 
@@ -76,9 +79,9 @@ class ServicioService with ChangeNotifier {
     if (_page <= _last_page) {
       try {
         isLoading = true;
-        var jsonResponse =
-            jsonDecode(await _getJsonData('/api/autorizacion/2', _page))
-                as Map<String, dynamic>;
+        var jsonResponse = jsonDecode(
+                await _getJsonData('${_baseUrlVersion}/autorizacion/2', _page))
+            as Map<String, dynamic>;
         if (jsonResponse.containsKey('data')) {
           // final Map<String, dynamic> decodeResp = json.decode(response.body);
           var aut = AutorizacionResponse.fromJson(jsonResponse);
@@ -93,18 +96,18 @@ class ServicioService with ChangeNotifier {
         } else {
           _page -= 1;
           isLoading = false;
-          return "Error en la conexion: Intentelo mas tarde";
+          return 'Error de conexión: Intentalo mas tarde';
         }
       } on TimeoutException catch (e) {
         _page -= 1;
         isLoading = false;
 
-        return 'Error en la conexion: Intentelo mas tarde';
+        return 'Error de conexión: Intentalo mas tarde';
       } on Exception catch (e) {
         _page -= 1;
         isLoading = false;
 
-        return 'Error en la conexion: Intentelo mas tarde';
+        return 'Error de conexión: Intentalo mas tarde';
       }
     } else {
       return "Ok";
@@ -157,7 +160,7 @@ class ServicioService with ChangeNotifier {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${token}'
       };
-      final url = Uri.http(_baseUrl, '/api/autorizacion');
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/autorizacion');
       final response = await http
           .post(url, headers: requestHeaders, body: json.encode(auhtData))
           .timeout(const Duration(seconds: 10));
@@ -175,12 +178,12 @@ class ServicioService with ChangeNotifier {
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
       } else {
-        return "Error en la conexion: Intentelo mas tarde";
+        return 'Error de conexión: Intentalo mas tarde';
       }
     } on TimeoutException catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return 'Error de conexión: Intentalo mas tarde';
     } on Exception catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return 'Error de conexión: Intentalo mas tarde';
     }
   }
 
@@ -193,13 +196,12 @@ class ServicioService with ChangeNotifier {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${token}'
       };
-      final url = Uri.http(_baseUrl, '/api/servicio/tipos');
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/servicio/tipos');
       final response = await http
-          .post(url, headers: requestHeaders)
+          .get(url, headers: requestHeaders)
           .timeout(const Duration(seconds: 10));
 
       // print(jsonDecode(response.body));
-
       var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
       if (jsonResponse.containsKey('data')) {
         // final Map<String, dynamic> decodeResp = json.decode(response.body);
@@ -208,12 +210,12 @@ class ServicioService with ChangeNotifier {
         servicioTipos = servicioTiposResponse.data;
         return "Ok";
       } else {
-        return "Error en la conexion: Intentelo mas tarde";
+        return 'Error de conexión: Intentalo mas tarde';
       }
     } on TimeoutException catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return 'Error de conexión: Intentalo mas tarde';
     } on Exception catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return 'Error de conexión: Intentalo mas tarde';
     }
   }
 }

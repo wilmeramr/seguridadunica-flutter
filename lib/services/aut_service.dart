@@ -7,9 +7,11 @@ import 'package:http/http.dart' as http;
 import '../models/aut_models.dart';
 import '../models/invitacion_models.dart';
 import '../models/user.dart';
+import 'globalkey_service.dart';
 
 class AutService with ChangeNotifier {
-  final String _baseUrl = 'acceso.seguridadunica.com';
+  final String _baseUrl = GlobalKeyService.urlApiKey;
+  final String _baseUrlVersion = GlobalKeyService.urlVersion;
   final storage = new FlutterSecureStorage();
 
   List<Datum> data = [];
@@ -41,8 +43,9 @@ class AutService with ChangeNotifier {
     try {
       _page = 1;
 
-      var jsonResponse = jsonDecode(await _getJsonData('/api/autorizacion/1'))
-          as Map<String, dynamic>;
+      var jsonResponse =
+          jsonDecode(await _getJsonData('${_baseUrlVersion}/autorizacion/1'))
+              as Map<String, dynamic>;
       if (jsonResponse.containsKey('data')) {
         // final Map<String, dynamic> decodeResp = json.decode(response.body);
         var aut = AutorizacionResponse.fromJson(jsonResponse);
@@ -56,12 +59,12 @@ class AutService with ChangeNotifier {
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
       } else {
-        return "Error en la conexion: Intentelo mas tarde";
+        return 'Error de conexión: Intentalo mas tarde';
       }
     } on TimeoutException catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return 'Error de conexión: Intentalo mas tarde';
     } on Exception catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return 'Error de conexión: Intentalo mas tarde';
     }
   }
 
@@ -71,9 +74,9 @@ class AutService with ChangeNotifier {
     if (_page <= _last_page) {
       try {
         isLoading = true;
-        var jsonResponse =
-            jsonDecode(await _getJsonData('/api/autorizacion/1', _page))
-                as Map<String, dynamic>;
+        var jsonResponse = jsonDecode(
+                await _getJsonData('${_baseUrlVersion}/autorizacion/1', _page))
+            as Map<String, dynamic>;
         if (jsonResponse.containsKey('data')) {
           // final Map<String, dynamic> decodeResp = json.decode(response.body);
           var aut = AutorizacionResponse.fromJson(jsonResponse);
@@ -90,18 +93,18 @@ class AutService with ChangeNotifier {
         } else {
           _page -= 1;
           isLoading = false;
-          return "Error en la conexion: Intentelo mas tarde";
+          return 'Error de conexión: Intentalo mas tarde';
         }
       } on TimeoutException catch (e) {
         _page -= 1;
         isLoading = false;
 
-        return 'Error en la conexion: Intentelo mas tarde';
+        return 'Error de conexión: Intentalo mas tarde';
       } on Exception catch (e) {
         _page -= 1;
         isLoading = false;
 
-        return 'Error en la conexion: Intentelo mas tarde';
+        return 'Error de conexión: Intentalo mas tarde';
       }
     } else {
       return "Ok";
@@ -126,10 +129,11 @@ class AutService with ChangeNotifier {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${token}'
       };
-      final url = Uri.http(_baseUrl, '/api/autorizacion');
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/autorizacion');
       final response = await http
           .post(url, headers: requestHeaders, body: json.encode(auhtData))
           .timeout(const Duration(seconds: 10));
+      print(response.body);
 
       var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
       if (jsonResponse.containsKey('link')) {
@@ -145,12 +149,12 @@ class AutService with ChangeNotifier {
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
       } else {
-        return "Error en la conexion: Intentelo mas tarde";
+        return 'Error de conexión: Intentalo mas tarde';
       }
     } on TimeoutException catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return 'Error de conexión: Intentalo mas tarde';
     } on Exception catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return 'Error de conexión: Intentalo mas tarde';
     }
   }
 }

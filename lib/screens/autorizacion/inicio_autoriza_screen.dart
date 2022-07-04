@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -25,13 +26,13 @@ class InicioAutorizaScreen extends StatelessWidget {
             var result = await autorizacionesService.getTopAutScroll();
 
             if (!result.contains('Ok'))
-              NotificationsService.showMyDialogAndroid(
-                  context, 'Autorizacion', result);
+              NotificationsService.showSnackbar(
+                  'Oh! ', "${result}", ContentType.failure);
           } else
-            NotificationsService.showMyDialogAndroid(
-                context,
-                'No se pudo conectar a intenet',
-                'Debe asegurarse que el dipositivo tengo conexion a internet');
+            NotificationsService.showSnackbar(
+                'Oh!',
+                "Debe asegurarse que el dipositivo tengo conexion a internet",
+                ContentType.failure);
         },
       ),
       Positioned(bottom: -10, right: 0, child: _BotonNewList())
@@ -57,13 +58,13 @@ class _BotonNewList extends StatelessWidget {
           if (conx) {
             Navigator.pushNamed(context, 'autorizaInvita');
           } else
-            NotificationsService.showMyDialogAndroid(
-                context,
-                'No se pudo conectar a intenet',
-                'Debe asegurarse que el dipositivo tengo conexion a internet');
+            NotificationsService.showSnackbar(
+                'Oh!',
+                "Debe asegurarse que el dipositivo tengo conexión a internet",
+                ContentType.failure);
         },
         child: Text(
-          'CREAR UNA INVITACION',
+          'CREAR UNA INVITACIÓN',
           style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -113,7 +114,6 @@ class _MainScrollState extends State<_MainScroll> {
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
-        print('addListener');
         widget.onNextPage();
       }
       ;
@@ -146,13 +146,13 @@ class _MainScrollState extends State<_MainScroll> {
           var result = await autorizacionesService.getTopAut();
 
           if (!result.contains('Ok'))
-            NotificationsService.showMyDialogAndroid(
-                context, 'Autorizacion', result);
+            NotificationsService.showSnackbar(
+                'Oh!', "$result", ContentType.failure);
         } else
-          NotificationsService.showMyDialogAndroid(
-              context,
-              'No se pudo conectar a intenet',
-              'Debe asegurarse que el dipositivo tengo conexion a internet');
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tengo conexión a internet",
+              ContentType.failure);
       },
       child: CustomScrollView(
         controller: scrollController,
@@ -162,7 +162,7 @@ class _MainScrollState extends State<_MainScroll> {
               floating: true,
               delegate: _SliverCustomHeaderDelegate(
                   minHeight: 170,
-                  maxHeight: 200,
+                  maxHeight: 225,
                   child: Container(
                       alignment: Alignment.centerLeft,
                       color: Colors.white,
@@ -244,8 +244,8 @@ class _Titulo extends StatelessWidget {
                 iconL: FontAwesomeIcons.idCardAlt,
                 iconR: FontAwesomeIcons.chevronLeft,
                 texto: 'Autorizaciones',
-                color1: Color(0xff6989F5),
-                color2: Color(0xff906EF5),
+                color1: const Color.fromARGB(255, 70, 109, 236),
+                color2: const Color.fromARGB(255, 117, 221, 145),
                 onPress: () => Navigator.of(context).pop(),
               ),
             ),

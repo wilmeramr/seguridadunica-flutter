@@ -22,7 +22,7 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
   String? email;
   String autorizoA = "";
 
-  final items = ['2hrs', '3hrs', '4hrs', '5hrs'];
+  final items = ['30min', '35min', '40min', '45min', '50min', '1hrs'];
   String? valueVigencia;
   bool isCompleted = false;
   @override
@@ -32,17 +32,17 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
     return Scaffold(
       body: SafeArea(
         child: Stack(children: [
-          Background(color1: Color(0xff6989F5), color2: Colors.white),
+          const Background(color1: Color(0xff6989F5), color2: Colors.white),
           Container(
             //  margin: EdgeInsets.only(top: 200),
             child: Hero(
-              tag: Text('Delivery,Entregas,otros'),
+              tag: const Text('Delivery,Entregas,otros'),
               child: BotonGordo(
                 iconL: FontAwesomeIcons.taxi,
                 iconR: FontAwesomeIcons.chevronLeft,
                 texto: 'Delivery,Entregas,otros',
-                color1: Color.fromARGB(255, 105, 245, 203),
-                color2: Color.fromARGB(255, 129, 95, 232),
+                color1: const Color.fromARGB(255, 215, 8, 8),
+                color2: const Color.fromARGB(255, 129, 95, 232),
                 onPress: () => Navigator.of(context).pop(),
               ),
             ),
@@ -50,13 +50,13 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
           Container(
             width: double.infinity,
             height: double.infinity,
-            margin: EdgeInsets.only(top: 150),
+            margin: const EdgeInsets.only(top: 150),
             child: SingleChildScrollView(
                 child: Theme(
               data: Theme.of(context).copyWith(
-                  colorScheme: ColorScheme.light(primary: Colors.green)),
+                  colorScheme: const ColorScheme.light(primary: Colors.green)),
               child: Stepper(
-                physics: ClampingScrollPhysics(),
+                physics: const ClampingScrollPhysics(),
                 steps: _getSteps(),
                 currentStep: currentStep,
                 onStepContinue: () async {
@@ -82,18 +82,16 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
 
                       if (response.contains('Error')) {
                         NotificationsService.showSnackbar(
-                            'Oh! Ocurrio un problema',
-                            response,
-                            ContentType.failure);
+                            'Oh!', response, ContentType.failure);
                       } else {
                         await deliveryService.getTopDeli();
                         Navigator.pop(context);
                       }
                     } else
-                      NotificationsService.showMyDialogAndroid(
-                          context,
-                          'No se pudo conectar a intenet',
-                          'Debe asegurarse que el dipositivo tengo conexion a internet');
+                      NotificationsService.showSnackbar(
+                          'Oh!',
+                          "Debe asegurarse que el dipositivo tengo conexion a internet",
+                          ContentType.failure);
                     setState(() => isCompleted = false);
                   } else {
                     if (currentStep == 1 && autorizoA.isEmpty) {
@@ -129,7 +127,7 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
                 controlsBuilder: (context, details) {
                   final isLastStep = currentStep == _getSteps().length - 1;
                   return Container(
-                    margin: EdgeInsets.only(top: 50),
+                    margin: const EdgeInsets.only(top: 50),
                     child: Row(
                       children: [
                         Expanded(
@@ -141,7 +139,7 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
                                         ? Container()
                                         : Image(
                                             width: size.width * 0.05,
-                                            image: AssetImage(
+                                            image: const AssetImage(
                                                 'assets/loading.gif'),
                                           ),
                                     Text(isLastStep ? 'ENVIAR' : 'SIGUIENTE'),
@@ -150,13 +148,13 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
                                 onPressed: !isCompleted
                                     ? details.onStepContinue
                                     : null)),
-                        SizedBox(
+                        const SizedBox(
                           width: 12,
                         ),
                         if (currentStep != 0)
                           Expanded(
                               child: ElevatedButton(
-                            child: Text('VOLVER'),
+                            child: const Text('VOLVER'),
                             onPressed: details.onStepCancel,
                           ))
                       ],
@@ -176,41 +174,41 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
       Step(
           state: currentStep > 0 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 0,
-          title: Text('Informacion'),
+          title: const Text('Información'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: Text(
-              'Invitar: Servicios de entragas rapidas,por ejemplo: Delivery,Farnacia,Local de Comida. Presiones CONTINUAR',
+            child: const Text(
+              'Podrás invitar: Servicios de entragas rápidas,por ejemplo: Delivery,Farmacia,Local de Comida. Presione CONTINUAR',
               style: TextStyle(color: Colors.black),
             ),
           )),
       Step(
           state: currentStep > 1 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 1,
-          title: Text('Autorizo a:'),
+          title: const Text('Autorizo a:'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: TextFormField(
               maxLength: 190,
               maxLines: 2,
               //maxLines: 1,
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
               onChanged: (value) => this.autorizoA = value,
             ),
           )),
       Step(
           state: currentStep > 2 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 2,
-          title: Text('Vigencia'),
+          title: const Text('Vigencia'),
           content: Container(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: Container(
@@ -218,9 +216,9 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
                 child: DropdownButton<String>(
                   isExpanded: true,
                   value: valueVigencia,
-                  hint: Text("Seleccion la Vigencia"),
+                  hint: const Text("Seleccione la Vigencia"),
                   iconSize: 36,
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_drop_down_outlined,
                     color: Colors.black,
                   ),
@@ -231,18 +229,18 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
           )),
       Step(
           isActive: currentStep >= 2,
-          title: Text('Email (Campo opcional)'),
+          title: Text('E-mail (Campo opcional)'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: TextFormField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Campo opcional.',
               ),
               //maxLines: 1,
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
               onChanged: (value) => this.email = value,
             ),
           )),
@@ -253,7 +251,7 @@ class _InvitarScreenState extends State<InvitarDeliveryScreen> {
         value: item,
         child: Text(
           item,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       );
 }

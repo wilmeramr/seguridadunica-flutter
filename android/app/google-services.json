@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "31413500791",
-    "project_id": "seguridad-notificaciones",
-    "storage_bucket": "seguridad-notificaciones.appspot.com"
+    "project_number": "841035798555",
+    "project_id": "com-seguridadunica-unikey",
+    "storage_bucket": "com-seguridadunica-unikey.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:31413500791:android:9f22f23b38a2d178fd7f72",
+        "mobilesdk_app_id": "1:841035798555:android:0efd6dc82e614e8e18c0be",
         "android_client_info": {
-          "package_name": "com.wmwm.notificaciones"
+          "package_name": "com.seguridadunica.unikey"
         }
       },
       "oauth_client": [
         {
-          "client_id": "31413500791-2kq4r3mfi61tdvv69a0enc3acjq211j0.apps.googleusercontent.com",
+          "client_id": "841035798555-kru3edf8dp8bg1thh3pbmis4oi3e6igv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.wmwm.notificaciones",
-            "certificate_hash": "5aa781f1bf7a8bd57d5e38fc02c416de0a4eba59"
+            "package_name": "com.seguridadunica.unikey",
+            "certificate_hash": "057cd61310727987989a32f73fbf6b9c8f585a28"
           }
         },
         {
-          "client_id": "31413500791-i339dmd47dh23d86c56en2dg5usnpgfm.apps.googleusercontent.com",
+          "client_id": "841035798555-2542ihao5erh5jhsttsaqnlj1f6ilj2h.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAQozqqytMcEbUCJoRJQC6NHrLoa2TbjC0"
+          "current_key": "AIzaSyAftMSrLxe19-I4EWZLanAGr8vZQS2Qpfo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "31413500791-i339dmd47dh23d86c56en2dg5usnpgfm.apps.googleusercontent.com",
+              "client_id": "841035798555-2542ihao5erh5jhsttsaqnlj1f6ilj2h.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wmwm.notificaciones">
+    package="com.seguridadunica.unikey">
    <application
         android:label="Unikey"
         android:name="${applicationName}"
@@ -20,16 +20,27 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+        
+        <action android:name="android.intent.action.VIEW" />
+        <!-- Include the host attribute if you want your app to respond
+             only to URLs with your app's domain. -->
+        <data android:scheme="http" />
+        
+        <!-- The BROWSABLE category is required to get links from web pages. -->
+        <category android:name="android.intent.category.BROWSABLE" />
+    </intent-filter>
         </activity>
+        
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    
 </manifest>

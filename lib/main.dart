@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,12 +30,11 @@ void main() async {
   await runZonedGuarded<Future<void>>(() async {
     // WidgetsFlutterBinding.ensureInitialized();
     WidgetsFlutterBinding.ensureInitialized();
-    //   await PushNotificationService.initializeApp();
-    //  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    // await PushNotificationService.initializeApp();
+    // await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
 
-    //FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-    FlutterError.onError = (FlutterErrorDetails details) {
-      print(details.toString());
+    // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    /*  FlutterError.onError = (FlutterErrorDetails details) {
       final exception = details.exception;
       final stackTrace = details.stack ?? StackTrace.fromString('');
 
@@ -43,21 +43,15 @@ void main() async {
       } else {
         FlutterError.dumpErrorToConsole(details);
       }
-    };
-
-    if (!kReleaseMode) {
-      // await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
-    }
+    }; */
 
     runApp(AppState());
   }, (error, stackTrace) {
-    print('Capturo un Dart Error!');
-    FirebaseCrashlytics.instance.recordError(error, stackTrace);
-
-    if (kReleaseMode) {
-      print('$error');
-      print('$stackTrace');
-    } else {}
+    NotificationsService.showSnackbar(
+        'Oh!',
+        "Debe asegurarse que el dipositivo tengo conexión a internet",
+        ContentType.failure);
+    FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
   });
 }
 
@@ -137,7 +131,8 @@ class _MyAppState extends State<MyApp> {
         'mascotaEditar': (_) => MascotaEditarScreen(),
         'servicio': (_) => InvitaAutorizaScreen(),
         'dash2': (_) => DashScreen(),
-        'detalleautorizacion': (_) => DetalleAutorizacionScreen()
+        'detalleautorizacion': (_) => DetalleAutorizacionScreen(),
+        'inicioSelfie': (_) => InicioSelfieScreen()
       },
       theme: ThemeData.light().copyWith(
           scaffoldBackgroundColor: Colors.grey[300],

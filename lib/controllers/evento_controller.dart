@@ -11,9 +11,11 @@ import 'package:time_range_picker/time_range_picker.dart';
 import '../models/aut_models.dart';
 import '../models/invitacion_models.dart';
 import '../models/user.dart';
+import '../services/globalkey_service.dart';
 
 class EventoController extends GetxController {
-  final String _baseUrl = 'acceso.seguridadunica.com';
+  final String _baseUrl = GlobalKeyService.urlApiKey;
+  final String _baseUrlVersion = GlobalKeyService.urlVersion;
   final storage = new FlutterSecureStorage();
 
   var data = <Datum>[].obs;
@@ -44,26 +46,23 @@ class EventoController extends GetxController {
   Future<String> getTopEvento() async {
     _page = 1.obs;
     try {
-      var jsonResponse = jsonDecode(await _getJsonData('/api/autorizacion/4'))
-          as Map<String, dynamic>;
+      var jsonResponse =
+          jsonDecode(await _getJsonData('${_baseUrlVersion}/autorizacion/4'))
+              as Map<String, dynamic>;
       if (jsonResponse.containsKey('data')) {
-        // final Map<String, dynamic> decodeResp = json.decode(response.body);
         var aut = AutorizacionResponse.fromJson(jsonResponse);
-        print(aut.data);
 
         data.clear();
         data.addAll(aut.data);
         _last_page = aut.lastPage.obs;
         return 'Ok';
-        //var itemCount = jsonResponse['totalItems'];
-        // print('Number of books about http: $itemCount.');
       } else {
-        return "Error en la conexion: Intentelo mas tarde";
+        return "Error de conexión: Intentalo mas tarde";
       }
     } on TimeoutException catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return "Error de conexión: Intentalo mas tarde";
     } on Exception catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return "Error de conexión: Intentalo mas tarde";
     }
   }
 
@@ -73,33 +72,30 @@ class EventoController extends GetxController {
     if (_page.value <= _last_page.value) {
       try {
         isLoading.value = true;
-        var jsonResponse =
-            jsonDecode(await _getJsonData('/api/autorizacion/4', _page.value))
-                as Map<String, dynamic>;
+        var jsonResponse = jsonDecode(await _getJsonData(
+                '${_baseUrlVersion}/autorizacion/4', _page.value))
+            as Map<String, dynamic>;
         if (jsonResponse.containsKey('data')) {
-          // final Map<String, dynamic> decodeResp = json.decode(response.body);
           var aut = AutorizacionResponse.fromJson(jsonResponse);
           data.value = [...data, ...aut.data];
           isLoading.value = false;
           return 'Ok';
-          //var itemCount = jsonResponse['totalItems'];
-          // print('Number of books about http: $itemCount.');
         } else {
           _page.value -= 1;
           isLoading.value = false;
 
-          return "Error en la conexion: Intentelo mas tarde";
+          return "Error de conexión: Intentalo mas tarde";
         }
       } on TimeoutException catch (e) {
         _page.value -= 1;
         isLoading.value = false;
 
-        return 'Error de conexcion';
+        return "Error de conexión: Intentalo mas tarde";
       } on Exception catch (e) {
         _page.value -= 1;
         isLoading.value = false;
 
-        return 'Error en la conexion: Intentelo mas tarde';
+        return "Error de conexión: Intentalo mas tarde";
       }
     } else {
       return 'Ok';
@@ -134,32 +130,26 @@ class EventoController extends GetxController {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${token}'
       };
-      final url = Uri.http(_baseUrl, '/api/autorizacion');
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/autorizacion');
       final response = await http
           .post(url, headers: requestHeaders, body: json.encode(auhtData))
           .timeout(const Duration(seconds: 10));
-      print(response);
       var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
       if (jsonResponse.containsKey('link')) {
         var user = await storage.read(key: 'user') ?? '';
         var userDto = User.fromJson(jsonDecode(user) as Map<String, dynamic>);
-        // final Map<String, dynamic> decodeResp = json.decode(response.body);
         var aut = InvitacionResponse.fromJson(jsonResponse);
 
-        // notifyListeners();
-
         return 'Ok';
-        //var itemCount = jsonResponse['totalItems'];
-        // print('Number of books about http: $itemCount.');
       } else if (jsonResponse.containsKey('error')) {
         return 'Error: ' + jsonResponse['error'];
       } else {
-        return "Error en la conexion: Intentelo mas tarde";
+        return "Error de conexión: Intentalo mas tarde";
       }
     } on TimeoutException catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return "Error de conexión: Intentalo mas tarde";
     } on Exception catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return "Error de conexión: Intentalo mas tarde";
     }
   }
 }

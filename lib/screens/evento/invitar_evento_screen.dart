@@ -25,7 +25,6 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
   String autorizoA = "";
   String cantInvitados = "0";
 
-  final items = ['2hrs', '3hrs', '4hrs', '5hrs'];
   String? valueVigencia;
   bool isCompleted = false;
   @override
@@ -35,17 +34,17 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
     return Scaffold(
       body: SafeArea(
         child: Stack(children: [
-          Background(color1: Color(0xff6989F5), color2: Colors.white),
+          const Background(color1: Color(0xff6989F5), color2: Colors.white),
           Container(
             //  margin: EdgeInsets.only(top: 200),
             child: Hero(
-              tag: Text('Eventos'),
+              tag: const Text('Eventos'),
               child: BotonGordo(
                 iconL: FontAwesomeIcons.calendarAlt,
                 iconR: FontAwesomeIcons.chevronLeft,
                 texto: 'Eventos',
-                color1: Color(0xff317183),
-                color2: Color(0xff46997D),
+                color1: const Color.fromARGB(255, 45, 56, 207),
+                color2: const Color.fromARGB(255, 39, 142, 108),
                 onPress: () => Navigator.of(context).pop(),
               ),
             ),
@@ -53,13 +52,13 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
           Container(
             width: double.infinity,
             height: double.infinity,
-            margin: EdgeInsets.only(top: 150),
+            margin: const EdgeInsets.only(top: 150),
             child: SingleChildScrollView(
                 child: Theme(
               data: Theme.of(context).copyWith(
-                  colorScheme: ColorScheme.light(primary: Colors.green)),
+                  colorScheme: const ColorScheme.light(primary: Colors.green)),
               child: Stepper(
-                physics: ClampingScrollPhysics(),
+                physics: const ClampingScrollPhysics(),
                 steps: _getSteps(),
                 currentStep: currentStep,
                 onStepContinue: () async {
@@ -84,18 +83,16 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
 
                       if (response.contains('Error')) {
                         NotificationsService.showSnackbar(
-                            'Oh! Ocurrio un problema',
-                            response,
-                            ContentType.failure);
+                            'Oh!', response, ContentType.failure);
                       } else {
                         await eventoCtrl.getTopEvento();
                         Navigator.pop(context);
                       }
                     } else
-                      NotificationsService.showMyDialogAndroid(
-                          context,
-                          'No se pudo conectar a intenet',
-                          'Debe asegurarse que el dipositivo tengo conexion a internet');
+                      NotificationsService.showSnackbar(
+                          'Oh!',
+                          "Debe asegurarse que el dipositivo tengo conexion a internet",
+                          ContentType.failure);
                     setState(() => isCompleted = false);
                   } else {
                     if (currentStep == 1 && autorizoA.isEmpty) {
@@ -163,7 +160,7 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
                 controlsBuilder: (context, details) {
                   final isLastStep = currentStep == _getSteps().length - 1;
                   return Container(
-                    margin: EdgeInsets.only(top: 50),
+                    margin: const EdgeInsets.only(top: 50),
                     child: Row(
                       children: [
                         Expanded(
@@ -175,7 +172,7 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
                                         ? Container()
                                         : Image(
                                             width: size.width * 0.05,
-                                            image: AssetImage(
+                                            image: const AssetImage(
                                                 'assets/loading.gif'),
                                           ),
                                     Text(isLastStep ? 'ENVIAR' : 'SIGUIENTE'),
@@ -184,13 +181,13 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
                                 onPressed: !isCompleted
                                     ? details.onStepContinue
                                     : null)),
-                        SizedBox(
+                        const SizedBox(
                           width: 12,
                         ),
                         if (currentStep != 0)
                           Expanded(
                               child: ElevatedButton(
-                            child: Text('VOLVER'),
+                            child: const Text('VOLVER'),
                             onPressed: details.onStepCancel,
                           ))
                       ],
@@ -210,41 +207,41 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
       Step(
           state: currentStep > 0 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 0,
-          title: Text('Informacion'),
+          title: const Text('Información'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: Text(
-              'Indique el fecha y horario del evento, cantidad de invitados. Presiones CONTINUAR',
+            child: const Text(
+              'Indique el fecha y horario del evento, cantidad de invitados. Presione CONTINUAR',
               style: TextStyle(color: Colors.black),
             ),
           )),
       Step(
           state: currentStep > 1 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 1,
-          title: Text('Nombre del evento:'),
+          title: const Text('Nombre del evento:'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: TextFormField(
               maxLength: 190,
               maxLines: 2,
               //maxLines: 1,
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
               onChanged: (value) => this.autorizoA = value,
             ),
           )),
       Step(
           state: currentStep > 2 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 2,
-          title: Text('Fecha y Hora'),
+          title: const Text('Fecha y Hora'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: Column(
@@ -256,15 +253,16 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
                   elevation: 3,
                   color: Colors.blue,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 15),
                     child: Text(
                       'Desde: ${dtdesde == null ? '' : dtdesde?.toESdate()}',
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
                   onPressed: () async => await pickDateRange(context, 'D'),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 MaterialButton(
@@ -274,10 +272,11 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
                   elevation: 3,
                   color: Colors.blue,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 15),
                     child: Text(
                       'Hasta: ${dthasta == null ? '' : dthasta?.toESdate()}',
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
                   onPressed: () async => await pickDateRange(context, 'H'),
@@ -288,10 +287,10 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
       Step(
           state: currentStep > 3 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 3,
-          title: Text('Cantidad de invitados:'),
+          title: const Text('Cantidad de invitados:'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: TextFormField(
@@ -300,24 +299,24 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
               maxLines: 1,
               decoration: InputDecoration(hintText: '0'),
               //maxLines: 1,
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
               onChanged: (value) => this.cantInvitados = value,
             ),
           )),
       Step(
           isActive: currentStep >= 4,
-          title: Text('Comentarios (Campo opcional)'),
+          title: const Text('Comentarios (Campo opcional)'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: TextFormField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Campo opcional.',
               ),
               //maxLines: 1,
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
               onChanged: (value) => this.comentarios = value,
             ),
           )),
@@ -329,36 +328,22 @@ class _InvitarEventoScreenState extends State<InvitarEventoScreen> {
         DateTimeRange(start: DateTime.now(), end: DateTime.now());
 
     DatePicker.showDateTimePicker(context,
-        showTitleActions: true, minTime: DateTime.now(), onChanged: (date) {
-      print('change $date');
-    }, onConfirm: (date) {
-      print('confirm $date');
+        showTitleActions: true,
+        minTime: DateTime.now(),
+        onChanged: (date) {}, onConfirm: (date) {
       if (rango == 'D')
         setState(() => dtdesde = date);
       else {
         setState(() => dthasta = date);
       }
     }, currentTime: rango == 'D' ? dtdesde : dthasta, locale: LocaleType.es);
-
-    /*  
-    final newDateRange = await showDateRangePicker(
-        context: context,
-        firstDate: DateTime(DateTime.now().year - 5),
-        lastDate: DateTime(DateTime.now().year + 5),
-        initialDateRange: dateRange ?? initialDateRange,
-        helpText: "Selecctione las fechas",
-        cancelText: "Salir",
-        confirmText: "Guardar",
-        saveText: "Guardar");
-
-    if (newDateRange == null) return; */
   }
 
   DropdownMenuItem<String> _buildMenuItem(String item) => DropdownMenuItem(
         value: item,
         child: Text(
           item,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       );
 }

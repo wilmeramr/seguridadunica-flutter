@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -29,13 +30,13 @@ class DeliveryInicioScreen extends StatelessWidget {
             var result = await deliveryService.getTopDeliScroll();
 
             if (!result.contains('Ok'))
-              NotificationsService.showMyDialogAndroid(
-                  context, 'Delivery', result);
+              NotificationsService.showSnackbar(
+                  'Oh! ', "${result}", ContentType.failure);
           } else
-            NotificationsService.showMyDialogAndroid(
-                context,
-                'No se pudo conectar a intenet',
-                'Debe asegurarse que el dipositivo tengo conexion a internet');
+            NotificationsService.showSnackbar(
+                'Oh!',
+                "Debe asegurarse que el dipositivo tengo conexion a internet",
+                ContentType.failure);
         },
       ),
       Positioned(bottom: -10, right: 0, child: _BotonNewList())
@@ -61,10 +62,10 @@ class _BotonNewList extends StatelessWidget {
           if (conx) {
             Navigator.pushNamed(context, 'invitarDeliveryInicio');
           } else
-            NotificationsService.showMyDialogAndroid(
-                context,
-                'No se pudo conectar a intenet',
-                'Debe asegurarse que el dipositivo tengo conexion a internet');
+            NotificationsService.showSnackbar(
+                'Oh! ',
+                "Debe asegurarse que el dipositivo tengo conexión a internet",
+                ContentType.failure);
         },
         child: Text(
           'CREAR UNA ENTRADA',
@@ -149,13 +150,13 @@ class _MainScrollState extends State<_MainScroll> {
           var result = await deliveryService.getTopDeli();
 
           if (!result.contains('Ok'))
-            NotificationsService.showMyDialogAndroid(
-                context, 'Delivery', result);
+            NotificationsService.showSnackbar(
+                'Oh!', "$result", ContentType.failure);
         } else
-          NotificationsService.showMyDialogAndroid(
-              context,
-              'No se pudo conectar a intenet',
-              'Debe asegurarse que el dipositivo tengo conexion a internet');
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tengo conexión a internet",
+              ContentType.failure);
       },
       child: Obx(() => CustomScrollView(
             controller: scrollController,
@@ -166,7 +167,7 @@ class _MainScrollState extends State<_MainScroll> {
                   floating: true,
                   delegate: _SliverCustomHeaderDelegate(
                       minHeight: 170,
-                      maxHeight: 200,
+                      maxHeight: 225,
                       child: Container(
                           alignment: Alignment.centerLeft,
                           color: Colors.white,
@@ -245,7 +246,7 @@ class _Titulo extends StatelessWidget {
                 iconL: FontAwesomeIcons.taxi,
                 iconR: FontAwesomeIcons.chevronLeft,
                 texto: 'Delivery,Entregas,otros',
-                color1: Color.fromARGB(255, 105, 245, 203),
+                color1: Color.fromARGB(255, 215, 8, 8),
                 color2: Color.fromARGB(255, 129, 95, 232),
                 onPress: () => Navigator.of(context).pop(),
               ),
@@ -361,7 +362,7 @@ class _NotificacionCreado extends StatelessWidget {
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
-          textAlign: TextAlign.justify,
+          textAlign: TextAlign.start,
         ));
   }
 }

@@ -11,6 +11,7 @@ class IconHeader extends StatelessWidget {
   final String country;
   final Color color1;
   final Color color2;
+  final AssetImage image;
 
   const IconHeader(
       {Key? key,
@@ -22,6 +23,7 @@ class IconHeader extends StatelessWidget {
       required this.email,
       required this.rol,
       required this.lote,
+      required this.image,
       required this.country})
       : super(key: key);
   @override
@@ -39,7 +41,7 @@ class IconHeader extends StatelessWidget {
           )),
       Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 80,
             width: double.infinity,
           ),
@@ -69,11 +71,12 @@ class IconHeader extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          FaIcon(
-            this.icon,
-            size: 80,
+          Image(
             color: Colors.white,
-          )
+            height: 120,
+            width: 120,
+            image: image,
+          ),
         ],
       )
     ]);

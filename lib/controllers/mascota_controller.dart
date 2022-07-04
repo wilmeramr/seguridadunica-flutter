@@ -9,9 +9,11 @@ import 'package:http/http.dart' as http;
 
 import '../models/masc_esp_models.dart';
 import '../models/user.dart';
+import '../services/globalkey_service.dart';
 
 class MascotaController extends GetxController {
-  final String _baseUrl = 'acceso.seguridadunica.com';
+  final String _baseUrl = GlobalKeyService.urlApiKey;
+  final String _baseUrlVersion = GlobalKeyService.urlVersion;
   final storage = new FlutterSecureStorage();
 
   var data = <Mascota>[].obs;
@@ -50,8 +52,9 @@ class MascotaController extends GetxController {
   Future<String> getTopMascota() async {
     _page = 1.obs;
     try {
-      var jsonResponse = jsonDecode(await _getJsonData('/api/mascota'))
-          as Map<String, dynamic>;
+      var jsonResponse =
+          jsonDecode(await _getJsonData('${_baseUrlVersion}/mascota'))
+              as Map<String, dynamic>;
       if (jsonResponse.containsKey('data')) {
         // final Map<String, dynamic> decodeResp = json.decode(response.body);
         var masc = MascotasResponse.fromMap(jsonResponse);
@@ -63,12 +66,12 @@ class MascotaController extends GetxController {
         //var itemCount = jsonResponse['totalItems'];
         // print('Number of books about http: $itemCount.');
       } else {
-        return "Error en la conexion: Intentelo mas tarde";
+        return "Error de conexión: Intentalo mas tarde";
       }
     } on TimeoutException catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return "Error de conexión: Intentalo mas tarde";
     } on Exception catch (e) {
-      return 'Error en la conexion: Intentelo mas tarde';
+      return "Error de conexión: Intentalo mas tarde";
     }
   }
 
@@ -78,33 +81,30 @@ class MascotaController extends GetxController {
     if (_page.value <= _last_page.value) {
       try {
         isLoading.value = true;
-        var jsonResponse =
-            jsonDecode(await _getJsonData('/api/mascota', _page.value))
-                as Map<String, dynamic>;
+        var jsonResponse = jsonDecode(
+                await _getJsonData('${_baseUrlVersion}/mascota', _page.value))
+            as Map<String, dynamic>;
         if (jsonResponse.containsKey('data')) {
-          // final Map<String, dynamic> decodeResp = json.decode(response.body);
           var aut = MascotasResponse.fromMap(jsonResponse);
           data.value = [...data, ...aut.data];
           isLoading.value = false;
           return 'Ok';
-          //var itemCount = jsonResponse['totalItems'];
-          // print('Number of books about http: $itemCount.');
         } else {
           _page.value -= 1;
           isLoading.value = false;
 
-          return "Error en la conexion";
+          return "Error de conexión: Intentalo mas tarde";
         }
       } on TimeoutException catch (e) {
         _page.value -= 1;
         isLoading.value = false;
 
-        return 'Error de conexcion';
+        return "Error de conexión: Intentalo mas tarde";
       } on Exception catch (e) {
         _page.value -= 1;
         isLoading.value = false;
 
-        return 'Error de conexcion';
+        return "Error de conexión: Intentalo mas tarde";
       }
     } else {
       return 'Ok';
@@ -120,26 +120,23 @@ class MascotaController extends GetxController {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${token}'
       };
-      final url = Uri.https(_baseUrl, '/api/mascota/especies');
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/mascota/especies');
       final response = await http
           .get(url, headers: requestHeaders)
           .timeout(const Duration(seconds: 10));
 
       var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
       if (jsonResponse.containsKey('especies')) {
-        // final Map<String, dynamic> decodeResp = json.decode(response.body);
         var aut = MascotasEspeciesResponse.fromMap(jsonResponse);
         dataEspeccies = aut.especies;
         return 'Ok';
-        //var itemCount = jsonResponse['totalItems'];
-        // print('Number of books about http: $itemCount.');
       } else {
-        return "Error en la conexion";
+        return "Error de conexión: Intentalo mas tarde";
       }
     } on TimeoutException catch (e) {
-      return 'Error de conexcion';
+      return "Error de conexión: Intentalo mas tarde";
     } on Exception catch (e) {
-      return 'Error de conexcion';
+      return "Error de conexión: Intentalo mas tarde";
     }
   }
 
@@ -152,27 +149,23 @@ class MascotaController extends GetxController {
         'Accept': 'application/json',
         'Authorization': 'Bearer ${token}'
       };
-      final url = Uri.https(_baseUrl, '/api/mascota/generos');
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/mascota/generos');
       final response = await http
           .get(url, headers: requestHeaders)
           .timeout(const Duration(seconds: 10));
       var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
       if (jsonResponse.containsKey('generos')) {
-        // final Map<String, dynamic> decodeResp = json.decode(response.body);
         var aut = MascotasGenerosResponse.fromMap(jsonResponse);
         datagenero = aut.generos;
         carga.value = 1;
-
         return 'Ok';
-        //var itemCount = jsonResponse['totalItems'];
-        // print('Number of books about http: $itemCount.');
       } else {
-        return "Error en la conexion";
+        return "Error de conexión: Intentalo mas tarde";
       }
     } on TimeoutException catch (e) {
-      return 'Error de conexcion';
+      return "Error de conexión: Intentalo mas tarde";
     } on Exception catch (e) {
-      return 'Error de conexcion';
+      return "Error de conexión: Intentalo mas tarde";
     }
   }
 

@@ -16,7 +16,6 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
   int currentStep = 0;
   DateTime? date;
   DateTimeRange? dateRange;
-  final items = ['Items 1', 'Items 2'];
   String? value;
   bool isCompleted = false;
 
@@ -36,9 +35,9 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
               child: BotonGordo(
                 iconL: FontAwesomeIcons.idCardAlt,
                 iconR: FontAwesomeIcons.chevronLeft,
-                texto: 'Crear Autorizacion',
-                color1: Color(0xff6989F5),
-                color2: Color(0xff906EF5),
+                texto: 'Crear Autorización',
+                color1: const Color.fromARGB(255, 70, 109, 236),
+                color2: const Color.fromARGB(255, 117, 221, 145),
                 onPress: () => Navigator.of(context).pop(),
               ),
             ),
@@ -46,13 +45,13 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
           Container(
             width: double.infinity,
             height: double.infinity,
-            margin: EdgeInsets.only(top: 150),
+            margin: const EdgeInsets.only(top: 150),
             child: SingleChildScrollView(
                 child: Theme(
               data: Theme.of(context).copyWith(
                   colorScheme: ColorScheme.light(primary: Colors.green)),
               child: Stepper(
-                physics: ClampingScrollPhysics(),
+                physics: const ClampingScrollPhysics(),
                 steps: _getSteps(),
                 currentStep: currentStep,
                 onStepContinue: () async {
@@ -72,9 +71,7 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
 
                       if (response.contains('Error')) {
                         NotificationsService.showSnackbar(
-                            'Oh! Ocurrio un problema',
-                            response,
-                            ContentType.failure);
+                            'Oh!', response, ContentType.failure);
                       } else {
                         await Share.share(response);
                         await authService.getTopAut();
@@ -82,10 +79,10 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
                         Navigator.pop(context);
                       }
                     } else
-                      NotificationsService.showMyDialogAndroid(
-                          context,
-                          'No se pudo conectar a intenet',
-                          'Debe asegurarse que el dipositivo tengo conexion a internet');
+                      NotificationsService.showSnackbar(
+                          'Oh!',
+                          "Debe asegurarse que el dipositivo tengo conexión a internet",
+                          ContentType.failure);
                   } else {
                     if (currentStep == 1 && dateRange == null) {
                       NotificationsService.showSnackbar(
@@ -117,7 +114,7 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
                 controlsBuilder: (context, details) {
                   final isLastStep = currentStep == _getSteps().length - 1;
                   return Container(
-                    margin: EdgeInsets.only(top: 50),
+                    margin: const EdgeInsets.only(top: 50),
                     child: Row(
                       children: [
                         Expanded(
@@ -129,7 +126,8 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
                                   ? Container()
                                   : Image(
                                       width: size.width * 0.05,
-                                      image: AssetImage('assets/loading.gif'),
+                                      image: const AssetImage(
+                                          'assets/loading.gif'),
                                     ),
                               Text(isLastStep ? 'ENVIAR' : 'SIGUIENTE'),
                             ],
@@ -137,13 +135,13 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
                           onPressed:
                               !isCompleted ? details.onStepContinue : null,
                         )),
-                        SizedBox(
+                        const SizedBox(
                           width: 12,
                         ),
                         if (currentStep != 0)
                           Expanded(
                               child: ElevatedButton(
-                            child: Text('VOLVER'),
+                            child: const Text('VOLVER'),
                             onPressed: details.onStepCancel,
                           ))
                       ],
@@ -163,24 +161,24 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
       Step(
           state: currentStep > 0 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 0,
-          title: Text('Informacion'),
+          title: const Text('Información'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: Text(
-              'Debe seleccionar el rango de fecha para la invitacion. Presiones CONTINUAR',
+            child: const Text(
+              'Debe seleccionar el rango de fecha para la invitación. Presiones CONTINUAR',
               style: TextStyle(color: Colors.black),
             ),
           )),
       Step(
           state: currentStep > 1 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 1,
-          title: Text('Seleccinar fechas'),
+          title: const Text('Seleccionar fechas'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: Column(
@@ -192,22 +190,23 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
                   elevation: 3,
                   color: Colors.blue,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                    child: Text(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 15),
+                    child: const Text(
                       'Seleccione las fechas',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                   onPressed: () async => await pickDateRange(context),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 dateRange == null
                     ? Container()
                     : Text(
                         '${_getText()} ',
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       )
               ],
             ),
@@ -237,17 +236,17 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
           )), */
       Step(
           isActive: currentStep >= 2,
-          title: Text('Comentarios'),
+          title: const Text('Comentarios'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: TextFormField(
               //maxLines: 1,
               onChanged: (value) => this.comentarios = value,
 
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
             ),
           )),
     ];
@@ -277,7 +276,7 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
         firstDate: DateTime(DateTime.now().year - 5),
         lastDate: DateTime(DateTime.now().year + 5),
         initialDateRange: dateRange ?? initialDateRange,
-        helpText: "Selecctione las fechas",
+        helpText: "Seleccione las fechas",
         cancelText: "Salir",
         confirmText: "Guardar",
         saveText: "Guardar");
@@ -298,7 +297,7 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
         value: item,
         child: Text(
           item,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       );
 }

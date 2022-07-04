@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:Unikey/extension/timeofday.dart';
@@ -44,17 +45,18 @@ class _MascotaScreenBody extends StatelessWidget {
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Column(
               children: [
-                Background(color1: Color(0xff6989F5), color2: Colors.white),
+                const Background(
+                    color1: Color(0xff6989F5), color2: Colors.white),
                 Container(
                   //  margin: EdgeInsets.only(top: 200),
                   child: Hero(
-                    tag: Text('Mascotas'),
+                    tag: const Text('Mascotas'),
                     child: BotonGordo(
                       iconL: FontAwesomeIcons.paw,
                       iconR: FontAwesomeIcons.chevronLeft,
                       texto: 'Mascotas',
-                      color1: Color(0xffF2D572),
-                      color2: Color(0xffE06AA3),
+                      color1: const Color(0xffF2D572),
+                      color2: const Color(0xffE06AA3),
                       onPress: () {
                         Get.delete<MascotaFormController>();
                         Navigator.of(context).pop();
@@ -70,7 +72,7 @@ class _MascotaScreenBody extends StatelessWidget {
                         top: 60,
                         right: 20,
                         child: IconButton(
-                          icon: Icon(Icons.camera_alt_outlined,
+                          icon: const Icon(Icons.camera_alt_outlined,
                               size: 40, color: Colors.white),
                           onPressed: () async {
                             await _showChoiceDialog(context);
@@ -108,7 +110,7 @@ class _MascotaScreenBody extends StatelessWidget {
                   ],
                 ),
                 _ProductForm(),
-                SizedBox(
+                const SizedBox(
                   height: 100,
                 ),
               ],
@@ -121,14 +123,15 @@ class _MascotaScreenBody extends StatelessWidget {
             height: 50,
             child: MaterialButton(
               color: Colors.blue,
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius.only(topLeft: Radius.circular(50))),
               child: mascotaFormCtrl.isSaving.value
-                  ? CircularProgressIndicator(
+                  ? const CircularProgressIndicator(
                       color: Colors.white,
                     )
-                  : Text('GUARDAR', style: TextStyle(color: Colors.white)),
+                  : const Text('GUARDAR',
+                      style: TextStyle(color: Colors.white)),
               onPressed: mascotaFormCtrl.isSaving.value
                   ? () {}
                   : () async {
@@ -150,8 +153,8 @@ class _MascotaScreenBody extends StatelessWidget {
                             await mascotaFormCtrl.saveOrCreateMascota();
                         mascotaFormCtrl.isSaving.value = false;
                         if (result.contains('error')) {
-                          NotificationsService.showMyDialogAndroid(
-                              context, 'Mascota', result);
+                          NotificationsService.showSnackbar(
+                              'Oh! ', "${result}", ContentType.failure);
                           return;
                         }
                         if (result.contains('update')) {
@@ -172,10 +175,10 @@ class _MascotaScreenBody extends StatelessWidget {
                           });
                         }
                       } else
-                        NotificationsService.showMyDialogAndroid(
-                            context,
-                            'No se pudo conectar a intenet',
-                            'Debe asegurarse que el dipositivo tengo conexion a internet');
+                        NotificationsService.showSnackbar(
+                            'Oh!',
+                            "Debe asegurarse que el dipositivo tengo conexion a internet",
+                            ContentType.failure);
                     },
             ),
           ),
@@ -200,14 +203,14 @@ class _ProductForm extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Obx(() => Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             decoration: _buildDecoration(),
             child: Form(
               key: mascotaFormCtrl.formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   TextFormField(
@@ -221,7 +224,7 @@ class _ProductForm extends StatelessWidget {
                     decoration: InputDecorations.authInputDecoration(
                         hintText: 'Nombre de su mascota', labelText: 'Nombre'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   DropdownButtonFormField<Especy>(
@@ -236,7 +239,7 @@ class _ProductForm extends StatelessWidget {
                     isExpanded: true,
                     // hint: Text("Seleccion la Especie"),
                     iconSize: 36,
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.arrow_drop_down_outlined,
                       color: Colors.black,
                     ),
@@ -248,7 +251,7 @@ class _ProductForm extends StatelessWidget {
                       });
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   TextFormField(
@@ -262,13 +265,13 @@ class _ProductForm extends StatelessWidget {
                     decoration: InputDecorations.authInputDecoration(
                         hintText: 'Raza de su mascota', labelText: 'Raza'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   DropdownButtonFormField<Genero>(
                     elevation: 16,
                     decoration: InputDecorations.authInputDecoration(
-                        hintText: 'Genero de su mascota', labelText: 'Genero'),
+                        hintText: 'Género de su mascota', labelText: 'Género'),
                     value: mascotaCtrl.datagenero
                         .where((element) =>
                             element.mascGeneId == mascota.value.mascGeneroId)
@@ -276,7 +279,7 @@ class _ProductForm extends StatelessWidget {
                     isExpanded: true,
                     // hint: Text("Seleccion la Especie"),
                     iconSize: 36,
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.arrow_drop_down_outlined,
                       color: Colors.black,
                     ),
@@ -289,7 +292,7 @@ class _ProductForm extends StatelessWidget {
                       });
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   TextFormField(
@@ -313,7 +316,7 @@ class _ProductForm extends StatelessWidget {
                     decoration: InputDecorations.authInputDecoration(
                         hintText: 'Peso de su mascota', labelText: 'Peso (Kg)'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   TextFormField(
@@ -335,7 +338,7 @@ class _ProductForm extends StatelessWidget {
                         hintText: 'Seleccione fecha',
                         labelText: 'Fecha Nacimiento'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   TextFormField(
@@ -356,12 +359,12 @@ class _ProductForm extends StatelessWidget {
                     keyboardType: TextInputType.number,
                     decoration: InputDecorations.authInputDecoration(
                         hintText: 'Seleccione fecha',
-                        labelText: 'Ultima Vacunacion'),
+                        labelText: 'Última Vacunación'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   )
                 ],
@@ -374,12 +377,12 @@ class _ProductForm extends StatelessWidget {
   BoxDecoration _buildDecoration() {
     return BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
             bottomRight: Radius.circular(25), bottomLeft: Radius.circular(25)),
         boxShadow: [
           BoxShadow(
               color: Colors.black.withOpacity(0.05),
-              offset: Offset(0, 5),
+              offset: const Offset(0, 5),
               blurRadius: 5)
         ]);
   }
@@ -388,7 +391,7 @@ class _ProductForm extends StatelessWidget {
         value: item,
         child: Text(
           item.mascEspName,
-          style: TextStyle(fontWeight: FontWeight.normal),
+          style: const TextStyle(fontWeight: FontWeight.normal),
         ),
       );
   DropdownMenuItem<Genero> _buildMenuItemGenero(Genero item) =>
@@ -404,7 +407,7 @@ class _ProductForm extends StatelessWidget {
     final newDate = await showDatePicker(
       context: context,
       initialDate: initialDate,
-      helpText: "Selecctione la fecha de nacimiento",
+      helpText: "Seleccione la fecha de nacimiento",
       cancelText: "Salir",
       confirmText: "Guardar",
       firstDate: DateTime(2021),
@@ -439,14 +442,14 @@ Future<void> _showChoiceDialog(BuildContext context) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
+          title: const Text(
             "Seleccione modo:",
             style: TextStyle(color: Colors.blue),
           ),
           content: SingleChildScrollView(
             child: ListBody(
               children: [
-                Divider(
+                const Divider(
                   height: 1,
                   color: Colors.blue,
                 ),
@@ -455,13 +458,13 @@ Future<void> _showChoiceDialog(BuildContext context) {
                     mascotaCtrl.galleryOCamare.value = 1;
                     Navigator.pop(context);
                   },
-                  title: Text("Galeria"),
-                  leading: Icon(
+                  title: const Text("Galería"),
+                  leading: const Icon(
                     Icons.account_box,
                     color: Colors.blue,
                   ),
                 ),
-                Divider(
+                const Divider(
                   height: 1,
                   color: Colors.blue,
                 ),
@@ -470,8 +473,8 @@ Future<void> _showChoiceDialog(BuildContext context) {
                     mascotaCtrl.galleryOCamare.value = 2;
                     Navigator.pop(context);
                   },
-                  title: Text("Camara"),
-                  leading: Icon(
+                  title: const Text("Cámara"),
+                  leading: const Icon(
                     Icons.camera,
                     color: Colors.blue,
                   ),

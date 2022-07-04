@@ -83,17 +83,17 @@ class AuthService extends ChangeNotifier {
         return "Error en las credenciaales";
       }
     } on TimeoutException catch (e) {
-      return 'Error de conexcion';
+      return 'Error de conexión: Intentalo mas tarde';
     } on Exception catch (e) {
       print(e);
-      return 'Error de conexcion';
+      return 'Error de general: Intentalo mas tarde';
     }
     //   final Map<String, dynamic> decodeResp = json.decode(resp.body);
     //print(resp);
   }
 
-  Future<String?> token(String email) async {
-    final Map<String, dynamic> auhtData = {'email': email};
+  Future<Map<String, dynamic>> token(String email) async {
+    final Map<String, String> auhtData = {'email': email};
 
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
@@ -105,21 +105,38 @@ class AuthService extends ChangeNotifier {
       final response = await http
           .post(url, headers: requestHeaders, body: json.encode(auhtData))
           .timeout(const Duration(seconds: 10));
-      var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
 
-      if (jsonResponse.containsKey('message')) {
-        return jsonResponse['message'];
+      var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
+      if (jsonResponse.containsKey('message') &&
+          (response.statusCode == 200 || response.statusCode == 201)) {
+        Map<String, dynamic> resp = {
+          'valido': true,
+          'r': jsonResponse['message']
+        };
+        return resp;
       } else {
         print('Request failed with status: ${response.statusCode}.');
-        return jsonResponse['error'];
-        ;
+        Map<String, dynamic> resp = {
+          'valido': false,
+          'r': jsonResponse['error'] ??
+              'Error de conexión: Intentalo mas tarde. '
+        };
+        return resp;
       }
     } on TimeoutException catch (e) {
       print(e);
-      return 'Error de conexcion: Intentalo mas tarde';
+      Map<String, dynamic> resp = {
+        'valido': false,
+        'r': 'Error de conexión: Intentalo mas tarde'
+      };
+      return resp;
     } on Exception catch (e) {
-      print(e);
-      return 'Error de conexcion: Intentalo mas tarde';
+      Map<String, dynamic> resp = {
+        'valido': false,
+        'r': 'Error de general: Intentalo mas tarde'
+      };
+      print(resp);
+      return resp;
     }
     //   final Map<String, dynamic> decodeResp = json.decode(resp.body);
     //print(resp);
@@ -173,12 +190,12 @@ class AuthService extends ChangeNotifier {
         if (response.statusCode == 201) {
           return 'Ok';
         } else {
-          return 'Error de conexcion';
+          return 'Error de conexión: Intentalo mas tarde';
         }
       } on TimeoutException catch (e) {
-        return 'Error de conexcion';
+        return 'Error de conexión: Intentalo mas tarde';
       } on Exception catch (e) {
-        return 'Error de conexcion: Intentalo mas tarde';
+        return 'Error de general: Intentalo mas tarde';
       }
     }
   }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:Unikey/models/masc_models.dart';
 import 'package:Unikey/services/services.dart';
@@ -31,13 +32,13 @@ class MascotaInicioScreen extends StatelessWidget {
 
             var result = await mascotaCtrl.getTopMascotaScroll();
             if (!result.contains('Ok'))
-              NotificationsService.showMyDialogAndroid(
-                  context, 'Mascota', result);
+              NotificationsService.showSnackbar(
+                  'Oh! ', "${result}", ContentType.failure);
           } else
-            NotificationsService.showMyDialogAndroid(
-                context,
-                'No se pudo conectar a intenet',
-                'Debe asegurarse que el dipositivo tengo conexion a internet');
+            NotificationsService.showSnackbar(
+                'Oh!',
+                "Debe asegurarse que el dipositivo tengo conexion a internet",
+                ContentType.failure);
         },
       ),
       Obx(() => mascotaCtrl.carga == 1
@@ -56,7 +57,7 @@ class _BotonNewList extends StatelessWidget {
       height: 100,
       child: MaterialButton(
         color: Colors.blue,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(topLeft: Radius.circular(50))),
         onPressed: () async {
           final authService = Provider.of<AuthService>(context, listen: false);
@@ -76,12 +77,12 @@ class _BotonNewList extends StatelessWidget {
                 .obs;
             Navigator.pushNamed(context, 'mascotaEditar');
           } else
-            NotificationsService.showMyDialogAndroid(
-                context,
-                'No se pudo conectar a intenet',
-                'Debe asegurarse que el dipositivo tengo conexion a internet');
+            NotificationsService.showSnackbar(
+                'Oh!',
+                "Debe asegurarse que el dipositivo tengo conexion a internet",
+                ContentType.failure);
         },
-        child: Text(
+        child: const Text(
           'REGISTRAR UNA MASCOTA',
           style: TextStyle(
               color: Colors.white,
@@ -109,7 +110,7 @@ class _MainScrollState extends State<_MainScroll> {
   int _start = 5;
 
   void startTimer() {
-    const oneSec = const Duration(seconds: 1);
+    const oneSec = Duration(seconds: 1);
     _timer = new Timer.periodic(
       oneSec,
       (Timer timer) {
@@ -145,8 +146,6 @@ class _MainScrollState extends State<_MainScroll> {
     super.dispose();
   }
 
-  List<_ListItem> items2 = [];
-
   onRefresh() {}
 
   @override
@@ -164,24 +163,24 @@ class _MainScrollState extends State<_MainScroll> {
           var result = await mascotaCtrl.getTopMascota();
 
           if (!result.contains('Ok'))
-            NotificationsService.showMyDialogAndroid(
-                context, 'Delivery', result);
+            NotificationsService.showSnackbar(
+                'Oh! ', "${result}", ContentType.failure);
         } else
-          NotificationsService.showMyDialogAndroid(
-              context,
-              'No se pudo conectar a intenet',
-              'Debe asegurarse que el dipositivo tengo conexion a internet');
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tengo conexion a internet",
+              ContentType.failure);
       },
       child: Obx(() => CustomScrollView(
             controller: scrollController,
-            physics:
-                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            physics: BouncingScrollPhysics(
+                parent: const AlwaysScrollableScrollPhysics()),
             slivers: [
               SliverPersistentHeader(
                   floating: true,
                   delegate: _SliverCustomHeaderDelegate(
                       minHeight: 170,
-                      maxHeight: 200,
+                      maxHeight: 225,
                       child: Container(
                           alignment: Alignment.centerLeft,
                           color: Colors.white,
@@ -189,11 +188,11 @@ class _MainScrollState extends State<_MainScroll> {
               mascotaCtrl.data.isEmpty && _start > 0
                   ? SliverList(
                       delegate: SliverChildListDelegate([
-                      LinearProgressIndicator(
+                      const LinearProgressIndicator(
                         color: Colors.green,
                       ),
-                      Center(child: Text('Espere por favor')),
-                      SizedBox(
+                      const Center(child: Text('Espere por favor')),
+                      const SizedBox(
                         height: 10,
                       )
                     ]))
@@ -202,7 +201,7 @@ class _MainScrollState extends State<_MainScroll> {
                       ...mascotaCtrl.data
                           .map((e) => MascotaCard(masc: e, ctrl: mascotaCtrl))
                           .toList(),
-                      SizedBox(
+                      const SizedBox(
                         height: 100,
                       )
                     ]))
@@ -249,19 +248,19 @@ class _Titulo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 0),
+        const SizedBox(height: 0),
         SafeArea(
           child: Container(
             color: Colors.white,
             //  margin: EdgeInsets.only(top: 200),
             child: Hero(
-              tag: Text('Mascotas'),
+              tag: const Text('Mascotas'),
               child: BotonGordo(
                 iconL: FontAwesomeIcons.paw,
                 iconR: FontAwesomeIcons.chevronLeft,
                 texto: 'Mascotas',
-                color1: Color(0xffF2D572),
-                color2: Color(0xffE06AA3),
+                color1: const Color(0xffF2D572),
+                color2: const Color(0xffE06AA3),
                 onPress: () => Navigator.of(context).pop(),
               ),
             ),
@@ -269,117 +268,5 @@ class _Titulo extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-class _ListItem extends StatelessWidget {
-  final Datum delivery;
-
-  const _ListItem({required this.delivery});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: [
-      GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, 'detalleautorizacion',
-                arguments: delivery);
-          },
-          child: Container(
-            margin: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(15)),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                _NotificacionBody(delivery),
-                SizedBox(
-                  height: 0,
-                ),
-                _NotificacionVigencia(delivery),
-                _NotificacionCreado(delivery),
-                Divider(),
-                SizedBox(
-                  height: 0,
-                ),
-              ],
-            ),
-          )),
-    ]);
-  }
-}
-
-class _NotificacionBody extends StatelessWidget {
-  final Datum delivery;
-
-  const _NotificacionBody(this.delivery);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: Text(
-          'Nombre  del Evento: ${delivery.autNombre} ',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-          textAlign: TextAlign.justify,
-        ));
-  }
-}
-
-class _NotificacionVigencia extends StatelessWidget {
-  final Datum delivery;
-
-  const _NotificacionVigencia(this.delivery);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: Text(
-          'Fecha del Evento:\n'
-          'Desde: ${delivery.autFechaEvento?.day.toString().padLeft(2, '0')}-${delivery.autFechaEvento?.month.toString().padLeft(2, '0')}-${delivery.autFechaEvento?.year} ${delivery.autFechaEvento?.hour.toString().padLeft(2, '0')}:${delivery.autFechaEvento?.minute.toString().padLeft(2, '0')}\n'
-          'Hasta: ${delivery.autFechaEventoHasta?.day.toString().padLeft(2, '0')}-${delivery.autFechaEventoHasta?.month.toString().padLeft(2, '0')}-${delivery.autFechaEventoHasta?.year}  ${delivery.autFechaEventoHasta?.hour.toString().padLeft(2, '0')}:${delivery.autFechaEventoHasta?.minute.toString().padLeft(2, '0')}\n'
-          'Cantidad de Invitados: ${delivery.autCantidadInvitado}\n',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-          textAlign: TextAlign.center,
-        ));
-  }
-}
-
-class _NotificacionCreado extends StatelessWidget {
-  final Datum delivery;
-
-  const _NotificacionCreado(this.delivery);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: Text(
-          'Creado por: ${delivery.email}\n'
-          'Fecha de Creacion: ${delivery.autDesde?.day.toString().padLeft(2, '0')}-${delivery.autDesde?.month.toString().padLeft(2, '0')}-${delivery.autDesde?.year}\n',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-          textAlign: TextAlign.justify,
-        ));
   }
 }

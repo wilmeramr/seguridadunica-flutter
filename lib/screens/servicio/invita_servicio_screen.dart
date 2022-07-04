@@ -69,13 +69,13 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
           Container(
             //  margin: EdgeInsets.only(top: 200),
             child: Hero(
-              tag: 'Servicios',
+              tag: 'Vistas recurrentes',
               child: BotonGordo(
                 iconL: FontAwesomeIcons.taxi,
                 iconR: FontAwesomeIcons.chevronLeft,
-                texto: 'Crear Servicios',
-                color1: Color(0xff6989F5),
-                color2: Color(0xff906EF5),
+                texto: 'Vistas recurrentes',
+                color1: Color(0xff317183),
+                color2: Color.fromARGB(255, 152, 70, 153),
                 onPress: () => Navigator.of(context).pop(),
               ),
             ),
@@ -118,9 +118,7 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
 
                       if (response.contains('Error')) {
                         NotificationsService.showSnackbar(
-                            'Oh! Ocurrio un problema',
-                            response,
-                            ContentType.failure);
+                            'Oh!', response, ContentType.failure);
                       } else {
                         await Share.share(response);
                         await servicioService.getTopAut();
@@ -128,10 +126,10 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
                         Navigator.pop(context);
                       }
                     } else
-                      NotificationsService.showMyDialogAndroid(
-                          context,
-                          'No se pudo conectar a intenet',
-                          'Debe asegurarse que el dipositivo tengo conexion a internet');
+                      NotificationsService.showSnackbar(
+                          'Oh!',
+                          "Debe asegurarse que el dipositivo tengo conexion a internet",
+                          ContentType.failure);
                   } else {
                     if (currentStep == 1 && dateRange == null) {
                       NotificationsService.showSnackbar(
@@ -188,7 +186,7 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
                   final isLastStep =
                       currentStep == _getSteps(context).length - 1;
                   return Container(
-                    margin: EdgeInsets.only(top: 50),
+                    margin: const EdgeInsets.only(top: 50),
                     child: Row(
                       children: [
                         Expanded(
@@ -200,7 +198,8 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
                                   ? Container()
                                   : Image(
                                       width: size.width * 0.05,
-                                      image: AssetImage('assets/loading.gif'),
+                                      image: const AssetImage(
+                                          'assets/loading.gif'),
                                     ),
                               Text(isLastStep ? 'ENVIAR' : 'SIGUIENTE'),
                             ],
@@ -208,13 +207,13 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
                           onPressed:
                               !isCompleted ? details.onStepContinue : null,
                         )),
-                        SizedBox(
+                        const SizedBox(
                           width: 12,
                         ),
                         if (currentStep != 0)
                           Expanded(
                               child: ElevatedButton(
-                            child: Text('VOLVER'),
+                            child: const Text('VOLVER'),
                             onPressed: details.onStepCancel,
                           ))
                       ],
@@ -234,13 +233,13 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
       Step(
           state: currentStep > 0 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 0,
-          title: Text('Informacion'),
+          title: const Text('Información'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: Text(
+            child: const Text(
               'Debe seleccionar el rango de fecha y hora para el servicio. Presiones CONTINUAR',
               style: TextStyle(color: Colors.black),
             ),
@@ -248,10 +247,10 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
       Step(
           state: currentStep > 1 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 1,
-          title: Text('Seleccinar fechas'),
+          title: const Text('Seleccionar fechas'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: Column(
@@ -263,22 +262,23 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
                   elevation: 3,
                   color: Colors.blue,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                    child: Text(
-                      'Seleccione las fechas',
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 15),
+                    child: const Text(
+                      "Seleccione las fechas",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                   onPressed: () async => await pickDateRange(context),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 dateRange == null
                     ? Container()
                     : Text(
                         '${_getText()} ',
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       )
               ],
             ),
@@ -286,20 +286,20 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
       Step(
           state: currentStep > 2 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 2,
-          title: Text('Tipo de Servicio'),
+          title: const Text('Tipo de visita recurrente'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: Container(
+            child: SizedBox(
                 width: double.infinity,
                 child: DropdownButtonFormField<ServicioTipos>(
-                  hint: Text('Seleccione tipo de  servicio'),
+                  hint: const Text('Seleccione tipo de visita recurrente'),
                   isExpanded: true,
                   value: valueServiciotipos,
                   iconSize: 36,
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_drop_down_outlined,
                     color: Colors.black,
                   ),
@@ -311,10 +311,10 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
       Step(
           state: currentStep > 3 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 3,
-          title: Text('Horarios'),
+          title: const Text('Horarios'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: Container(
@@ -325,16 +325,16 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
           )),
       Step(
           isActive: currentStep >= 4,
-          title: Text('Comentarios'),
+          title: const Text('Comentarios'),
           content: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            decoration: const BoxDecoration(
                 color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: TextFormField(
               //maxLines: 1,
               onChanged: (value) => this.comentario = value,
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
             ),
           )),
     ];
@@ -426,7 +426,7 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
           value: _isActive[3],
           title: FittedBox(
             child: Text(
-                'Miercoles : ${timeRanges[3].startTime.to24hours()} - ${timeRanges[3].endTime.to24hours()} '),
+                'Miércoles : ${timeRanges[3].startTime.to24hours()} - ${timeRanges[3].endTime.to24hours()} '),
           ),
           onChanged: (value) async {
             if (value) {
@@ -504,7 +504,7 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
           value: _isActive[6],
           title: FittedBox(
             child: Text(
-                'Sabado : ${timeRanges[6].startTime.to24hours()} - ${timeRanges[6].endTime.to24hours()} '),
+                'Sábado : ${timeRanges[6].startTime.to24hours()} - ${timeRanges[6].endTime.to24hours()} '),
           ),
           onChanged: (value) async {
             if (value) {
@@ -553,7 +553,7 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
         firstDate: DateTime(DateTime.now().year - 5),
         lastDate: DateTime(DateTime.now().year + 5),
         initialDateRange: dateRange ?? initialDateRange,
-        helpText: "Selecctione las fechas",
+        helpText: "Seleccioné las fechas",
         cancelText: "Salir",
         confirmText: "Guardar",
         saveText: "Guardar");
@@ -564,7 +564,7 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
   }
 
   String _getText() {
-    if (dateRange == null) return "Seleccione fechas";
+    if (dateRange == null) return "Seleccioné fechas";
 
     return 'Desde: ${dateRange?.start.day}/${dateRange?.start.month}/${dateRange?.start.year} - '
         'Hasta: ${dateRange?.end.day}/${dateRange?.end.month}/${dateRange?.end.year}';
@@ -575,7 +575,7 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
         value: item,
         child: Text(
           item.stpDescripcion,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       );
 }

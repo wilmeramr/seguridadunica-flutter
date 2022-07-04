@@ -13,13 +13,13 @@ class AuthBackground extends StatelessWidget {
       height: double.infinity,
       child: Stack(
         children: [
-          _PurpleBox(),
+          const _PurpleBox(),
           SafeArea(
             child: Container(
               width: double.infinity,
               height: size.height * 0.23,
-              margin: EdgeInsets.only(top: 5),
-              child: Image(
+              margin: const EdgeInsets.only(top: 5),
+              child: const Image(
                 image: AssetImage('assets/LogoSeguridadUnica.png'),
               ),
             ),
@@ -74,7 +74,7 @@ class _PurpleBox extends StatelessWidget {
     );
   }
 
-  BoxDecoration _BuildBoxDecoration() => BoxDecoration(
+  BoxDecoration _BuildBoxDecoration() => const BoxDecoration(
           gradient: LinearGradient(colors: [
         Color.fromARGB(255, 159, 204, 247),
         Color.fromARGB(255, 33, 114, 236)
@@ -89,7 +89,7 @@ class _Bubble extends StatelessWidget {
       height: 100,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
-          color: Color.fromRGBO(255, 255, 255, 0.05)),
+          color: const Color.fromRGBO(255, 255, 255, 0.05)),
     );
   }
 }

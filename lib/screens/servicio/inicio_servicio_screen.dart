@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -26,13 +27,13 @@ class InicioServicioScreen extends StatelessWidget {
             await servicioService.getServicioTipos();
 
             if (!result.contains('Ok'))
-              NotificationsService.showMyDialogAndroid(
-                  context, 'Servicios', result);
+              NotificationsService.showSnackbar(
+                  'Oh! ', "${result}", ContentType.failure);
           } else
-            NotificationsService.showMyDialogAndroid(
-                context,
-                'No se pudo conectar a intenet',
-                'Debe asegurarse que el dipositivo tengo conexion a internet');
+            NotificationsService.showSnackbar(
+                'Oh!',
+                "Debe asegurarse que el dipositivo tengo conexion a internet",
+                ContentType.failure);
         },
       ),
       Positioned(bottom: -10, right: 0, child: _BotonNewList())
@@ -58,13 +59,13 @@ class _BotonNewList extends StatelessWidget {
           if (conx) {
             Navigator.pushNamed(context, 'invitarServicio');
           } else
-            NotificationsService.showMyDialogAndroid(
-                context,
-                'No se pudo conectar a intenet',
-                'Debe asegurarse que el dipositivo tengo conexion a internet');
+            NotificationsService.showSnackbar(
+                'Oh!',
+                "Debe asegurarse que el dipositivo tengo conexión a internet",
+                ContentType.failure);
         },
         child: Text(
-          'CREAR UN SERVICIO',
+          'CREAR UNA VISITA REC',
           style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -150,13 +151,13 @@ class _MainScrollState extends State<_MainScroll> {
           await servicioService.getServicioTipos();
 
           if (!result.contains('Ok'))
-            NotificationsService.showMyDialogAndroid(
-                context, 'Servicios', result);
+            NotificationsService.showSnackbar(
+                'Oh!', "$result", ContentType.failure);
         } else
-          NotificationsService.showMyDialogAndroid(
-              context,
-              'No se pudo conectar a intenet',
-              'Debe asegurarse que el dipositivo tengo conexion a internet');
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tengo conexión a internet",
+              ContentType.failure);
       },
       child: CustomScrollView(
         controller: scrollController,
@@ -166,7 +167,7 @@ class _MainScrollState extends State<_MainScroll> {
               floating: true,
               delegate: _SliverCustomHeaderDelegate(
                   minHeight: 170,
-                  maxHeight: 200,
+                  maxHeight: 230,
                   child: Container(
                       alignment: Alignment.centerLeft,
                       color: Colors.white,
@@ -232,19 +233,19 @@ class _Titulo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 0),
+        const SizedBox(height: 0),
         SafeArea(
           child: Container(
             color: Colors.white,
             //  margin: EdgeInsets.only(top: 200),
             child: Hero(
-              tag: Text('Servicios'),
+              tag: const Text('Vistas recurrentes'),
               child: BotonGordo(
-                iconL: FontAwesomeIcons.taxi,
+                iconL: FontAwesomeIcons.recycle,
                 iconR: FontAwesomeIcons.chevronLeft,
-                texto: 'Servicios',
-                color1: Color(0xff66A9F2),
-                color2: Color(0xff536CF6),
+                texto: 'Vistas recurrentes',
+                color1: Color(0xff317183),
+                color2: Color.fromARGB(255, 152, 70, 153),
                 onPress: () => Navigator.of(context).pop(),
               ),
             ),
