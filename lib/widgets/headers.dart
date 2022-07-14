@@ -69,12 +69,12 @@ class IconHeader extends StatelessWidget {
                 textAlign: TextAlign.center),
           ),
           SizedBox(
-            height: 20,
+            height: 5,
           ),
           Image(
             color: Colors.white,
-            height: 120,
-            width: 120,
+            height: 160,
+            width: 200,
             image: image,
           ),
         ],

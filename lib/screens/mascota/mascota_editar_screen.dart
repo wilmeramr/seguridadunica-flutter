@@ -9,6 +9,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../controllers/controllers.dart';
@@ -420,19 +421,31 @@ class _ProductForm extends StatelessWidget {
 }
 
 Future<XFile?> _openGallery() async {
-  final picker = new ImagePicker();
-  final XFile? pickedFile =
-      await picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+  var status = await Permission.photos.request();
 
-  return pickedFile;
+  if (status.isGranted) {
+    final picker = new ImagePicker();
+    final XFile? pickedFile =
+        await picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+    return pickedFile;
+  } else {
+    openAppSettings();
+  }
+  return null;
 }
 
 Future<XFile?> _openCamera() async {
-  final picker = new ImagePicker();
-  final XFile? pickedFile =
-      await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
+  var status = await Permission.camera.request();
 
-  return pickedFile;
+  if (status.isGranted) {
+    final picker = new ImagePicker();
+    final XFile? pickedFile =
+        await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
+    return pickedFile;
+  } else {
+    openAppSettings();
+  }
+  return null;
 }
 
 Future<void> _showChoiceDialog(BuildContext context) {

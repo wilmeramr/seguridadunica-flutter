@@ -1,9 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.seguridadunica.unikey">
+              <uses-permission android:name="android.permission.CAMERA"/>
+
    <application
         android:label="Unikey"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -20,20 +22,17 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
-             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.LAUNCHER"/>
         
-        <action android:name="android.intent.action.VIEW" />
         <!-- Include the host attribute if you want your app to respond
              only to URLs with your app's domain. -->
-        <data android:scheme="http" />
+     
         
         <!-- The BROWSABLE category is required to get links from web pages. -->
-        <category android:name="android.intent.category.BROWSABLE" />
-    </intent-filter>
+ß    </intent-filter>
         </activity>
         
         <!-- Don't delete the meta-data below.
@@ -41,6 +40,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+               <meta-data
+            android:name="oi.flutter.embedding.android.SplashScreenDrawable"
+            android:value="@drawable/launch_background" />
     </application>
     
 </manifest>

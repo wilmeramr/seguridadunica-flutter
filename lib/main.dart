@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -30,6 +31,7 @@ void main() async {
   await runZonedGuarded<Future<void>>(() async {
     // WidgetsFlutterBinding.ensureInitialized();
     WidgetsFlutterBinding.ensureInitialized();
+
     // await PushNotificationService.initializeApp();
     // await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
 

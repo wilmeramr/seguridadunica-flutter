@@ -220,7 +220,7 @@ class _Encabezado extends StatelessWidget {
       apellido: sur.apellido,
       email: sur.email,
       rol: sur.rol,
-      image: const AssetImage('assets/LogoSeguridadUnica.png'),
+      image: const AssetImage('assets/background.png'),
       color1: const Color.fromARGB(255, 22, 85, 232),
       color2: const Color.fromARGB(255, 67, 107, 195),
     );

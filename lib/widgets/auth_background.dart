@@ -19,8 +19,11 @@ class AuthBackground extends StatelessWidget {
               width: double.infinity,
               height: size.height * 0.23,
               margin: const EdgeInsets.only(top: 5),
-              child: const Image(
-                image: AssetImage('assets/LogoSeguridadUnica.png'),
+              child: Padding(
+                padding: const EdgeInsets.all(38.0),
+                child: const Image(
+                  image: AssetImage('assets/background.png'),
+                ),
               ),
             ),
           ),

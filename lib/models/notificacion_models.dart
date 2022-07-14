@@ -79,6 +79,7 @@ class Notificacion {
     required this.notiTitulo,
     required this.notiBody,
     required this.notiTo,
+    required this.notiToUser,
     required this.notiEvent,
     required this.notiPriority,
     required this.notiEnvio,
@@ -92,6 +93,7 @@ class Notificacion {
   String notiTitulo;
   String notiBody;
   String notiTo;
+  int notiToUser;
   String notiEvent;
   String notiPriority;
   int notiEnvio;
@@ -110,6 +112,7 @@ class Notificacion {
         notiTitulo: json["noti_titulo"],
         notiBody: json["noti_body"],
         notiTo: json["noti_to"],
+        notiToUser: json["noti_to_user"],
         notiEvent: json["noti_event"],
         notiPriority: json["noti_priority"],
         notiEnvio: json["noti_envio"],
@@ -124,6 +127,7 @@ class Notificacion {
         "noti_titulo": notiTitulo,
         "noti_body": notiBody,
         "noti_to": notiTo,
+        "noti_to_user": notiToUser,
         "noti_event": notiEvent,
         "noti_priority": notiPriority,
         "noti_envio": notiEnvio,

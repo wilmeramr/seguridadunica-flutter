@@ -144,8 +144,8 @@ class NotificacionController extends GetxController {
       String token = await storage.read(key: 'token') ?? '';
 
       final Map<String, dynamic> auhtData = {
-        'to':
-            enviaA.isFalse ? 'A' : 'L:' + userIdSelected.value.usrId.toString(),
+        'to': enviaA.isFalse ? 'T' : 'L',
+        'to_user': userIdSelected.value.usrId.toString(),
         'titulo': '$titulo',
         'body': '$body'
       };
