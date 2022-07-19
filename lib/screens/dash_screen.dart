@@ -144,7 +144,6 @@ class DashScreen extends StatelessWidget {
                     color1: const Color.fromARGB(255, 27, 85, 219),
                     color2: const Color.fromARGB(255, 28, 209, 237),
                     onPress: () async {
-                      throw Exception("prueba");
                       var conx = await authService.internetConnectivity();
                       if (conx)
                         Navigator.pushNamed(context, 'notificacionInicio');
