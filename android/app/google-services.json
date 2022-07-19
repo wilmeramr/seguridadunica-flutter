@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "841035798555",
-    "project_id": "com-seguridadunica-unikey",
-    "storage_bucket": "com-seguridadunica-unikey.appspot.com"
+    "project_number": "366607957500",
+    "project_id": "seguridadunica-unica-app",
+    "storage_bucket": "seguridadunica-unica-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:841035798555:android:0efd6dc82e614e8e18c0be",
+        "mobilesdk_app_id": "1:366607957500:android:f493f947d4d1a5ce630679",
         "android_client_info": {
-          "package_name": "com.seguridadunica.unikey"
+          "package_name": "com.seguridadUnica.Unica"
         }
       },
       "oauth_client": [
         {
-          "client_id": "841035798555-kru3edf8dp8bg1thh3pbmis4oi3e6igv.apps.googleusercontent.com",
+          "client_id": "366607957500-favsm3dp6mgaas5p70vdsi9p9q51uiqp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.seguridadunica.unikey",
+            "package_name": "com.seguridadUnica.Unica",
             "certificate_hash": "057cd61310727987989a32f73fbf6b9c8f585a28"
           }
         },
         {
-          "client_id": "841035798555-2542ihao5erh5jhsttsaqnlj1f6ilj2h.apps.googleusercontent.com",
+          "client_id": "366607957500-ib6oubof9o8tslk3d88mk8vhtu7iag8n.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAftMSrLxe19-I4EWZLanAGr8vZQS2Qpfo"
+          "current_key": "AIzaSyAMLbutHEGuSp3XZJRLpBAe6L9Iu1yfDjw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "841035798555-2542ihao5erh5jhsttsaqnlj1f6ilj2h.apps.googleusercontent.com",
+              "client_id": "366607957500-ib6oubof9o8tslk3d88mk8vhtu7iag8n.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

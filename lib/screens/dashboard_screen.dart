@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Unikey/widgets/widgets.dart';
+import 'package:Unica/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../services/services.dart';

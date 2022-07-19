@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.seguridadunica.unikey">
+    package="com.seguridadUnica.Unica">
               <uses-permission android:name="android.permission.CAMERA"/>
 
    <application
-        android:label="Unikey"
+        android:label="Unica"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

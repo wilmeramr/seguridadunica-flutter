@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:Unikey/services/globalkey_service.dart';
+import 'package:Unica/services/globalkey_service.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:Unikey/models/user.dart';
-import 'package:Unikey/services/push_notifications_service.dart';
+import 'package:Unica/models/user.dart';
+import 'package:Unica/services/push_notifications_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:http/http.dart' as http;
@@ -158,6 +159,9 @@ class AuthService extends ChangeNotifier {
   Future<User> readUser() async {
     var user = await storage.read(key: 'user') ?? '';
     var userDto = User.fromJson(jsonDecode(user) as Map<String, dynamic>);
+    var userId = userDto.id;
+    FirebaseCrashlytics.instance.setUserIdentifier("$userId");
+
     return userDto;
   }
 

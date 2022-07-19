@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:Unikey/services/services.dart';
-import 'package:Unikey/widgets/mascota_card.dart';
+import 'package:Unica/services/services.dart';
+import 'package:Unica/widgets/mascota_card.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {

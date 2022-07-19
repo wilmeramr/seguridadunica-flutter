@@ -3,14 +3,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:Unikey/models/masc_models.dart';
+import 'package:Unica/models/masc_models.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class MascotaFormController extends GetxController {
   GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-  final String _baseUrl = 'acceso.seguridadunica.com';
+  final String _baseUrl = 'acceso.seguridadUnica.com';
   final storage = new FlutterSecureStorage();
   Rx<Mascota> mascota;
   var isSaving = false.obs;

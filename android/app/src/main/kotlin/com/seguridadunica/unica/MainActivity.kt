@@ -1,4 +1,4 @@
-package com.seguridadunica.unikey
+package com.seguridadUnica.Unica
 
 import io.flutter.embedding.android.FlutterActivity
 

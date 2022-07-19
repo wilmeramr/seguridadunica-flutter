@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:Unikey/extension/timeofday.dart';
-import 'package:Unikey/models/servicio_tipos_models.dart';
+import 'package:Unica/extension/timeofday.dart';
+import 'package:Unica/models/servicio_tipos_models.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:time_range_picker/time_range_picker.dart';
@@ -12,7 +12,7 @@ import '../models/invitacion_models.dart';
 import '../models/user.dart';
 
 class DeliveryService with ChangeNotifier {
-  final String _baseUrl = 'acceso.seguridaunica.com';
+  final String _baseUrl = 'acceso.seguridaUnica.com';
   final storage = new FlutterSecureStorage();
 
   List<Datum> data = [];

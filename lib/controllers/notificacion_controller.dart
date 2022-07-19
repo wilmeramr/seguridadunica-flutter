@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:async';
 
-import 'package:Unikey/helpers/debouncer.dart';
+import 'package:Unica/helpers/debouncer.dart';
 import 'package:flutter/material.dart';
-import 'package:Unikey/models/notificacion_models.dart';
+import 'package:Unica/models/notificacion_models.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;

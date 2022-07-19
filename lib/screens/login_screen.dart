@@ -1,9 +1,9 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:Unikey/providers/login_form_provider.dart';
-import 'package:Unikey/services/services.dart';
-import 'package:Unikey/ui/input_decorations.dart';
-import 'package:Unikey/widgets/widgets.dart';
+import 'package:Unica/providers/login_form_provider.dart';
+import 'package:Unica/services/services.dart';
+import 'package:Unica/ui/input_decorations.dart';
+import 'package:Unica/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {

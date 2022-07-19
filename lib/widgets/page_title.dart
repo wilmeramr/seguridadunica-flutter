@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:Unikey/models/user.dart';
-import 'package:Unikey/services/services.dart';
+import 'package:Unica/models/user.dart';
+import 'package:Unica/services/services.dart';
 import 'package:provider/provider.dart';
 
 class PageTitle extends StatelessWidget {

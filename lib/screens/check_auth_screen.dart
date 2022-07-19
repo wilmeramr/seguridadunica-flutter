@@ -1,6 +1,7 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:Unikey/screens/screens.dart';
-import 'package:Unikey/services/services.dart';
+import 'package:Unica/screens/screens.dart';
+import 'package:Unica/services/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 

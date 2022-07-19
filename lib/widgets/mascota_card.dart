@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:Unikey/controllers/controllers.dart';
-import 'package:Unikey/models/masc_models.dart';
+import 'package:Unica/controllers/controllers.dart';
+import 'package:Unica/models/masc_models.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';

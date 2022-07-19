@@ -1,4 +1,4 @@
-# Unikey
+# Unica
 
 A new Flutter project.
 

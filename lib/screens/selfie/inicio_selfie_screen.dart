@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
-import 'package:Unikey/controllers/selfie_controller.dart';
-import 'package:Unikey/widgets/widgets.dart';
+import 'package:Unica/controllers/selfie_controller.dart';
+import 'package:Unica/widgets/widgets.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -187,7 +187,7 @@ void _launchUrl(String url) async {
   if (!await launchUrl(Uri.parse(url))) {
     NotificationsService.showSnackbar(
         'Oh! ',
-        'Intentolo mas tarde o sComunicarse con Administración',
+        'Intentolo mas tarde o sComUnicarse con Administración',
         ContentType.failure);
   }
   ;

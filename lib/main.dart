@@ -5,9 +5,9 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:Unikey/screens/screens.dart';
-import 'package:Unikey/services/services.dart';
-import 'package:Unikey/services/push_notifications_service.dart';
+import 'package:Unica/screens/screens.dart';
+import 'package:Unica/services/services.dart';
+import 'package:Unica/services/push_notifications_service.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
@@ -32,10 +32,10 @@ void main() async {
     // WidgetsFlutterBinding.ensureInitialized();
     WidgetsFlutterBinding.ensureInitialized();
 
-    // await PushNotificationService.initializeApp();
-    // await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+    await PushNotificationService.initializeApp();
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
-    // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
     /*  FlutterError.onError = (FlutterErrorDetails details) {
       final exception = details.exception;
       final stackTrace = details.stack ?? StackTrace.fromString('');
