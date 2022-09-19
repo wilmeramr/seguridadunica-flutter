@@ -32,7 +32,7 @@ class InicioServicioScreen extends StatelessWidget {
           } else
             NotificationsService.showSnackbar(
                 'Oh!',
-                "Debe asegurarse que el dipositivo tengo conexion a internet",
+                "Debe asegurarse que el dipositivo tenga conexión  a internet",
                 ContentType.failure);
         },
       ),
@@ -61,7 +61,7 @@ class _BotonNewList extends StatelessWidget {
           } else
             NotificationsService.showSnackbar(
                 'Oh!',
-                "Debe asegurarse que el dipositivo tengo conexión a internet",
+                "Debe asegurarse que el dipositivo tenga conexión a internet",
                 ContentType.failure);
         },
         child: Text(
@@ -156,7 +156,7 @@ class _MainScrollState extends State<_MainScroll> {
         } else
           NotificationsService.showSnackbar(
               'Oh!',
-              "Debe asegurarse que el dipositivo tengo conexión a internet",
+              "Debe asegurarse que el dipositivo tenga conexión a internet",
               ContentType.failure);
       },
       child: CustomScrollView(
@@ -287,8 +287,9 @@ class _ListItem extends StatelessWidget {
                 SizedBox(
                   height: 10,
                 ),
-                _NotificacionStatus(servicios),
+                _NotificacionCreado(servicios),
                 Divider(),
+                _NotificacionStatus(servicios),
                 SizedBox(
                   height: 10,
                 ),
@@ -303,6 +304,27 @@ class _NotificacionStatus extends StatelessWidget {
   final Datum servicios;
 
   const _NotificacionStatus(this.servicios);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: 10,
+        decoration: BoxDecoration(
+            color: servicios.autActivo == 1 ? Colors.green : Colors.red,
+            borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [],
+        ));
+  }
+}
+
+class _NotificacionCreado extends StatelessWidget {
+  final Datum servicios;
+
+  const _NotificacionCreado(this.servicios);
 
   @override
   Widget build(BuildContext context) {

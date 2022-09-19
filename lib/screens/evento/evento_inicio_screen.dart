@@ -35,7 +35,7 @@ class EventoInicioScreen extends StatelessWidget {
           } else
             NotificationsService.showSnackbar(
                 'Oh!',
-                "Debe asegurarse que el dipositivo tengo conexion a internet",
+                "Debe asegurarse que el dipositivo tenga conexión  a internet",
                 ContentType.failure);
         },
       ),
@@ -64,7 +64,7 @@ class _BotonNewList extends StatelessWidget {
           } else
             NotificationsService.showSnackbar(
                 'Oh!',
-                "Debe asegurarse que el dipositivo tengo conexión a internet",
+                "Debe asegurarse que el dipositivo tenga conexión a internet",
                 ContentType.failure);
         },
         child: const Text(
@@ -156,7 +156,7 @@ class _MainScrollState extends State<_MainScroll> {
         } else
           NotificationsService.showSnackbar(
               'Oh!',
-              "Debe asegurarse que el dipositivo tengo conexión a internet",
+              "Debe asegurarse que el dipositivo tenga conexión a internet",
               ContentType.failure);
       },
       child: Obx(() => CustomScrollView(
@@ -288,13 +288,35 @@ class _ListItem extends StatelessWidget {
                 _NotificacionVigencia(delivery),
                 _NotificacionCreado(delivery),
                 const Divider(),
+                _NotificacionStatus(delivery),
                 const SizedBox(
-                  height: 0,
+                  height: 5,
                 ),
               ],
             ),
           )),
     ]);
+  }
+}
+
+class _NotificacionStatus extends StatelessWidget {
+  final Datum delivery;
+
+  const _NotificacionStatus(this.delivery);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: 10,
+        decoration: BoxDecoration(
+            color: this.delivery.autActivo == 1 ? Colors.green : Colors.red,
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [],
+        ));
   }
 }
 

@@ -50,6 +50,8 @@ dependencies:
   url_launcher: ^6.1.4
   animated_splash_screen: ^1.3.0
   permission_handler: ^10.0.0
+  page_transition: ^2.0.9  
+  advance_pdf_viewer: any
 
 dev_dependencies:
   change_app_package_name: ^1.1.0

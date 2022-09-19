@@ -78,7 +78,7 @@ class ScaffoldBody extends StatelessWidget {
                         } else
                           NotificationsService.showSnackbar(
                               'Oh! Conexión a intenet',
-                              "Debe asegurarse que el dipositivo tengo conexión a internet",
+                              "Debe asegurarse que el dipositivo tenga conexión a internet",
                               ContentType.failure);
                       },
               )),
@@ -184,7 +184,7 @@ class _MainScroll extends StatelessWidget {
                                   } else
                                     NotificationsService.showSnackbar(
                                         'Oh! Conexión a intenet',
-                                        "Debe asegurarse que el dipositivo tengo conexión a internet",
+                                        "Debe asegurarse que el dipositivo tenga conexión a internet",
                                         ContentType.failure);
                                 },
                                 readOnly: true,

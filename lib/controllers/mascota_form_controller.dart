@@ -8,9 +8,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import '../services/globalkey_service.dart';
+
 class MascotaFormController extends GetxController {
   GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-  final String _baseUrl = 'acceso.seguridadUnica.com';
+  final String _baseUrl = GlobalKeyService.urlApiKey;
+  final String _baseUrlVersion = GlobalKeyService.urlVersion;
   final storage = new FlutterSecureStorage();
   Rx<Mascota> mascota;
   var isSaving = false.obs;
@@ -42,7 +45,7 @@ class MascotaFormController extends GetxController {
         'Authorization': 'Bearer ${token}'
       };
 
-      final url = Uri.https(_baseUrl, '/api/mascota');
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/mascota');
       final response = await http
           .post(url, headers: requestHeaders, body: mascota.toJson())
           .timeout(const Duration(seconds: 10));
@@ -73,7 +76,7 @@ class MascotaFormController extends GetxController {
         'Authorization': 'Bearer ${token}'
       };
 
-      final url = Uri.https(_baseUrl, '/api/mascota');
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/mascota');
       final response = await http
           .post(url, headers: requestHeaders, body: mascota.toJson())
           .timeout(const Duration(seconds: 10));
@@ -109,7 +112,7 @@ class MascotaFormController extends GetxController {
         'Authorization': 'Bearer ${token}'
       };
 
-      final url = Uri.https(_baseUrl, '/api/mascota/uploadImg');
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/mascota/uploadImg');
 
       final imageUploadRequest = http.MultipartRequest('POST', url);
 
@@ -127,6 +130,7 @@ class MascotaFormController extends GetxController {
       }
       this.newPictureFile = null;
       final decodeData = json.decode(resp.body);
+
       return decodeData['link'];
     } on TimeoutException catch (e) {
       return 'Error de conexcion';

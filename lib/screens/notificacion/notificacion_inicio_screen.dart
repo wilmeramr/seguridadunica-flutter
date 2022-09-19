@@ -38,7 +38,7 @@ class NotificacionInicioScreen extends StatelessWidget {
           } else
             NotificationsService.showSnackbar(
                 'Oh!',
-                "Debe asegurarse que el dipositivo tengo conexion a internet",
+                "Debe asegurarse que el dipositivo tenga conexión  a internet",
                 ContentType.failure);
         },
         onInitNoti: () async {
@@ -88,7 +88,7 @@ class _BotonNewList extends StatelessWidget {
           } else
             NotificationsService.showSnackbar(
                 'Oh!',
-                "Debe asegurarse que el dipositivo tengo conexión a internet",
+                "Debe asegurarse que el dipositivo tenga conexión a internet",
                 ContentType.failure);
         },
         child: Text(
@@ -190,7 +190,7 @@ class _MainScrollState extends State<_MainScroll> {
         } else
           NotificationsService.showSnackbar(
               'Oh!',
-              "Debe asegurarse que el dipositivo tengo conexión a internet",
+              "Debe asegurarse que el dipositivo tenga conexión a internet",
               ContentType.failure);
       },
       child: Obx(() => CustomScrollView(

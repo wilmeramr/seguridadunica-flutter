@@ -12,6 +12,8 @@ class CheckAuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context, listen: false);
     final notificacionCtrl = Get.put(NotificacionController());
+    final emeCtrl = Get.put(EmeController());
+
     final badgeCtrl = Get.put(BadgeController());
 
     return Scaffold(

@@ -128,7 +128,7 @@ class _LoginForm extends StatelessWidget {
                               if (!conx) {
                                 NotificationsService.showSnackbar(
                                     'Oh!',
-                                    'Debe asegurarse que el dispositivo tengo conexión a internet.',
+                                    'Debe asegurarse que el dispositivo tenga conexión a internet.',
                                     ContentType.warning);
 
                                 return;

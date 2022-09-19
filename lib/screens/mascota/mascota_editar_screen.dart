@@ -149,7 +149,6 @@ class _MascotaScreenBody extends StatelessWidget {
                         if (imageUrl != null) {
                           mascotaFormCtrl.mascota.value.mascUrlFoto = imageUrl;
                         }
-
                         var result =
                             await mascotaFormCtrl.saveOrCreateMascota();
                         mascotaFormCtrl.isSaving.value = false;
@@ -158,6 +157,7 @@ class _MascotaScreenBody extends StatelessWidget {
                               'Oh! ', "${result}", ContentType.failure);
                           return;
                         }
+
                         if (result.contains('update')) {
                           mascotaCtrl.data.value =
                               mascotaCtrl.data.value.map((e) {
@@ -175,10 +175,14 @@ class _MascotaScreenBody extends StatelessWidget {
                             mascotaCtrl.data.refresh();
                           });
                         }
+
+                        if (!result.contains('error')) {
+                          Navigator.pop(context);
+                        }
                       } else
                         NotificationsService.showSnackbar(
                             'Oh!',
-                            "Debe asegurarse que el dipositivo tengo conexion a internet",
+                            "Debe asegurarse que el dipositivo tenga conexión  a internet",
                             ContentType.failure);
                     },
             ),

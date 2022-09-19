@@ -128,7 +128,7 @@ class _InvitarServicioScreenState extends State<InvitaServicioScreen> {
                     } else
                       NotificationsService.showSnackbar(
                           'Oh!',
-                          "Debe asegurarse que el dipositivo tengo conexion a internet",
+                          "Debe asegurarse que el dipositivo tenga conexión  a internet",
                           ContentType.failure);
                   } else {
                     if (currentStep == 1 && dateRange == null) {

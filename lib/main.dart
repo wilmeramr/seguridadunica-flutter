@@ -51,7 +51,7 @@ void main() async {
   }, (error, stackTrace) {
     NotificationsService.showSnackbar(
         'Oh!',
-        "Debe asegurarse que el dipositivo tengo conexión a internet",
+        "Debe asegurarse que el dipositivo tenga conexión a internet",
         ContentType.failure);
     FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true);
   });
@@ -134,7 +134,11 @@ class _MyAppState extends State<MyApp> {
         'servicio': (_) => InvitaAutorizaScreen(),
         'dash2': (_) => DashScreen(),
         'detalleautorizacion': (_) => DetalleAutorizacionScreen(),
-        'inicioSelfie': (_) => InicioSelfieScreen()
+        'inicioSelfie': (_) => InicioSelfieScreen(),
+        'inicioNoticia': (_) => NoticiaInicioScreen(),
+        'enviarNoticia': (_) => EnviarNoticiaScreen(),
+        'enviarReglamento': (_) => ReglamentoInicioScreen(),
+        'viewpdf': (_) => ViewPDFScreen()
       },
       theme: ThemeData.light().copyWith(
           scaffoldBackgroundColor: Colors.grey[300],

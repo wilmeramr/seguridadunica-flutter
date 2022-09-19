@@ -36,7 +36,7 @@ class MascotaCard extends StatelessWidget {
             NotificationsService.showMyDialogAndroid(
                 context,
                 'No se pudo conectar a intenet',
-                'Debe asegurarse que el dipositivo tengo conexion a internet');
+                'Debe asegurarse que el dipositivo tenga conexión  a internet');
         },
         child: Container(
           margin: EdgeInsets.only(top: 30, bottom: 50),

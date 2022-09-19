@@ -81,7 +81,7 @@ class _InvitarScreenState extends State<InvitaAutorizaScreen> {
                     } else
                       NotificationsService.showSnackbar(
                           'Oh!',
-                          "Debe asegurarse que el dipositivo tengo conexión a internet",
+                          "Debe asegurarse que el dipositivo tenga conexión a internet",
                           ContentType.failure);
                   } else {
                     if (currentStep == 1 && dateRange == null) {

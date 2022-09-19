@@ -37,6 +37,8 @@ class PushNotificationService {
   static Future initializeApp() async {
     await Firebase.initializeApp();
 
+    await requestPermission();
+
     token = await FirebaseMessaging.instance.getToken();
 
     print('token $token');
@@ -44,6 +46,19 @@ class PushNotificationService {
     FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
     FirebaseMessaging.onMessage.listen(_onMessageHandler);
     FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenApp);
+  }
+
+  static requestPermission() async {
+    NotificationSettings settings = await messaging.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true);
+
+    print('User push notifications status ${settings.authorizationStatus}');
   }
 
   static closeStreams() {

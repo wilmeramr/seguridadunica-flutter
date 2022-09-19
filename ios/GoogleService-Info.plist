@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>366607957500-4rbed44nqr89c6e4r8kbc5puv26napt3.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.366607957500-4rbed44nqr89c6e4r8kbc5puv26napt3</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>366607957500-favsm3dp6mgaas5p70vdsi9p9q51uiqp.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB-fYc25DTglfnfqh2-ZbMJ0eHyPeZKEmY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>366607957500</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.seguridadUnica.Unica</string>
+	<key>PROJECT_ID</key>
+	<string>seguridadunica-unica-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>seguridadunica-unica-app.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:366607957500:ios:f1f0b8eda3692955630679</string>
+</dict>
+</plist>

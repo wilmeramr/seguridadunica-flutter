@@ -37,7 +37,7 @@ class MascotaInicioScreen extends StatelessWidget {
           } else
             NotificationsService.showSnackbar(
                 'Oh!',
-                "Debe asegurarse que el dipositivo tengo conexion a internet",
+                "Debe asegurarse que el dipositivo tenga conexión  a internet",
                 ContentType.failure);
         },
       ),
@@ -79,7 +79,7 @@ class _BotonNewList extends StatelessWidget {
           } else
             NotificationsService.showSnackbar(
                 'Oh!',
-                "Debe asegurarse que el dipositivo tengo conexion a internet",
+                "Debe asegurarse que el dipositivo tenga conexión  a internet",
                 ContentType.failure);
         },
         child: const Text(
@@ -168,7 +168,7 @@ class _MainScrollState extends State<_MainScroll> {
         } else
           NotificationsService.showSnackbar(
               'Oh!',
-              "Debe asegurarse que el dipositivo tengo conexion a internet",
+              "Debe asegurarse que el dipositivo tenga conexión  a internet",
               ContentType.failure);
       },
       child: Obx(() => CustomScrollView(

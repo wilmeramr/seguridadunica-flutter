@@ -26,89 +26,129 @@ class DashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final notificacionCtrl = Get.find<NotificacionController>();
+    final emeCtrl = Get.find<EmeController>();
 
     final authService = Provider.of<AuthService>(context, listen: false);
     final items = <ItemBoton>[
-      new ItemBoton(
+      ItemBoton(
+          FontAwesomeIcons.newspaper,
+          'Noticias',
+          Color.fromARGB(255, 31, 226, 44),
+          Color.fromARGB(255, 169, 228, 68), () async {
+        var conx = await authService.internetConnectivity();
+        if (conx) {
+          Navigator.pushNamed(context, 'inicioNoticia');
+        } else {
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tenga conexión  a internet",
+              ContentType.failure);
+        }
+      }),
+      ItemBoton(
           FontAwesomeIcons.photoVideo,
           'Selfie Propietario',
-          Color.fromARGB(255, 90, 31, 226),
-          Color.fromARGB(255, 201, 133, 212), () async {
+          const Color.fromARGB(255, 90, 31, 226),
+          const Color.fromARGB(255, 201, 133, 212), () async {
         var conx = await authService.internetConnectivity();
-        if (conx)
+        if (conx) {
           Navigator.pushNamed(context, 'inicioSelfie');
-        else
+        } else {
           NotificationsService.showSnackbar(
               'Oh!',
-              "Debe asegurarse que el dipositivo tengo conexion a internet",
+              "Debe asegurarse que el dipositivo tenga conexión  a internet",
               ContentType.failure);
+        }
       }),
-      new ItemBoton(
+      ItemBoton(
           FontAwesomeIcons.idCardAlt,
           'Autorizaciones',
-          Color.fromARGB(255, 70, 109, 236),
-          Color.fromARGB(255, 117, 221, 145), () async {
+          const Color.fromARGB(255, 70, 109, 236),
+          const Color.fromARGB(255, 117, 221, 145), () async {
         var conx = await authService.internetConnectivity();
-        if (conx)
+        if (conx) {
           Navigator.pushNamed(context, 'autorizaInicio');
-        else
+        } else {
           NotificationsService.showSnackbar(
               'Oh!',
-              "Debe asegurarse que el dipositivo tengo conexion a internet",
+              "Debe asegurarse que el dipositivo tenga conexión  a internet",
               ContentType.failure);
+        }
       }),
-      new ItemBoton(FontAwesomeIcons.recycle, 'Vistas recurrentes',
-          Color(0xff317183), Color.fromARGB(255, 152, 70, 153), () async {
+      ItemBoton(
+          FontAwesomeIcons.recycle,
+          'Vistas recurrentes',
+          const Color(0xff317183),
+          const Color.fromARGB(255, 152, 70, 153), () async {
         var conx = await authService.internetConnectivity();
-        if (conx)
+        if (conx) {
           Navigator.pushNamed(context, 'servicioInicio');
-        else
+        } else {
           NotificationsService.showSnackbar(
               'Oh!',
-              "Debe asegurarse que el dipositivo tengo conexion a internet",
+              "Debe asegurarse que el dipositivo tenga conexión  a internet",
               ContentType.failure);
+        }
       }),
-      new ItemBoton(
+      ItemBoton(
           FontAwesomeIcons.taxi,
-          'Delivery,Entregas,otros',
-          Color.fromARGB(255, 215, 8, 8),
-          Color.fromARGB(255, 129, 95, 232), () async {
+          'Entregas Inmediatas, otros',
+          const Color.fromARGB(255, 215, 8, 8),
+          const Color.fromARGB(255, 129, 95, 232), () async {
         var conx = await authService.internetConnectivity();
-        if (conx)
+        if (conx) {
           Navigator.pushNamed(context, 'deliveryInicio');
-        else
+        } else {
           NotificationsService.showSnackbar(
               'Oh!',
-              "Debe asegurarse que el dipositivo tengo conexion a internet",
+              "Debe asegurarse que el dipositivo tenga conexión  a internet",
               ContentType.failure);
+        }
       }),
-      new ItemBoton(
+      ItemBoton(
           FontAwesomeIcons.paw,
           'Mascotas',
-          Color.fromARGB(255, 223, 181, 42),
-          Color.fromARGB(255, 208, 58, 130), () async {
+          const Color.fromARGB(255, 223, 181, 42),
+          const Color.fromARGB(255, 208, 58, 130), () async {
         var conx = await authService.internetConnectivity();
-        if (conx)
+        if (conx) {
           Navigator.pushNamed(context, 'mascotaInicio');
-        else
+        } else {
           NotificationsService.showSnackbar(
               'Oh!',
-              "Debe asegurarse que el dipositivo tengo conexion a internet",
+              "Debe asegurarse que el dipositivo tenga conexión  a internet",
               ContentType.failure);
+        }
       }),
-      new ItemBoton(
+      ItemBoton(
           FontAwesomeIcons.calendar,
           'Eventos',
-          Color.fromARGB(255, 45, 56, 207),
-          Color.fromARGB(255, 39, 142, 108), () async {
+          const Color.fromARGB(255, 45, 56, 207),
+          const Color.fromARGB(255, 39, 142, 108), () async {
         var conx = await authService.internetConnectivity();
-        if (conx)
+        if (conx) {
           Navigator.pushNamed(context, 'eventoInicio');
-        else
+        } else {
           NotificationsService.showSnackbar(
               'Oh!',
-              "Debe asegurarse que el dipositivo tengo conexion a internet",
+              "Debe asegurarse que el dipositivo tenga conexión  a internet",
               ContentType.failure);
+        }
+      }),
+      ItemBoton(
+          FontAwesomeIcons.ruler,
+          'Reglemantos',
+          Color.fromARGB(255, 207, 172, 45),
+          const Color.fromARGB(255, 39, 142, 108), () async {
+        var conx = await authService.internetConnectivity();
+        if (conx) {
+          Navigator.pushNamed(context, 'enviarReglamento');
+        } else {
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tenga conexión  a internet",
+              ContentType.failure);
+        }
       }),
     ];
 
@@ -137,6 +177,34 @@ class DashScreen extends StatelessWidget {
               ),
               FadeInLeft(
                 child: Hero(
+                  tag: const Text('EMERGENCIAS'),
+                  child: BotonGordoEme(
+                    iconR: FontAwesomeIcons.broadcastTower,
+                    iconL: FontAwesomeIcons.bell,
+                    texto: 'EMERGENCIAS',
+                    color1: const Color.fromARGB(255, 219, 27, 27),
+                    color2: const Color.fromARGB(255, 237, 28, 129),
+                    onPress: () async {
+                      NotificationsService.showSnackbar(
+                          'Emergencia!', "Enviada.", ContentType.warning);
+                      var res = await emeCtrl.registroEmergencias();
+                      if (res == 'OK') {
+                        NotificationsService.showSnackbar(
+                            'Emergencia!',
+                            "Sea registrado una emergencia.",
+                            ContentType.success);
+                      } else {
+                        NotificationsService.showSnackbar(
+                            'Oh!',
+                            "Debe asegurarse que el dipositivo tenga conexión  a internet",
+                            ContentType.failure);
+                      }
+                    },
+                  ),
+                ),
+              ),
+              FadeInLeft(
+                child: Hero(
                   tag: const Text('Notificaciones'),
                   child: BotonGordoNoti(
                     iconR: FontAwesomeIcons.bell,
@@ -145,13 +213,14 @@ class DashScreen extends StatelessWidget {
                     color2: const Color.fromARGB(255, 28, 209, 237),
                     onPress: () async {
                       var conx = await authService.internetConnectivity();
-                      if (conx)
+                      if (conx) {
                         Navigator.pushNamed(context, 'notificacionInicio');
-                      else
+                      } else {
                         NotificationsService.showSnackbar(
                             'Oh!',
-                            "Debe asegurarse que el dipositivo tengo conexion a internet",
+                            "Debe asegurarse que el dipositivo tenga conexión  a internet",
                             ContentType.failure);
+                      }
                     },
                   ),
                 ),
@@ -189,13 +258,14 @@ class _Encabezado extends StatelessWidget {
             child: RawMaterialButton(
               onPressed: () async {
                 var result = await authService.logout();
-                if (result!.contains('Ok'))
+                if (result!.contains('Ok')) {
                   Navigator.pushReplacementNamed(context, 'login');
-                else
+                } else {
                   NotificationsService.showSnackbar(
                       'Oh!',
                       "Fallo la desconexión del servicio: Intentelo mas tarde. ",
                       ContentType.failure);
+                }
               },
               shape: const CircleBorder(),
               padding: const EdgeInsets.all(15.0),

@@ -35,7 +35,7 @@ class DeliveryInicioScreen extends StatelessWidget {
           } else
             NotificationsService.showSnackbar(
                 'Oh!',
-                "Debe asegurarse que el dipositivo tengo conexion a internet",
+                "Debe asegurarse que el dipositivo tenga conexión  a internet",
                 ContentType.failure);
         },
       ),
@@ -64,7 +64,7 @@ class _BotonNewList extends StatelessWidget {
           } else
             NotificationsService.showSnackbar(
                 'Oh! ',
-                "Debe asegurarse que el dipositivo tengo conexión a internet",
+                "Debe asegurarse que el dipositivo tenga conexión a internet",
                 ContentType.failure);
         },
         child: Text(
@@ -155,7 +155,7 @@ class _MainScrollState extends State<_MainScroll> {
         } else
           NotificationsService.showSnackbar(
               'Oh!',
-              "Debe asegurarse que el dipositivo tengo conexión a internet",
+              "Debe asegurarse que el dipositivo tenga conexión a internet",
               ContentType.failure);
       },
       child: Obx(() => CustomScrollView(
@@ -241,11 +241,11 @@ class _Titulo extends StatelessWidget {
             color: Colors.white,
             //  margin: EdgeInsets.only(top: 200),
             child: Hero(
-              tag: Text('Delivery,Entregas,otros'),
+              tag: Text('Entregas Inmediatas, otros'),
               child: BotonGordo(
                 iconL: FontAwesomeIcons.taxi,
                 iconR: FontAwesomeIcons.chevronLeft,
-                texto: 'Delivery,Entregas,otros',
+                texto: 'Entregas Inmediatas, otros',
                 color1: Color.fromARGB(255, 215, 8, 8),
                 color2: Color.fromARGB(255, 129, 95, 232),
                 onPress: () => Navigator.of(context).pop(),
