@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:Unica/models/doc_model.dart';
+import 'package:Unica/models/expensa_models.dart';
 import 'package:Unica/models/noticias_models.dart';
 import 'package:Unica/screens/screens.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -15,7 +16,7 @@ import '../../models/user.dart';
 import '../../services/services.dart';
 import '../../widgets/widgets.dart';
 
-class ReglamentoInicioScreen extends StatelessWidget {
+class ExpensaInicioScreen extends StatelessWidget {
   // final notificacionCtrl = Get.find<NotificacionController>();
 
   @override
@@ -30,9 +31,9 @@ class ReglamentoInicioScreen extends StatelessWidget {
 
           var conx = await authService.internetConnectivity();
           if (conx) {
-            final docCtrl = Get.find<DocumentController>();
+            final expenCtrl = Get.find<ExpensaController>();
 
-            var result = await docCtrl.getTopDocScroll();
+            var result = await expenCtrl.getTopExpScroll();
             if (!result.contains('Ok')) {
               NotificationsService.showSnackbar(
                   'Oh! ', result, ContentType.failure);
@@ -45,9 +46,9 @@ class ReglamentoInicioScreen extends StatelessWidget {
           }
         },
         onInitNoti: () async {
-          final docCtrl = Get.find<DocumentController>();
+          final expCtrl = Get.find<ExpensaController>();
 
-          var result = await docCtrl.getTopDoc();
+          var result = await expCtrl.getTopExp();
           if (!result.contains('Ok')) {
             NotificationsService.showSnackbar(
                 'Oh! ', result, ContentType.failure);
@@ -122,7 +123,7 @@ class _MainScroll extends StatefulWidget {
 
 class _MainScrollState extends State<_MainScroll> {
   final ScrollController scrollController = ScrollController();
-  final docCtrl = Get.put(DocumentController());
+  final expCtrl = Get.put(ExpensaController());
   Timer? _timer;
   int _start = 5;
 
@@ -177,7 +178,7 @@ class _MainScrollState extends State<_MainScroll> {
 
   @override
   Widget build(BuildContext context) {
-    final docCtrl = Get.find<DocumentController>();
+    final expCtrl = Get.find<ExpensaController>();
 
     return RefreshIndicator(
       edgeOffset: 130,
@@ -186,10 +187,10 @@ class _MainScrollState extends State<_MainScroll> {
 
         var conx = await authService.internetConnectivity();
         if (conx) {
-          var result = await docCtrl.getTopDoc();
+          var result = await expCtrl.getTopExp();
           if (!result.contains('Ok')) {
             NotificationsService.showSnackbar(
-                'Oh!', "$result", ContentType.failure);
+                'Oh!', result, ContentType.failure);
           }
         } else {
           NotificationsService.showSnackbar(
@@ -212,7 +213,7 @@ class _MainScrollState extends State<_MainScroll> {
                           alignment: Alignment.centerLeft,
                           color: Colors.white,
                           child: _Titulo()))),
-              docCtrl.data.isEmpty && _start > 0
+              expCtrl.data.isEmpty && _start > 0
                   ? SliverList(
                       delegate: SliverChildListDelegate([
                       const LinearProgressIndicator(
@@ -225,8 +226,8 @@ class _MainScrollState extends State<_MainScroll> {
                     ]))
                   : SliverList(
                       delegate: SliverChildListDelegate([
-                      ...docCtrl.data.map((e) => _ListItem(doc: e)).toList(),
-                      docCtrl.isLoading.value
+                      ...expCtrl.data.map((e) => _ListItem(expn: e)).toList(),
+                      expCtrl.isLoading.value
                           ? const CircularProgressIndicator(
                               color: Colors.red,
                             )
@@ -284,12 +285,12 @@ class _Titulo extends StatelessWidget {
             color: Colors.white,
             //  margin: EdgeInsets.only(top: 200),
             child: Hero(
-              tag: const Text('Reglemantos'),
+              tag: const Text('Expensas'),
               child: BotonGordoNoti(
-                iconL: FontAwesomeIcons.ruler,
+                iconL: FontAwesomeIcons.paypal,
                 iconR: FontAwesomeIcons.chevronLeft,
-                texto: 'Reglemantos',
-                color1: const Color.fromARGB(255, 207, 172, 45),
+                texto: 'Expensas',
+                color1: const Color.fromARGB(255, 45, 207, 164),
                 color2: const Color.fromARGB(255, 39, 142, 108),
                 onPress: () {
                   Navigator.of(context).pop();
@@ -304,9 +305,9 @@ class _Titulo extends StatelessWidget {
 }
 
 class _ListItem extends StatelessWidget {
-  final Doc doc;
+  final Expen expn;
 
-  const _ListItem({required this.doc});
+  const _ListItem({required this.expn});
 
   @override
   Widget build(BuildContext context) {
@@ -316,19 +317,19 @@ class _ListItem extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (_) =>
-                        ViewPDFScreen(url: doc.docUrl!, title: doc.docName)));
+                    builder: (_) => ViewPDFScreen(
+                        url: expn.expenUrl!, title: expn.expenName)));
           },
           child: Container(
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(15)),
             child: Column(
               children: [
-                _NotificacionTopBar(doc),
+                _NotificacionTopBar(expn),
                 const Divider(),
                 _NotificacionTitulo(
-                  doc,
+                  expn,
                 ),
                 const SizedBox(
                   height: 10,
@@ -367,9 +368,9 @@ class _NotificacionStatus extends StatelessWidget {
 }
 
 class _NotificacionTitulo extends StatelessWidget {
-  final Doc doc;
+  final Expen expn;
 
-  const _NotificacionTitulo(this.doc);
+  const _NotificacionTitulo(this.expn);
 
   @override
   Widget build(BuildContext context) {
@@ -383,7 +384,7 @@ class _NotificacionTitulo extends StatelessWidget {
           ),
           Flexible(
             child: Text(
-              doc.docName,
+              expn.expenName,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -395,9 +396,9 @@ class _NotificacionTitulo extends StatelessWidget {
 }
 
 class _NotificacionTopBar extends StatelessWidget {
-  final Doc doc;
+  final Expen expn;
 
-  const _NotificacionTopBar(this.doc);
+  const _NotificacionTopBar(this.expn);
 
   @override
   Widget build(BuildContext context) {
@@ -408,7 +409,7 @@ class _NotificacionTopBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-              'Fecha de registro: ${doc.updatedAt.day.toString().padLeft(2, '0')}/${doc.updatedAt.month.toString().padLeft(2, '0')}/${doc.updatedAt.year.toString().padLeft(4, '0')}')
+              'Fecha de registro: ${expn.updatedAt.day.toString().padLeft(2, '0')}/${expn.updatedAt.month.toString().padLeft(2, '0')}/${expn.updatedAt.year.toString().padLeft(4, '0')}')
         ],
       ),
     );

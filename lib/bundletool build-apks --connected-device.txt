@@ -1,3 +1,4 @@
+flutter build appbundle
 bundletool build-apks --connected-device --device-id=R58N81N83WY --bundle=/Users/wilmermolina/Documents/git/seguridadunica-flutter/build/app/outputs/bundle/release/app-release.aab  --output=/Users/wilmermolina/Documents/git/seguridadunica-flutter/build/app/outputs/bundle/release/my_app.apks --ks=/Users/wilmermolina/upload-keystore.jks --ks-key-alias=upload
 
 bundletool install-apks --device-id=R58N81N83WY  --apks=/Users/wilmermolina/Documents/git/seguridadunica-flutter/build/app/outputs/bundle/release/my_app.apks

@@ -1,5 +1,6 @@
-export 'package:Unica/controllers/doc_controller.dart';
+export 'package:Unica/controllers/expensa_controller.dart';
 
+export 'package:Unica/controllers/doc_controller.dart';
 export 'package:Unica/controllers/noticia_controller.dart';
 export 'package:Unica/controllers/delivery_controller.dart';
 export 'package:Unica/controllers/notificacion_controller.dart';

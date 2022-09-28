@@ -28,7 +28,7 @@ class IconHeader extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final Color colorBlanco = Colors.white;
+    const Color colorBlanco = Colors.white;
     return Stack(children: [
       _IconHeaderBackground(color1: this.color1, color2: this.color2),
       Positioned(
@@ -48,35 +48,40 @@ class IconHeader extends StatelessWidget {
           FittedBox(
             child: Text(
               this.country.toUpperCase(),
-              style: TextStyle(color: colorBlanco, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                  color: colorBlanco, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
           ),
           FittedBox(
             child: Text(
                 '${this.name.toUpperCase()} ${this.apellido.toUpperCase()}',
-                style: TextStyle(color: colorBlanco),
+                style: const TextStyle(color: colorBlanco),
                 textAlign: TextAlign.center),
           ),
           FittedBox(
             child: Text('${this.rol} - Lote: ${this.lote}',
-                style: TextStyle(color: colorBlanco),
+                style: const TextStyle(color: colorBlanco),
                 textAlign: TextAlign.center),
           ),
           FittedBox(
-            child: Text('${this.email}',
-                style: TextStyle(color: colorBlanco),
+            child: Text(email,
+                style: const TextStyle(color: colorBlanco),
                 textAlign: TextAlign.center),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Image(
             color: Colors.white,
-            height: 160,
+            height: 100,
             width: 200,
             image: image,
           ),
+          const Text(
+            'Versión: 1.1.4 ',
+            style: TextStyle(color: Colors.white),
+          )
         ],
       )
     ]);

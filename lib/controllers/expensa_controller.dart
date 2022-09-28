@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:Unica/models/doc_model.dart';
+import 'package:Unica/models/expensa_models.dart';
 import 'package:Unica/models/masc_genero_models.dart';
 import 'package:Unica/models/masc_models.dart';
 import 'package:advance_pdf_viewer_fork/advance_pdf_viewer_fork.dart';
@@ -13,12 +14,12 @@ import '../models/masc_esp_models.dart';
 import '../models/user.dart';
 import '../services/globalkey_service.dart';
 
-class DocumentController extends GetxController {
+class ExpensaController extends GetxController {
   final String _baseUrl = GlobalKeyService.urlApiKey;
   final String _baseUrlVersion = GlobalKeyService.urlVersion;
   final storage = new FlutterSecureStorage();
 
-  var data = <Doc>[].obs;
+  var data = <Expen>[].obs;
   var carga = 0.obs;
   var _page = 1.obs;
   var _last_page = 1.obs;
@@ -28,7 +29,7 @@ class DocumentController extends GetxController {
   var galleryOCamare = 0.obs;
 
   DocumentController() {
-    getTopDoc();
+    getTopExp();
   }
 
   _getJsonData(String endpoint, [int page = 1]) async {
@@ -40,8 +41,7 @@ class DocumentController extends GetxController {
       'Authorization': 'Bearer ${token}'
     };
 
-    final url =
-        Uri.https(_baseUrl, endpoint, {'page': '$page', 'doc_tipo': '1'});
+    final url = Uri.https(_baseUrl, endpoint, {'page': '$page'});
     final response = await http
         .get(url, headers: requestHeaders)
         .timeout(const Duration(seconds: 10));
@@ -49,20 +49,20 @@ class DocumentController extends GetxController {
     return response.body;
   }
 
-  Future<String> getTopDoc() async {
+  Future<String> getTopExp() async {
     _page = 1.obs;
     try {
       var jsonResponse =
-          jsonDecode(await _getJsonData('${_baseUrlVersion}/doc'))
+          jsonDecode(await _getJsonData('${_baseUrlVersion}/expensas'))
               as Map<String, dynamic>;
       print(jsonResponse);
 
       if (jsonResponse.containsKey('data')) {
         // final Map<String, dynamic> decodeResp = json.decode(response.body);
-        var doc = DocResponse.fromMap(jsonResponse);
+        var expen = ExpenResponse.fromMap(jsonResponse);
         data.clear();
-        data.addAll(doc.data);
-        _last_page = doc.lastPage.obs;
+        data.addAll(expen.data);
+        _last_page = expen.lastPage.obs;
 
         return 'Ok';
         //var itemCount = jsonResponse['totalItems'];
@@ -78,7 +78,7 @@ class DocumentController extends GetxController {
     }
   }
 
-  Future<String> getTopDocScroll() async {
+  Future<String> getTopExpScroll() async {
     _page.value += 1;
 
     if (_page.value <= _last_page.value) {
@@ -88,8 +88,8 @@ class DocumentController extends GetxController {
                 await _getJsonData('${_baseUrlVersion}/doc', _page.value))
             as Map<String, dynamic>;
         if (jsonResponse.containsKey('data')) {
-          var doc = DocResponse.fromMap(jsonResponse);
-          data.value = [...data, ...doc.data];
+          var expen = ExpenResponse.fromMap(jsonResponse);
+          data.value = [...data, ...expen.data];
           isLoading.value = false;
           return 'Ok';
         } else {
@@ -125,11 +125,5 @@ class DocumentController extends GetxController {
     } on Exception catch (e) {
       return false;
     }
-  }
-
-  Future<void> loadPDF(String url) async {
-    var result = await PDFDocument.fromURL(url);
-
-    document = result.obs;
   }
 }

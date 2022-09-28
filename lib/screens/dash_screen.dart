@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:Unica/services/services.dart';
@@ -6,6 +7,7 @@ import 'package:Unica/widgets/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:upgrader/upgrader.dart';
 
 import '../controllers/controllers.dart';
 import '../models/user.dart';
@@ -22,7 +24,59 @@ class ItemBoton {
   ItemBoton(this.icon, this.texto, this.color1, this.color2, this.onPress);
 }
 
-class DashScreen extends StatelessWidget {
+class DashScreen extends StatefulWidget {
+  @override
+  State<DashScreen> createState() => _DashScreenState();
+}
+
+class _DashScreenState extends State<DashScreen> {
+  String _authStatus = 'Unknown';
+
+  @override
+  void initState() {
+    super.initState();
+    //initPlugin();
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlugin() async {
+    final TrackingStatus status =
+        await AppTrackingTransparency.trackingAuthorizationStatus;
+    setState(() => _authStatus = '$status');
+    // If the system can show an authorization request dialog
+    if (status == TrackingStatus.notDetermined) {
+      // Show a custom explainer dialog before the system dialog
+      await showCustomTrackingDialog(context);
+      // Wait for dialog popping animation
+      await Future.delayed(const Duration(milliseconds: 200));
+      // Request system's tracking authorization dialog
+      final TrackingStatus status =
+          await AppTrackingTransparency.requestTrackingAuthorization();
+      setState(() => _authStatus = '$status');
+    }
+
+    final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
+    print("UUID: $uuid");
+  }
+
+  Future<void> showCustomTrackingDialog(BuildContext context) async =>
+      await showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Querido usuario'),
+          content: const Text(
+              'Nos preocupamos por su privacidad y seguridad de los datos.'
+              'Podemos seguir usando tus datos para mejorar nuestra app para ti? \n\nPuedes cambiar tu elección en cualquier momento en la configuración de la aplicación. '
+              'Nuestros socios recopilarán datos y utilizarán un identificador único en su dispositivo.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Continuar'),
+            ),
+          ],
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     final notificacionCtrl = Get.find<NotificacionController>();
@@ -142,7 +196,22 @@ class DashScreen extends StatelessWidget {
           const Color.fromARGB(255, 39, 142, 108), () async {
         var conx = await authService.internetConnectivity();
         if (conx) {
-          Navigator.pushNamed(context, 'enviarReglamento');
+          Navigator.pushNamed(context, 'inicioReglamento');
+        } else {
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tenga conexión  a internet",
+              ContentType.failure);
+        }
+      }),
+      ItemBoton(
+          FontAwesomeIcons.paypal,
+          'Expensas',
+          Color.fromARGB(255, 45, 207, 164),
+          const Color.fromARGB(255, 39, 142, 108), () async {
+        var conx = await authService.internetConnectivity();
+        if (conx) {
+          Navigator.pushNamed(context, 'inicioExpensa');
         } else {
           NotificationsService.showSnackbar(
               'Oh!',
@@ -242,6 +311,7 @@ class _Encabezado extends StatelessWidget {
 
     return Stack(
       children: [
+        // UpgradeAlert(),
         FutureBuilder(
           future: _dataTitle(context),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -273,7 +343,7 @@ class _Encabezado extends StatelessWidget {
                 Icons.login_outlined,
                 color: Colors.white,
               ),
-            ))
+            )),
       ],
     );
   }
