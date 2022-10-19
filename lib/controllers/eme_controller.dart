@@ -10,9 +10,12 @@ class EmeController extends GetxController {
   final String _baseUrl = GlobalKeyService.urlApiKey;
   final String _baseUrlVersion = GlobalKeyService.urlVersion;
 
+  var isLoading = false.obs;
+
   final storage = const FlutterSecureStorage();
-  Future<String> registroEmergencias() async {
+  Future<String> registroEmergencias(int tipo) async {
     try {
+      isLoading.value = true;
       String token = await storage.read(key: 'token') ?? '';
 
       Map<String, String> requestHeaders = {
@@ -22,16 +25,23 @@ class EmeController extends GetxController {
       };
       final url = Uri.https(_baseUrl, '$_baseUrlVersion/eme');
       final response = await http
-          .post(url, headers: requestHeaders)
+          .post(url,
+              headers: requestHeaders, body: json.encode({'eme_tipo_id': tipo}))
           .timeout(const Duration(seconds: 10));
       if (response.statusCode == 201) {
+        isLoading.value = false;
+
         return 'OK';
       } else {
+        isLoading.value = false;
+
         return "Error de conexión: Intentalo mas tarde";
       }
     } on TimeoutException catch (e) {
+      isLoading.value = false;
       return 'Error de conexión: Intentalo mas tarde';
     } on Exception catch (e) {
+      isLoading.value = false;
       return 'Error de general: Intentalo mas tarde';
     }
   }

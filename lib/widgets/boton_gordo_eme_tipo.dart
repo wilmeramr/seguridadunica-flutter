@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../controllers/controllers.dart';
 
-class BotonGordoEme extends StatelessWidget {
+class BotonGordoEmeTipo extends StatelessWidget {
   final IconData iconR;
   final IconData iconL;
 
@@ -14,7 +14,7 @@ class BotonGordoEme extends StatelessWidget {
   final Color color2;
   final Function()? onPress;
 
-  const BotonGordoEme(
+  const BotonGordoEmeTipo(
       {Key? key,
       this.iconR = FontAwesomeIcons.nimblr,
       required this.texto,
@@ -36,7 +36,7 @@ class BotonGordoEme extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(
-                height: 140,
+                height: 110,
                 width: 40,
               ),
               FaIcon(
@@ -99,7 +99,7 @@ class _BotonGordoBackground extends StatelessWidget {
           ),
         ),
         width: double.infinity,
-        height: 100,
+        height: 70,
         margin: EdgeInsets.all(20),
         decoration: BoxDecoration(
             color: Colors.red,

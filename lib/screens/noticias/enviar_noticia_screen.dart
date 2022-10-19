@@ -96,7 +96,7 @@ class _MainScroll extends StatelessWidget {
             floating: true,
             delegate: _SliverCustomHeaderDelegate(
                 minHeight: 105,
-                maxHeight: 221,
+                maxHeight: 233,
                 child: Container(
                     alignment: Alignment.centerLeft,
                     color: Colors.white,

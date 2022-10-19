@@ -249,25 +249,11 @@ class _DashScreenState extends State<DashScreen> {
                   tag: const Text('EMERGENCIAS'),
                   child: BotonGordoEme(
                     iconR: FontAwesomeIcons.broadcastTower,
-                    iconL: FontAwesomeIcons.bell,
                     texto: 'EMERGENCIAS',
                     color1: const Color.fromARGB(255, 219, 27, 27),
                     color2: const Color.fromARGB(255, 237, 28, 129),
                     onPress: () async {
-                      NotificationsService.showSnackbar(
-                          'Emergencia!', "Enviada.", ContentType.warning);
-                      var res = await emeCtrl.registroEmergencias();
-                      if (res == 'OK') {
-                        NotificationsService.showSnackbar(
-                            'Emergencia!',
-                            "Sea registrado una emergencia.",
-                            ContentType.success);
-                      } else {
-                        NotificationsService.showSnackbar(
-                            'Oh!',
-                            "Debe asegurarse que el dipositivo tenga conexión  a internet",
-                            ContentType.failure);
-                      }
+                      Navigator.pushNamed(context, 'inicioEmergencias');
                     },
                   ),
                 ),

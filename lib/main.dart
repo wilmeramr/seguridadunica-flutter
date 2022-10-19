@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Unica/screens/emergencia/inicio_eme_screen.dart';
 import 'package:Unica/screens/expensa/expensa_inicio_screen.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -139,7 +140,8 @@ class _MyAppState extends State<MyApp> {
         'inicioNoticia': (_) => NoticiaInicioScreen(),
         'enviarNoticia': (_) => EnviarNoticiaScreen(),
         'inicioReglamento': (_) => ReglamentoInicioScreen(),
-        'inicioExpensa': (_) => ExpensaInicioScreen()
+        'inicioExpensa': (_) => ExpensaInicioScreen(),
+        'inicioEmergencias': (_) => InicioEmeScreen()
       },
       theme: ThemeData.light().copyWith(
           scaffoldBackgroundColor: Colors.grey[300],

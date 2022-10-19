@@ -1,3 +1,5 @@
+export 'package:Unica/widgets/boton_gordo_eme_tipo.dart';
+
 export 'package:Unica/widgets/ExpandedText.dart';
 
 export 'package:Unica/widgets/AnimatedExpandingContainer.dart';

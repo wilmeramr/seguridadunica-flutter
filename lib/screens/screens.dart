@@ -1,8 +1,9 @@
+import 'package:Unica/screens/emergencia/inicio_eme_screen.dart';
+
 export 'package:Unica/screens/view_pdf_screen.dart';
 
 export 'package:Unica/screens/reglamento/reglamento_inicio_screen.dart';
 export 'package:Unica/screens/noticias/enviar_noticia_screen.dart';
-
 export 'package:Unica/screens/noticias/noticia_inicio_screen.dart';
 export 'package:Unica/screens/selfie/inicio_selfie_screen.dart';
 export 'package:Unica/screens/home_screen.dart';
