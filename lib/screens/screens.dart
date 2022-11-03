@@ -1,4 +1,4 @@
-import 'package:Unica/screens/emergencia/inicio_eme_screen.dart';
+export 'package:Unica/screens/reserva/reserva_inicio_screen.dart';
 
 export 'package:Unica/screens/view_pdf_screen.dart';
 
@@ -26,3 +26,4 @@ export 'package:Unica/screens/evento/evento_inicio_screen.dart';
 export 'package:Unica/screens/evento/invitar_evento_screen.dart';
 export 'package:Unica/screens/mascota/mascota_inicio_screen.dart';
 export 'package:Unica/screens/mascota/mascota_editar_screen.dart';
+export 'package:Unica/screens/emergencia/inicio_eme_screen.dart';

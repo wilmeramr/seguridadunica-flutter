@@ -219,6 +219,21 @@ class _DashScreenState extends State<DashScreen> {
               ContentType.failure);
         }
       }),
+      ItemBoton(
+          FontAwesomeIcons.solidRegistered,
+          'Reservas',
+          Color.fromARGB(255, 45, 199, 207),
+          Color.fromARGB(255, 33, 54, 131), () async {
+        var conx = await authService.internetConnectivity();
+        if (conx) {
+          Navigator.pushNamed(context, 'inicioReservas');
+        } else {
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tenga conexión  a internet",
+              ContentType.failure);
+        }
+      }),
     ];
 
     List<Widget> itemMap = items.map((item) {

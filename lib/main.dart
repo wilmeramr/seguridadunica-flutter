@@ -141,7 +141,8 @@ class _MyAppState extends State<MyApp> {
         'enviarNoticia': (_) => EnviarNoticiaScreen(),
         'inicioReglamento': (_) => ReglamentoInicioScreen(),
         'inicioExpensa': (_) => ExpensaInicioScreen(),
-        'inicioEmergencias': (_) => InicioEmeScreen()
+        'inicioEmergencias': (_) => InicioEmeScreen(),
+        'inicioReservas': (_) => ReservaInicioScreen(),
       },
       theme: ThemeData.light().copyWith(
           scaffoldBackgroundColor: Colors.grey[300],

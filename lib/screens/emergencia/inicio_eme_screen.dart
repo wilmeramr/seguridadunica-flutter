@@ -15,26 +15,26 @@ import '../../services/services.dart';
 
 final Uri _url = Uri.parse('https://flutter.dev');
 
-class ItemBoton {
+class ItemBotonEme {
   final IconData icon;
   final String texto;
   final Color color1;
   final Color color2;
   final Function()? onPress;
 
-  ItemBoton(this.icon, this.texto, this.color1, this.color2, this.onPress);
+  ItemBotonEme(this.icon, this.texto, this.color1, this.color2, this.onPress);
 }
 
 class InicioEmeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: ScaffoldBodySelfie(),
+      child: ScaffoldBodyEme(),
     );
   }
 }
 
-class ScaffoldBodySelfie extends StatelessWidget {
+class ScaffoldBodyEme extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -60,8 +60,8 @@ class _MainScroll extends StatelessWidget {
     final emeCtrl = Get.put(EmeController());
     final authService = Provider.of<AuthService>(context, listen: false);
 
-    final items = <ItemBoton>[
-      ItemBoton(
+    final itemsEme = <ItemBotonEme>[
+      ItemBotonEme(
           FontAwesomeIcons.shieldAlt,
           'Seguridad',
           Color.fromARGB(255, 3, 23, 35),
@@ -85,7 +85,7 @@ class _MainScroll extends StatelessWidget {
               ContentType.failure);
         }
       }),
-      ItemBoton(
+      ItemBotonEme(
           FontAwesomeIcons.phoneSquare,
           '911',
           const Color.fromARGB(255, 90, 31, 226),
@@ -109,7 +109,7 @@ class _MainScroll extends StatelessWidget {
               ContentType.failure);
         }
       }),
-      ItemBoton(
+      ItemBotonEme(
           FontAwesomeIcons.userNurse,
           'Médica',
           const Color.fromARGB(255, 70, 109, 236),
@@ -133,7 +133,7 @@ class _MainScroll extends StatelessWidget {
               ContentType.failure);
         }
       }),
-      ItemBoton(
+      ItemBotonEme(
           FontAwesomeIcons.fireExtinguisher,
           'Incendio',
           Color.fromARGB(255, 240, 122, 122),
@@ -159,7 +159,7 @@ class _MainScroll extends StatelessWidget {
       }),
     ];
 
-    var itemMap = items.map((item) {
+    var itemMap = itemsEme.map((item) {
       return FadeInLeft(
         child: BotonGordoEmeTipo(
           iconR: item.icon,
