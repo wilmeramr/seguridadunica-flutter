@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:Unica/models/noticias_models.dart';
 import 'package:Unica/models/reserva_models.dart';
+import 'package:Unica/models/treserva_models.dart';
 import 'package:Unica/screens/reserva/CustomDialogBox.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
@@ -14,22 +15,26 @@ import '../../models/user.dart';
 import '../../services/services.dart';
 import '../../widgets/widgets.dart';
 
-class ReservaInicioScreen extends StatelessWidget {
+late int agrs;
+
+class ReservaByTipoScreen extends StatelessWidget {
   // final notificacionCtrl = Get.find<NotificacionController>();
 
   @override
   Widget build(BuildContext context) {
+    agrs = ModalRoute.of(context)!.settings.arguments as int;
+
     final authService = Provider.of<AuthService>(context, listen: false);
     return Scaffold(
         body: Stack(children: [
       const Background(color2: Color(0xff6989F5), color1: Colors.white),
       _MainScroll(
         onNextPage: () async {
-          final authService = Provider.of<AuthService>(context, listen: false);
+          /*   final authService = Provider.of<AuthService>(context, listen: false);
 
           var conx = await authService.internetConnectivity();
           if (conx) {
-            final reservaCtrl = Get.find<ReservaController>();
+            final reservaCtrl = Get.find<TReservaController>();
 
             var result = await reservaCtrl.getTopreservaScroll();
             if (!result!.contains('Ok')) {
@@ -41,13 +46,13 @@ class ReservaInicioScreen extends StatelessWidget {
                 'Oh!',
                 "Debe asegurarse que el dipositivo tenga conexión  a internet",
                 ContentType.failure);
-          }
+          } */
         },
         onInitNoti: () async {
-          final reservaCtrl = Get.find<ReservaController>();
+          final reservaCtrl = Get.find<TReservaController>();
 
-          var result = await reservaCtrl.getTopreserva();
-          if (!result!.contains('Ok')) {
+          var result = await reservaCtrl.getTopTreserva(agrs);
+          if (!result!.contains('OK')) {
             NotificationsService.showSnackbar(
                 'Oh! ', result, ContentType.failure);
           }
@@ -63,7 +68,7 @@ class ReservaInicioScreen extends StatelessWidget {
                 return CircularProgressIndicator();
               }
 
-              if (snapshot.data!.rol.contains('Adm')) return _BotonNewList();
+              if (snapshot.data!.rol.contains('Admm')) return _BotonNewList();
               return Container();
             },
           ))
@@ -122,7 +127,7 @@ class _MainScroll extends StatefulWidget {
 
 class _MainScrollState extends State<_MainScroll> {
   final ScrollController scrollController = ScrollController();
-  final reservaCtrl = Get.put(ReservaController());
+  final treservaCtrl = Get.put(TReservaController());
   Timer? _timer;
   int _start = 5;
 
@@ -158,7 +163,7 @@ class _MainScrollState extends State<_MainScroll> {
         // print(scrollController.position.pixels);
         //print(scrollController.position.maxScrollExtent);
 
-        widget.onNextPage();
+        // widget.onNextPage();
       }
       ;
     });
@@ -177,7 +182,7 @@ class _MainScrollState extends State<_MainScroll> {
 
   @override
   Widget build(BuildContext context) {
-    final reservaCtrl = Get.find<ReservaController>();
+    final treservaCtrl = Get.find<TReservaController>();
 
     return RefreshIndicator(
       edgeOffset: 130,
@@ -186,8 +191,8 @@ class _MainScrollState extends State<_MainScroll> {
 
         var conx = await authService.internetConnectivity();
         if (conx) {
-          var result = await reservaCtrl.getTopreserva();
-          if (!result!.contains('Ok')) {
+          var result = await treservaCtrl.getTopTreserva(agrs);
+          if (!result!.contains('OK')) {
             NotificationsService.showSnackbar(
                 'Oh!', "$result", ContentType.failure);
           }
@@ -212,7 +217,7 @@ class _MainScrollState extends State<_MainScroll> {
                           alignment: Alignment.centerLeft,
                           color: Colors.white,
                           child: _Titulo()))),
-              reservaCtrl.data.isEmpty && _start > 0
+              treservaCtrl.data.isEmpty && _start > 0
                   ? SliverList(
                       delegate: SliverChildListDelegate([
                       const LinearProgressIndicator(
@@ -225,10 +230,10 @@ class _MainScrollState extends State<_MainScroll> {
                     ]))
                   : SliverList(
                       delegate: SliverChildListDelegate([
-                      ...reservaCtrl.data
-                          .map((e) => _ListItem(reserva: e))
+                      ...treservaCtrl.data
+                          .map((e) => _ListItem(treserva: e))
                           .toList(),
-                      reservaCtrl.isLoading.value
+                      treservaCtrl.isLoading.value
                           ? const CircularProgressIndicator(
                               color: Colors.red,
                             )
@@ -307,9 +312,9 @@ class _Titulo extends StatelessWidget {
 }
 
 class _ListItem extends StatelessWidget {
-  final Reserva reserva;
+  final TipoReserva treserva;
 
-  const _ListItem({required this.reserva});
+  const _ListItem({required this.treserva});
 
   @override
   Widget build(BuildContext context) {
@@ -322,7 +327,7 @@ class _ListItem extends StatelessWidget {
                 color: Colors.white, borderRadius: BorderRadius.circular(15)),
             child: Column(
               children: [
-                _NotificacionStatus(
+                /*    _NotificacionStatus(
                   reserva: reserva,
                   onPressedCancelar: () async {
                     final authService =
@@ -344,19 +349,19 @@ class _ListItem extends StatelessWidget {
                           ContentType.failure);
                     }
                   },
-                ),
+                ), */
                 const Divider(),
                 const SizedBox(
                   height: 10,
                 ),
-                _NotificacionTitulo(
+                /*   _NotificacionTitulo(
                   reserva,
-                ),
+                ), */
                 const SizedBox(
                   height: 10,
                 ),
                 _NotificacionBody(
-                  reserva,
+                  treserva,
                 ),
                 const SizedBox(
                   height: 10,
@@ -414,38 +419,19 @@ class _NotificacionStatus extends StatelessWidget {
 }
 
 class _NotificacionBody extends StatelessWidget {
-  final Reserva reserva;
+  final TipoReserva treserva;
 
-  const _NotificacionBody(this.reserva);
+  const _NotificacionBody(this.treserva);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      child: ExpandedText(
-        maxLines: 100,
-        minLines: 3,
-        text: 'Horario de la Reserva: ' +
-            reserva.horarios +
-            '\n' +
-            'Usuario creador: ' +
-            reserva.usName +
-            ' ' +
-            reserva.usApellido +
-            '\n' +
-            'Tipo de Reserva: ' +
-            reserva.tipo +
-            '\n' +
-            'Fecha Creación: ${reserva.createdAt.day.toString().padLeft(2, '0')}/${reserva.createdAt.month.toString().padLeft(2, '0')}/${reserva.createdAt.year.toString().padLeft(4, '0')}' +
-            '\n' +
-            'Comentarios: ${reserva.comentarios}' +
-            '\n',
-      ),
-    );
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        child: Text(treserva.description));
   }
 }
 

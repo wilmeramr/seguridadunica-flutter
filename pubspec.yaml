@@ -55,6 +55,7 @@ dependencies:
   upgrader: ^4.6.1
   new_version: ^0.3.1
   app_tracking_transparency: ^2.0.2+4
+  date_picker_timeline: ^1.2.3
 
 dev_dependencies:
   change_app_package_name: ^1.1.0
