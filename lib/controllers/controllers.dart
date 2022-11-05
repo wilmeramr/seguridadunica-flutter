@@ -1,3 +1,5 @@
+export 'package:Unica/controllers/info_controller.dart';
+
 export 'package:Unica/controllers/reservas/treserva_controller.dart';
 
 export 'package:Unica/controllers/reservas/deportivas_controller.dart';

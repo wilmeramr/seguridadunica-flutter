@@ -234,6 +234,21 @@ class _DashScreenState extends State<DashScreen> {
               ContentType.failure);
         }
       }),
+      ItemBoton(
+          FontAwesomeIcons.info,
+          'Información',
+          Color.fromARGB(255, 118, 207, 45),
+          Color.fromARGB(255, 33, 54, 131), () async {
+        var conx = await authService.internetConnectivity();
+        if (conx) {
+          Navigator.pushNamed(context, 'inicioInformacion');
+        } else {
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tenga conexión  a internet",
+              ContentType.failure);
+        }
+      }),
     ];
 
     List<Widget> itemMap = items.map((item) {

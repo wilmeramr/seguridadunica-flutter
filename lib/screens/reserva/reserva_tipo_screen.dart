@@ -29,9 +29,7 @@ class ItemBotonReservaTipo {
 class ReservaTipoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: ScaffoldBodyReservaTipo(),
-    );
+    return ScaffoldBodyReservaTipo();
   }
 }
 
@@ -99,7 +97,7 @@ class _MainScroll extends StatelessWidget {
         SliverPersistentHeader(
             floating: true,
             delegate: _SliverCustomHeaderDelegate(
-                minHeight: 150,
+                minHeight: 250,
                 maxHeight: 160,
                 child: Container(
                     alignment: Alignment.centerLeft,

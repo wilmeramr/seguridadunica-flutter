@@ -1,5 +1,6 @@
-export 'package:Unica/screens/reserva/reserva_by_tipo_screen.dart';
+export 'package:Unica/screens/informacion/info_inicio_screen.dart';
 
+export 'package:Unica/screens/reserva/reserva_by_tipo_screen.dart';
 export 'package:Unica/screens/reserva/reserva_deportivas.dart';
 
 export 'package:Unica/screens/reserva/reserva_tipo_screen.dart';

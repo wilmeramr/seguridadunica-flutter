@@ -5,10 +5,13 @@ class User {
   final String email;
   final String rol;
   final String lote;
+  final int? loteId;
+  final int? countryId;
+
   final String country;
 
   User(this.id, this.name, this.apellido, this.email, this.rol, this.lote,
-      this.country);
+      this.country, this.loteId, this.countryId);
 
   User.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -17,7 +20,9 @@ class User {
         email = json['email'],
         rol = json['rol'],
         lote = json['lote'],
-        country = json['country'];
+        loteId = json['loteId'],
+        country = json['country'],
+        countryId = json['countryId'];
 
   Map<String, dynamic> toJson() => {
         'name': name,

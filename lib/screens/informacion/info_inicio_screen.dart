@@ -1,9 +1,7 @@
 import 'dart:async';
 
+import 'package:Unica/models/info_models.dart';
 import 'package:Unica/models/noticias_models.dart';
-import 'package:Unica/models/reserva_models.dart';
-import 'package:Unica/models/treserva_models.dart';
-import 'package:Unica/screens/reserva/CustomDialogBox.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -15,28 +13,24 @@ import '../../models/user.dart';
 import '../../services/services.dart';
 import '../../widgets/widgets.dart';
 
-late int agrs;
-
-class ReservaByTipoScreen extends StatelessWidget {
+class InfoInicioScreen extends StatelessWidget {
   // final notificacionCtrl = Get.find<NotificacionController>();
 
   @override
   Widget build(BuildContext context) {
-    agrs = ModalRoute.of(context)!.settings.arguments as int;
-
     final authService = Provider.of<AuthService>(context, listen: false);
     return Scaffold(
         body: Stack(children: [
       const Background(color2: Color(0xff6989F5), color1: Colors.white),
       _MainScroll(
         onNextPage: () async {
-          /*   final authService = Provider.of<AuthService>(context, listen: false);
+          /*     final authService = Provider.of<AuthService>(context, listen: false);
 
           var conx = await authService.internetConnectivity();
           if (conx) {
-            final reservaCtrl = Get.find<TReservaController>();
+            final notificacionCtrl = Get.find<NoticiaController>();
 
-            var result = await reservaCtrl.getTopreservaScroll();
+            var result = await notificacionCtrl.getTopNoticScroll();
             if (!result!.contains('Ok')) {
               NotificationsService.showSnackbar(
                   'Oh! ', result, ContentType.failure);
@@ -49,10 +43,10 @@ class ReservaByTipoScreen extends StatelessWidget {
           } */
         },
         onInitNoti: () async {
-          final reservaCtrl = Get.find<TReservaController>();
+          final infoCtrl = Get.find<InfoController>();
 
-          var result = await reservaCtrl.getTopTreserva(agrs);
-          if (!result!.contains('OK')) {
+          var result = await infoCtrl.getTopInfo();
+          if (!result!.contains('Ok')) {
             NotificationsService.showSnackbar(
                 'Oh! ', result, ContentType.failure);
           }
@@ -68,7 +62,7 @@ class ReservaByTipoScreen extends StatelessWidget {
                 return CircularProgressIndicator();
               }
 
-              if (snapshot.data!.rol.contains('Admm')) return _BotonNewList();
+              if (snapshot.data!.rol.contains('Adm')) return _BotonNewList();
               return Container();
             },
           ))
@@ -88,21 +82,20 @@ class _BotonNewList extends StatelessWidget {
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(topLeft: Radius.circular(50))),
         onPressed: () async {
-          Navigator.pushNamed(context, 'tipoReservas');
-          /*     final authService = Provider.of<AuthService>(context, listen: false);
+          final authService = Provider.of<AuthService>(context, listen: false);
 
           var conx = await authService.internetConnectivity();
           if (conx) {
-            Navigator.pushNamed(context, 'enviarReserva');
+            Navigator.pushNamed(context, 'enviarNoticia');
           } else {
             NotificationsService.showSnackbar(
                 'Oh!',
                 "Debe asegurarse que el dipositivo tenga conexión a internet",
                 ContentType.failure);
-          } */
+          }
         },
         child: const Text(
-          'CREAR UNA RESERVA',
+          'CREAR UNA INFORMACÍON',
           style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -127,9 +120,7 @@ class _MainScroll extends StatefulWidget {
 
 class _MainScrollState extends State<_MainScroll> {
   final ScrollController scrollController = ScrollController();
-  final treservaCtrl = Get.put(TReservaController());
-  final deportivasCtrl = Get.put(DeportivasController());
-
+  final infoCtrl = Get.put(InfoController());
   Timer? _timer;
   int _start = 5;
 
@@ -165,7 +156,7 @@ class _MainScrollState extends State<_MainScroll> {
         // print(scrollController.position.pixels);
         //print(scrollController.position.maxScrollExtent);
 
-        // widget.onNextPage();
+        widget.onNextPage();
       }
       ;
     });
@@ -184,7 +175,7 @@ class _MainScrollState extends State<_MainScroll> {
 
   @override
   Widget build(BuildContext context) {
-    final treservaCtrl = Get.find<TReservaController>();
+    final infoCtrl = Get.find<InfoController>();
 
     return RefreshIndicator(
       edgeOffset: 130,
@@ -193,8 +184,8 @@ class _MainScrollState extends State<_MainScroll> {
 
         var conx = await authService.internetConnectivity();
         if (conx) {
-          var result = await treservaCtrl.getTopTreserva(agrs);
-          if (!result!.contains('OK')) {
+          var result = await infoCtrl.getTopInfo();
+          if (!result!.contains('Ok')) {
             NotificationsService.showSnackbar(
                 'Oh!', "$result", ContentType.failure);
           }
@@ -219,7 +210,7 @@ class _MainScrollState extends State<_MainScroll> {
                           alignment: Alignment.centerLeft,
                           color: Colors.white,
                           child: _Titulo()))),
-              treservaCtrl.data.isEmpty && _start > 0
+              infoCtrl.data.isEmpty && _start > 0
                   ? SliverList(
                       delegate: SliverChildListDelegate([
                       const LinearProgressIndicator(
@@ -232,10 +223,8 @@ class _MainScrollState extends State<_MainScroll> {
                     ]))
                   : SliverList(
                       delegate: SliverChildListDelegate([
-                      ...treservaCtrl.data
-                          .map((e) => _ListItem(treserva: e))
-                          .toList(),
-                      treservaCtrl.isLoading.value
+                      ...infoCtrl.data.map((e) => _ListItem(info: e)).toList(),
+                      infoCtrl.isLoading.value
                           ? const CircularProgressIndicator(
                               color: Colors.red,
                             )
@@ -292,15 +281,14 @@ class _Titulo extends StatelessWidget {
           child: Container(
             color: Colors.white,
             //  margin: EdgeInsets.only(top: 200),
-
             child: Hero(
-              tag: const Text('Reservas'),
+              tag: const Text('Noticias'),
               child: BotonGordoNoti(
-                iconL: FontAwesomeIcons.solidRegistered,
+                iconL: FontAwesomeIcons.bell,
                 iconR: FontAwesomeIcons.chevronLeft,
-                texto: 'Reservas',
-                color1: const Color.fromARGB(255, 45, 199, 207),
-                color2: const Color.fromARGB(255, 33, 54, 131),
+                texto: 'Noticias',
+                color1: const Color.fromARGB(255, 31, 226, 44),
+                color2: const Color.fromARGB(255, 169, 228, 68),
                 onPress: () {
                   Navigator.of(context).pop();
                 },
@@ -314,9 +302,9 @@ class _Titulo extends StatelessWidget {
 }
 
 class _ListItem extends StatelessWidget {
-  final TipoReserva treserva;
+  final InfoUtil info;
 
-  const _ListItem({required this.treserva});
+  const _ListItem({required this.info});
 
   @override
   Widget build(BuildContext context) {
@@ -324,73 +312,24 @@ class _ListItem extends StatelessWidget {
       GestureDetector(
           onTap: () {},
           child: Container(
-            margin: const EdgeInsets.all(10),
+            margin: EdgeInsets.all(10),
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(15)),
             child: Column(
               children: [
-                /*    _NotificacionStatus(
-                  reserva: reserva,
-                  onPressedCancelar: () async {
-                    final authService =
-                        Provider.of<AuthService>(context, listen: false);
-
-                    var conx = await authService.internetConnectivity();
-                    if (conx) {
-                      final reservaCtrl = Get.find<ReservaController>();
-
-                      var result = await reservaCtrl.deleteReserva(reserva.id);
-                      if (!result.contains('OK')) {
-                        NotificationsService.showSnackbar(
-                            'Oh! ', result, ContentType.failure);
-                      }
-                    } else {
-                      NotificationsService.showSnackbar(
-                          'Oh!',
-                          "Debe asegurarse que el dipositivo tenga conexión  a internet",
-                          ContentType.failure);
-                    }
-                  },
-                ), */
-                /*   const Divider(),
-                const SizedBox(
-                  height: 10,
+                /*   _NotificacionStatus(info),
+                const Divider(), */
+                _NotificacionTitulo(
+                  info,
                 ),
-                 _NotificacionTitulo(
-                  reserva,
-                ), */
                 const SizedBox(
-                  height: 10,
+                  height: 2,
                 ),
                 _NotificacionBody(
-                  treserva,
-                  () async {
-                    final authService =
-                        Provider.of<AuthService>(context, listen: false);
-
-                    var conx = await authService.internetConnectivity();
-                    if (conx) {
-                      final reservaCtrl = Get.find<TReservaController>();
-                      final deportivaCtrl = Get.put(DeportivasController());
-
-                      Navigator.pushNamed(context, 'reservasDeportivas',
-                          arguments: treserva);
-                      deportivaCtrl.tipoReservaSelected = treserva;
-                      //   var result = await reservaCtrl.deleteReserva(treserva.id);
-                      /*   if (!result.contains('OK')) {
-                        NotificationsService.showSnackbar(
-                            'Oh! ', result, ContentType.failure);
-                      } */
-                    } else {
-                      NotificationsService.showSnackbar(
-                          'Oh!',
-                          "Debe asegurarse que el dipositivo tenga conexión  a internet",
-                          ContentType.failure);
-                    }
-                  },
+                  info,
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 2,
                 )
               ],
             ),
@@ -400,17 +339,12 @@ class _ListItem extends StatelessWidget {
 }
 
 class _NotificacionStatus extends StatelessWidget {
-  final Reserva reserva;
-  final Function onPressedCancelar;
+  final InfoUtil info;
 
-  const _NotificacionStatus(
-      {required this.reserva, required this.onPressedCancelar});
+  const _NotificacionStatus(this.info);
+
   @override
   Widget build(BuildContext context) {
-    final reservaCtrl = Get.find<ReservaController>();
-
-    DateTime now = DateTime.now();
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -421,21 +355,8 @@ class _NotificacionStatus extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: Row(
             children: [
-              reserva.fecha.isAfter(now.add(const Duration(days: -1)))
-                  ? Obx(() => reservaCtrl.isSaving.value
-                      ? const CircularProgressIndicator()
-                      : ElevatedButton(
-                          onPressed: () => onPressedCancelar(),
-                          child: const Text('Cancelar'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                          )))
-                  : const Text(''),
-              const SizedBox(
-                width: 5,
-              ),
               Text(
-                  'Fecha de Reservación: ${reserva.fecha.day.toString().padLeft(2, '0')}/${reserva.fecha.month.toString().padLeft(2, '0')}/${reserva.fecha.year.toString().padLeft(4, '0')}')
+                  'Fecha de envío: ${info.updatedAt.day.toString().padLeft(2, '0')}/${info.updatedAt.month.toString().padLeft(2, '0')}/${info.updatedAt.year.toString().padLeft(4, '0')}')
             ],
           ),
         )
@@ -445,40 +366,38 @@ class _NotificacionStatus extends StatelessWidget {
 }
 
 class _NotificacionBody extends StatelessWidget {
-  final TipoReserva treserva;
-  final Function onPressedCancelar;
+  final InfoUtil info;
 
-  const _NotificacionBody(this.treserva, this.onPressedCancelar);
+  const _NotificacionBody(this.info);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onPressedCancelar(),
-      child: Container(
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-          child: Text(
-            treserva.description,
-            style: TextStyle(fontSize: 20),
-          )),
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      child: ExpandedText(
+        maxLines: 100,
+        minLines: 3,
+        text: info.body,
+      ),
     );
   }
 }
 
 class _NotificacionTitulo extends StatelessWidget {
-  final Reserva reserva;
+  final InfoUtil info;
 
-  const _NotificacionTitulo(this.reserva);
+  const _NotificacionTitulo(this.info);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 1, left: 30, right: 30),
+      padding: const EdgeInsets.only(top: 10),
       child: Text(
-        reserva.description + ' - ' + reserva.ubicacion,
+        info.titulo,
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
     );
