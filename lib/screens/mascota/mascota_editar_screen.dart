@@ -177,8 +177,10 @@ class _MascotaScreenBody extends StatelessWidget {
                         }
 
                         if (!result.contains('error')) {
-                          Navigator.pop(context);
+                          NotificationsService.showSnackbar('OK!',
+                              "Se guarado correctamente.", ContentType.success);
                         }
+                        ;
                       } else
                         NotificationsService.showSnackbar(
                             'Oh!',

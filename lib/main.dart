@@ -13,9 +13,13 @@ import 'package:Unica/services/push_notifications_service.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:upgrader/upgrader.dart';
 
 import 'controllers/controllers.dart';
 import 'screens/home_screen.dart';
+
+RouteObserver<ModalRoute<void>> routerObserver =
+    RouteObserver<ModalRoute<void>>();
 
 void main() async {
   /*  FlutterError.onError = (details) {
@@ -114,8 +118,10 @@ class _MyAppState extends State<MyApp> {
       initialRoute: "checking",
       navigatorKey: NotificationsService.navigatorKey,
       scaffoldMessengerKey: NotificationsService.messengerKey,
+      navigatorObservers: [routerObserver],
       routes: {
         'login': (_) => LoginScreen(),
+        'version': (_) => VersionScreen(),
         'register': (_) => RegisterScreen(),
         'home': (_) => HomeScreen(),
         'product': (_) => ProductScreen(),
@@ -147,6 +153,7 @@ class _MyAppState extends State<MyApp> {
         'tipobyReservas': (_) => ReservaByTipoScreen(),
         'reservasDeportivas': (_) => ReservaDeportivas(),
         'inicioInformacion': (_) => InfoInicioScreen(),
+        'enviarInformacion': (_) => EnviarInfoScreen(),
       },
       theme: ThemeData.light().copyWith(
           scaffoldBackgroundColor: Colors.grey[300],

@@ -58,6 +58,7 @@ class MascotaController extends GetxController {
       if (jsonResponse.containsKey('data')) {
         // final Map<String, dynamic> decodeResp = json.decode(response.body);
         var masc = MascotasResponse.fromMap(jsonResponse);
+
         data.clear();
         data.addAll(masc.data);
         _last_page = masc.lastPage.obs;
@@ -85,8 +86,9 @@ class MascotaController extends GetxController {
                 await _getJsonData('${_baseUrlVersion}/mascota', _page.value))
             as Map<String, dynamic>;
         if (jsonResponse.containsKey('data')) {
-          var aut = MascotasResponse.fromMap(jsonResponse);
-          data.value = [...data, ...aut.data];
+          var masc = MascotasResponse.fromMap(jsonResponse);
+
+          data.value = [...data, ...masc.data];
           isLoading.value = false;
           return 'Ok';
         } else {
@@ -170,7 +172,8 @@ class MascotaController extends GetxController {
   }
 
   Future<bool> checkUrl(String urlv) async {
-    final url = Uri(path: urlv);
+    final url = Uri.parse(urlv);
+
     try {
       final response = await http.get(url).timeout(const Duration(seconds: 10));
 

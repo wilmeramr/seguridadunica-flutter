@@ -219,6 +219,7 @@ class DeportivasController extends GetxController {
       var user = await storage.read(key: 'user') ?? '';
       var userDto = User.fromJson(jsonDecode(user) as Map<String, dynamic>);
       print(userDto.loteId);
+      print(hor.lote);
 
       if (hor.noHabilitado == 1 && hor.lote != userDto.loteId) {
         return 'Esta reserva pertenece a otro usuarios';
@@ -250,7 +251,7 @@ class DeportivasController extends GetxController {
         dataHorarios.value = dataHorarios.map((element) {
           if (element.id == hor.id) {
             element.noHabilitado = hor.noHabilitado == 1 ? 0 : 1;
-            element.lote = 1;
+            element.lote = userDto.loteId!;
             return element;
           }
           return element;

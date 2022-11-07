@@ -63,8 +63,9 @@ class ReservaInicioScreen extends StatelessWidget {
                 return CircularProgressIndicator();
               }
 
-              if (snapshot.data!.rol.contains('Adm')) return _BotonNewList();
-              return Container();
+              //  if (snapshot.data!.rol.contains('Adm'))
+              return _BotonNewList();
+              //return Container();
             },
           ))
     ]));

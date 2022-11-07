@@ -294,7 +294,7 @@ class _DatePicker extends StatelessWidget {
         color: Colors.white24,
         child: DatePicker(DateTime.now(),
             width: 60,
-            height: 80,
+            height: 81,
             locale: 'es_AR',
             initialSelectedDate: DateTime.now(),
             selectionColor: Colors.black,

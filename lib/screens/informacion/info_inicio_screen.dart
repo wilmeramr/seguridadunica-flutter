@@ -86,7 +86,7 @@ class _BotonNewList extends StatelessWidget {
 
           var conx = await authService.internetConnectivity();
           if (conx) {
-            Navigator.pushNamed(context, 'enviarNoticia');
+            Navigator.pushNamed(context, 'enviarInformacion');
           } else {
             NotificationsService.showSnackbar(
                 'Oh!',
@@ -282,13 +282,13 @@ class _Titulo extends StatelessWidget {
             color: Colors.white,
             //  margin: EdgeInsets.only(top: 200),
             child: Hero(
-              tag: const Text('Noticias'),
+              tag: const Text('Información'),
               child: BotonGordoNoti(
-                iconL: FontAwesomeIcons.bell,
+                iconL: FontAwesomeIcons.info,
                 iconR: FontAwesomeIcons.chevronLeft,
-                texto: 'Noticias',
-                color1: const Color.fromARGB(255, 31, 226, 44),
-                color2: const Color.fromARGB(255, 169, 228, 68),
+                texto: 'Información',
+                color1: const Color.fromARGB(255, 118, 207, 45),
+                color2: const Color.fromARGB(255, 33, 54, 131),
                 onPress: () {
                   Navigator.of(context).pop();
                 },

@@ -77,6 +77,8 @@ class NotificacionController extends GetxController {
     try {
       var body = await _getJsonData('${_baseUrlVersion}/notificacion');
       var jsonResponse = jsonDecode(body) as Map<String, dynamic>;
+
+      print(body);
       if (jsonResponse.containsKey('data')) {
         // final Map<String, dynamic> decodeResp = json.decode(response.body);
         var aut = NotificacionesResponse.fromMap(jsonResponse);

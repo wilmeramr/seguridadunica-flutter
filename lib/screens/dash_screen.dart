@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:Unica/main.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -8,7 +11,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:upgrader/upgrader.dart';
-
+import 'package:new_version/new_version.dart';
 import '../controllers/controllers.dart';
 import '../models/user.dart';
 import '../services/auth_service.dart';
@@ -29,53 +32,42 @@ class DashScreen extends StatefulWidget {
   State<DashScreen> createState() => _DashScreenState();
 }
 
-class _DashScreenState extends State<DashScreen> {
+class _DashScreenState extends State<DashScreen> with RouteAware {
   String _authStatus = 'Unknown';
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    routerObserver.subscribe(this, ModalRoute.of(context)!);
+  }
 
   @override
   void initState() {
     super.initState();
-    //initPlugin();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlugin() async {
-    final TrackingStatus status =
-        await AppTrackingTransparency.trackingAuthorizationStatus;
-    setState(() => _authStatus = '$status');
-    // If the system can show an authorization request dialog
-    if (status == TrackingStatus.notDetermined) {
-      // Show a custom explainer dialog before the system dialog
-      await showCustomTrackingDialog(context);
-      // Wait for dialog popping animation
-      await Future.delayed(const Duration(milliseconds: 200));
-      // Request system's tracking authorization dialog
-      final TrackingStatus status =
-          await AppTrackingTransparency.requestTrackingAuthorization();
-      setState(() => _authStatus = '$status');
-    }
-
-    final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
-    print("UUID: $uuid");
+  basicStatusCheck(NewVersion newVersion) {
+    newVersion.showAlertIfNecessary(context: context);
   }
 
-  Future<void> showCustomTrackingDialog(BuildContext context) async =>
-      await showDialog<void>(
+  advancedStatusCheck(NewVersion newVersion) async {
+    final status = await newVersion.getVersionStatus();
+    print(status);
+    if (status != null) {
+      debugPrint(status.releaseNotes);
+      debugPrint(status.appStoreLink);
+      debugPrint(status.localVersion);
+      debugPrint(status.storeVersion);
+      debugPrint(status.canUpdate.toString());
+      newVersion.showUpdateDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Querido usuario'),
-          content: const Text(
-              'Nos preocupamos por su privacidad y seguridad de los datos.'
-              'Podemos seguir usando tus datos para mejorar nuestra app para ti? \n\nPuedes cambiar tu elección en cualquier momento en la configuración de la aplicación. '
-              'Nuestros socios recopilarán datos y utilizarán un identificador único en su dispositivo.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Continuar'),
-            ),
-          ],
-        ),
+        versionStatus: status,
+        dialogTitle: 'Custom Title',
+        dialogText: 'Custom Text',
       );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -317,6 +309,19 @@ class _DashScreenState extends State<DashScreen> {
         ],
       ),
     );
+  }
+
+  @override
+  void didPushNext() async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+
+    // TODO: implement didPush
+    final ver = await authService.getVersionApp();
+    if (ver != null) {
+      if (GlobalKeyService.appVersionAndoid < ver!['android']) {
+        Navigator.pushReplacementNamed(context, 'version');
+      }
+    }
   }
 }
 

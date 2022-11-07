@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:Unica/models/version_models.dart';
 import 'package:Unica/services/globalkey_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,32 @@ class AuthService extends ChangeNotifier {
   final String _baseUrlVersion = GlobalKeyService.urlVersion;
 
   final storage = new FlutterSecureStorage();
+
+  Future<Map<String, dynamic>?> getVersionApp() async {
+    try {
+      String token = await storage.read(key: 'token') ?? '';
+
+      Map<String, String> requestHeaders = {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token}'
+      };
+      final url =
+          Uri.https(_baseUrl, '${_baseUrlVersion}/version', {'app': 'unica'});
+      final response = await http
+          .get(url, headers: requestHeaders)
+          .timeout(const Duration(seconds: 10));
+      var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
+      print(response.body);
+      if (jsonResponse.containsKey('data')) {
+        // final Map<String, dynamic> decodeResp = json.decode(response.body);
+        //  var ver = VersionResponse.fromJson(response.body);
+
+        // print(aut);
+        return jsonResponse['data'];
+      }
+    } catch (e) {}
+  }
 
   Future<String?> createUser(String email, String password) async {
     final Map<String, dynamic> auhtData = {

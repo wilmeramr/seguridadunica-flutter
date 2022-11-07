@@ -81,20 +81,20 @@ class InfoController extends GetxController {
     }
   }
 
-  Future<String> registroNoticia() async {
+  Future<String> registroInfo() async {
     try {
       String token = await storage.read(key: 'token') ?? '';
 
       final Map<String, dynamic> auhtData = {
-        'titulo': '$titulo',
-        'body': '$body'
+        'info_titulo': '$titulo',
+        'info_body': '$body'
       };
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer ${token}'
       };
-      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/noticias');
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/info');
       isSaving.value = true;
       final response = await http
           .post(url, headers: requestHeaders, body: json.encode(auhtData))

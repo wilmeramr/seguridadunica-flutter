@@ -9,19 +9,19 @@ import 'package:provider/provider.dart';
 import '../../services/services.dart';
 import '../../ui/input_decorations.dart';
 
-class EnviarNoticiaScreen extends StatelessWidget {
+class EnviarInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final infoCtrl = Get.put(InfoController());
 
-    return ScaffoldBodyNoticia();
+    return ScaffoldBodyInfo();
   }
 }
 
-class ScaffoldBodyNoticia extends StatelessWidget {
+class ScaffoldBodyInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final noticiaCtrl = Get.find<NoticiaController>();
+    final infoCtrl = Get.find<InfoController>();
     final size = MediaQuery.of(context).size;
     return Scaffold(
         body: Stack(
@@ -40,13 +40,13 @@ class ScaffoldBodyNoticia extends StatelessWidget {
                 shape: const RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.only(topLeft: Radius.circular(50))),
-                child: noticiaCtrl.isSaving.value
+                child: infoCtrl.isSaving.value
                     ? const CircularProgressIndicator(
                         color: Colors.white,
                       )
                     : const Text('GUARDAR',
                         style: TextStyle(color: Colors.white)),
-                onPressed: noticiaCtrl.isSaving.value
+                onPressed: infoCtrl.isSaving.value
                     ? () {}
                     : () async {
                         final authService =
@@ -54,21 +54,23 @@ class ScaffoldBodyNoticia extends StatelessWidget {
 
                         var conx = await authService.internetConnectivity();
                         if (conx) {
-                          if (!noticiaCtrl.isValidForm()) return;
+                          if (!infoCtrl.isValidForm()) return;
 
-                          noticiaCtrl.isSaving.value = true;
-                          var result = await noticiaCtrl.registroNoticia();
+                          infoCtrl.isSaving.value = true;
+                          var result = await infoCtrl.registroInfo();
 
                           if (result == 'OK') {
-                            NotificationsService.showSnackbar('Noticia',
-                                "La noticia fue enviada.", ContentType.success);
+                            NotificationsService.showSnackbar(
+                                'Informacíon',
+                                "La informacíon fue enviada.",
+                                ContentType.success);
                           } else {
                             NotificationsService.showSnackbar(
                                 'Oh! ',
-                                "La noticia no fue enviada, $result",
+                                "La informacíon no fue enviada, $result",
                                 ContentType.failure);
                           }
-                          noticiaCtrl.isSaving.value = false;
+                          infoCtrl.isSaving.value = false;
                         } else {
                           NotificationsService.showSnackbar(
                               'Oh! Conexión a intenet',
@@ -88,7 +90,7 @@ class _MainScroll extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final noticiaCtrl = Get.find<NoticiaController>();
+    final infoCtrl = Get.find<InfoController>();
 
     return CustomScrollView(
       slivers: [
@@ -112,7 +114,7 @@ class _MainScroll extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               decoration: _buildDecoration(),
               child: Form(
-                key: noticiaCtrl.formKey,
+                key: infoCtrl.formKey,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Column(
                   children: [
@@ -125,10 +127,10 @@ class _MainScroll extends StatelessWidget {
                         }
                       },
                       onChanged: (value) {
-                        noticiaCtrl.titulo.value = value;
+                        infoCtrl.titulo.value = value;
                       },
                       decoration: InputDecorations.authInputDecoration(
-                          hintText: 'Título de la noticia',
+                          hintText: 'Título de la Informacíon',
                           labelText: 'Título'),
                     ),
                     TextFormField(
@@ -137,15 +139,15 @@ class _MainScroll extends StatelessWidget {
                       maxLength: 1500,
                       validator: (value) {
                         if (value == null || value.length < 1) {
-                          return 'El cuerpo de la noticia es obligatorio';
+                          return 'El cuerpo de la infomacíon es obligatorio';
                         }
                       },
                       onChanged: (value) {
-                        noticiaCtrl.body.value = value;
+                        infoCtrl.body.value = value;
                       },
                       decoration: InputDecorations.authInputDecoration(
-                          hintText: 'Cuerpo de la noticia',
-                          labelText: 'Noticia'),
+                          hintText: 'Cuerpo de la infomacíon',
+                          labelText: 'Infomacíon'),
                     ),
                     const SizedBox(
                       height: 60,
@@ -204,15 +206,16 @@ class _Titulo extends StatelessWidget {
               color: Colors.white,
               //  margin: EdgeInsets.only(top: 200),
               child: Hero(
-                tag: const Text('Noticias'),
+                tag: const Text('Información'),
                 child: BotonGordoNoti(
-                  iconL: FontAwesomeIcons.bell,
-                  iconR: FontAwesomeIcons.chevronLeft,
-                  texto: 'Noticias',
-                  color1: const Color.fromARGB(255, 31, 226, 44),
-                  color2: const Color.fromARGB(255, 169, 228, 68),
-                  onPress: () => Navigator.of(context).pop(),
-                ),
+                    iconL: FontAwesomeIcons.info,
+                    iconR: FontAwesomeIcons.chevronLeft,
+                    texto: 'Información',
+                    color1: const Color.fromARGB(255, 118, 207, 45),
+                    color2: const Color.fromARGB(255, 33, 54, 131),
+                    onPress: () {
+                      Navigator.of(context).pop();
+                    }),
               )),
         ),
       ],

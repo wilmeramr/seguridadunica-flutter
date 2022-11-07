@@ -5,6 +5,7 @@ import 'package:Unica/screens/screens.dart';
 import 'package:Unica/services/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:upgrader/upgrader.dart';
 
 import '../controllers/controllers.dart';
 

@@ -166,7 +166,6 @@ class _BackgroundImage extends StatelessWidget {
   final Mascota _mascota;
   final MascotaController ctrl;
   _BackgroundImage(this._mascota, MascotaController this.ctrl);
-
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -177,7 +176,10 @@ class _BackgroundImage extends StatelessWidget {
         child: _mascota.mascUrlFoto != null
             ? FadeInImage(
                 placeholder: AssetImage('assets/jar-loading.gif'),
-                image: CachedNetworkImageProvider(_mascota.mascUrlFoto!),
+                image: CachedNetworkImageProvider(
+                  _mascota.mascUrlFoto!,
+                  errorListener: () => print('hola'),
+                ),
                 fit: BoxFit.cover,
                 imageErrorBuilder: (context, error, stackTrace) {
                   return Image.asset('assets/no-image.png', fit: BoxFit.cover);

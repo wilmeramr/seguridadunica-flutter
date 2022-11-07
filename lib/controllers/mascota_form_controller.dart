@@ -130,7 +130,7 @@ class MascotaFormController extends GetxController {
       }
       this.newPictureFile = null;
       final decodeData = json.decode(resp.body);
-
+      print(decodeData['link']);
       return decodeData['link'];
     } on TimeoutException catch (e) {
       return 'Error de conexcion';

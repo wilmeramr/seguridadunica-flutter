@@ -1,3 +1,4 @@
+import 'package:Unica/services/globalkey_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -78,8 +79,8 @@ class IconHeader extends StatelessWidget {
             width: 200,
             image: image,
           ),
-          const Text(
-            'Versión: 1.1.4 ',
+          Text(
+            '${GlobalKeyService.headerVersion}',
             style: TextStyle(color: Colors.white),
           )
         ],
