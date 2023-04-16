@@ -21,7 +21,17 @@ class AuthService extends ChangeNotifier {
   Future<Map<String, dynamic>?> getVersionApp() async {
     try {
       String token = await storage.read(key: 'token') ?? '';
+      String versiones = await storage.read(key: 'version') ?? '';
 
+      if (versiones != '') {
+        var ver = jsonDecode(versiones) as Map<String, dynamic>;
+        var data = ver['data'];
+        if (!DateTime.parse(data['fecha']).isBefore(DateTime.now())) {
+          return data;
+        } else {
+          await storage.delete(key: 'version');
+        }
+      }
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
@@ -39,6 +49,7 @@ class AuthService extends ChangeNotifier {
         //  var ver = VersionResponse.fromJson(response.body);
 
         // print(aut);
+        await storage.write(key: 'version', value: response.body);
         return jsonResponse['data'];
       }
     } catch (e) {}

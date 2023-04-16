@@ -152,13 +152,13 @@ class _DashScreenState extends State<DashScreen> with RouteAware {
         }
       }),
       ItemBoton(
-          FontAwesomeIcons.paw,
-          'Mascotas',
-          const Color.fromARGB(255, 223, 181, 42),
-          const Color.fromARGB(255, 208, 58, 130), () async {
+          FontAwesomeIcons.box,
+          'Paqueteria / Mercado Libre',
+          Color.fromARGB(255, 2, 6, 244),
+          Color.fromARGB(255, 246, 218, 12), () async {
         var conx = await authService.internetConnectivity();
         if (conx) {
-          Navigator.pushNamed(context, 'mascotaInicio');
+          Navigator.pushNamed(context, 'paqueteInicio');
         } else {
           NotificationsService.showSnackbar(
               'Oh!',
@@ -174,21 +174,6 @@ class _DashScreenState extends State<DashScreen> with RouteAware {
         var conx = await authService.internetConnectivity();
         if (conx) {
           Navigator.pushNamed(context, 'eventoInicio');
-        } else {
-          NotificationsService.showSnackbar(
-              'Oh!',
-              "Debe asegurarse que el dipositivo tenga conexión  a internet",
-              ContentType.failure);
-        }
-      }),
-      ItemBoton(
-          FontAwesomeIcons.ruler,
-          'Reglemantos',
-          Color.fromARGB(255, 207, 172, 45),
-          const Color.fromARGB(255, 39, 142, 108), () async {
-        var conx = await authService.internetConnectivity();
-        if (conx) {
-          Navigator.pushNamed(context, 'inicioReglamento');
         } else {
           NotificationsService.showSnackbar(
               'Oh!',
@@ -219,6 +204,36 @@ class _DashScreenState extends State<DashScreen> with RouteAware {
         var conx = await authService.internetConnectivity();
         if (conx) {
           Navigator.pushNamed(context, 'inicioReservas');
+        } else {
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tenga conexión  a internet",
+              ContentType.failure);
+        }
+      }),
+      ItemBoton(
+          FontAwesomeIcons.ruler,
+          'Reglemantos',
+          Color.fromARGB(255, 207, 172, 45),
+          const Color.fromARGB(255, 39, 142, 108), () async {
+        var conx = await authService.internetConnectivity();
+        if (conx) {
+          Navigator.pushNamed(context, 'inicioReglamento');
+        } else {
+          NotificationsService.showSnackbar(
+              'Oh!',
+              "Debe asegurarse que el dipositivo tenga conexión  a internet",
+              ContentType.failure);
+        }
+      }),
+      ItemBoton(
+          FontAwesomeIcons.paw,
+          'Mascotas',
+          const Color.fromARGB(255, 223, 181, 42),
+          const Color.fromARGB(255, 208, 58, 130), () async {
+        var conx = await authService.internetConnectivity();
+        if (conx) {
+          Navigator.pushNamed(context, 'mascotaInicio');
         } else {
           NotificationsService.showSnackbar(
               'Oh!',
