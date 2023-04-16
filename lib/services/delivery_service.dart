@@ -31,9 +31,9 @@ class DeliveryService with ChangeNotifier {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
     };
-    final url = Uri.https(_baseUrl, endpoint, {'page': '$page'});
+    final url = Uri.https(
+        _baseUrl, endpoint, {'page': '$page', 'Authorization': token});
     final response = await http
         .get(url, headers: requestHeaders)
         .timeout(const Duration(seconds: 10));
@@ -130,12 +130,12 @@ class DeliveryService with ChangeNotifier {
             '${hasta.year}${hasta.month.toString().padLeft(2, '0')}${hasta.day.toString().padLeft(2, '0')}',
         'aut_lunes': valueVigencia,
         'aut_nombre': autorizoA,
-        'aut_email': email
+        'aut_email': email,
+        'Authorization': token
       };
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
       final url = Uri.http(_baseUrl, '/api/autorizacion');
       final response = await http

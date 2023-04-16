@@ -29,9 +29,9 @@ class AutService with ChangeNotifier {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
     };
-    final url = Uri.https(_baseUrl, endpoint, {'page': '$page'});
+    final url = Uri.https(
+        _baseUrl, endpoint, {'page': '$page', 'Authorization': token});
     final response = await http
         .get(url, headers: requestHeaders)
         .timeout(const Duration(seconds: 10));
@@ -122,12 +122,12 @@ class AutService with ChangeNotifier {
             '${desde.year}${desde.month.toString().padLeft(2, '0')}${desde.day.toString().padLeft(2, '0')}',
         'aut_hasta':
             '${hasta.year}${hasta.month.toString().padLeft(2, '0')}${hasta.day.toString().padLeft(2, '0')}',
-        'aut_comentario': comentarios == null ? null : '$comentarios'
+        'aut_comentario': comentarios == null ? null : '$comentarios',
+        'Authorization': token
       };
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
       final url = Uri.https(_baseUrl, '${_baseUrlVersion}/autorizacion');
       final response = await http

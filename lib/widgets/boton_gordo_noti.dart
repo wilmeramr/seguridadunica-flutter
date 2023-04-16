@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -46,7 +46,7 @@ class BotonGordoNoti extends StatelessWidget {
                 size: 40,
               ),
               Obx(() => badgeCtrl.badge.value > 0
-                  ? Badge(
+                  ? badges.Badge(
                       badgeContent: Text('${badgeCtrl.badge.value}'),
                     )
                   : Text('')),

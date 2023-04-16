@@ -61,10 +61,10 @@ class NotificacionController extends GetxController {
 
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
+      'Accept': 'application/json'
     };
-    final url = Uri.https(_baseUrl, endpoint, {'page': '$page'});
+    final url = Uri.https(
+        _baseUrl, endpoint, {'page': '$page', 'Authorization': token});
     final response = await http
         .get(url, headers: requestHeaders)
         .timeout(const Duration(seconds: 10));
@@ -149,12 +149,12 @@ class NotificacionController extends GetxController {
         'to': enviaA.isFalse ? 'T' : 'L',
         'to_user': userIdSelected.value.usrId.toString(),
         'titulo': '$titulo',
-        'body': '$body'
+        'body': '$body',
+        'Authorization': token
       };
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
+        'Accept': 'application/json'
       };
       final url = Uri.https(_baseUrl, '${_baseUrlVersion}/notificacion');
       isSaving.value = true;

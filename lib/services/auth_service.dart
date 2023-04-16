@@ -25,10 +25,9 @@ class AuthService extends ChangeNotifier {
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
-      final url =
-          Uri.https(_baseUrl, '${_baseUrlVersion}/version', {'app': 'unica'});
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/version',
+          {'app': 'unica', 'Authorization': token});
       final response = await http
           .get(url, headers: requestHeaders)
           .timeout(const Duration(seconds: 10));
@@ -201,13 +200,13 @@ class AuthService extends ChangeNotifier {
       print(deviceToken);
 
       final Map<String, dynamic> auhtData = {
-        'token_device': up ? deviceToken : 'x'
+        'token_device': up ? deviceToken : 'x',
+        'Authorization': token
       };
 
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
       try {
         final url = Uri.https(_baseUrl, '${_baseUrlVersion}/device');
