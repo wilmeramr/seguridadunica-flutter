@@ -1,13 +1,9 @@
+export 'package:Unica/controllers/paquete_controller.dart';
 export 'package:Unica/controllers/info_controller.dart';
-
 export 'package:Unica/controllers/reservas/treserva_controller.dart';
-
 export 'package:Unica/controllers/reservas/deportivas_controller.dart';
-
 export 'package:Unica/controllers/reserva_controller.dart';
-
 export 'package:Unica/controllers/expensa_controller.dart';
-
 export 'package:Unica/controllers/doc_controller.dart';
 export 'package:Unica/controllers/noticia_controller.dart';
 export 'package:Unica/controllers/delivery_controller.dart';

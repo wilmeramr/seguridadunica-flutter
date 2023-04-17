@@ -38,10 +38,10 @@ class ExpensaController extends GetxController {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
     };
 
-    final url = Uri.https(_baseUrl, endpoint, {'page': '$page'});
+    final url = Uri.https(
+        _baseUrl, endpoint, {'page': '$page', 'Authorization': token});
     final response = await http
         .get(url, headers: requestHeaders)
         .timeout(const Duration(seconds: 10));

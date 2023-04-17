@@ -35,9 +35,9 @@ class ServicioService with ChangeNotifier {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
     };
-    final url = Uri.https(_baseUrl, endpoint, {'page': '$page'});
+    final url = Uri.https(
+        _baseUrl, endpoint, {'page': '$page', 'Authorization': token});
     final response = await http
         .get(url, headers: requestHeaders)
         .timeout(const Duration(seconds: 10));
@@ -154,11 +154,11 @@ class ServicioService with ChangeNotifier {
             ? '${timeRanges[6].startTime.to24hours()} - ${timeRanges[6].endTime.to24hours()}'
             : '00:00 - 00:00',
         'aut_comentario': comentarios == null ? null : '$comentarios',
+        'Authorization': token
       };
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
+        'Accept': 'application/json'
       };
       final url = Uri.https(_baseUrl, '${_baseUrlVersion}/autorizacion');
       final response = await http
@@ -194,9 +194,9 @@ class ServicioService with ChangeNotifier {
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
-      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/servicio/tipos');
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/servicio/tipos',
+          {'Authorization': token});
       final response = await http
           .get(url, headers: requestHeaders)
           .timeout(const Duration(seconds: 10));

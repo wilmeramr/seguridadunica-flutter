@@ -1,9 +1,8 @@
+export 'package:Unica/screens/paquete/paquete_detalles_screen.dart';
+export 'package:Unica/screens/paquete/paquete_inicio_screen.dart';
 export 'package:Unica/screens/version_screen.dart';
-
 export 'package:Unica/screens/informacion/enviar_info_screen.dart';
-
 export 'package:Unica/screens/informacion/info_inicio_screen.dart';
-
 export 'package:Unica/screens/reserva/reserva_by_tipo_screen.dart';
 export 'package:Unica/screens/reserva/reserva_deportivas.dart';
 export 'package:Unica/screens/reserva/reserva_tipo_screen.dart';

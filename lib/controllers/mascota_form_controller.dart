@@ -42,10 +42,10 @@ class MascotaFormController extends GetxController {
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
 
-      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/mascota');
+      final url = Uri.https(
+          _baseUrl, '${_baseUrlVersion}/mascota', {'Authorization': token});
       final response = await http
           .post(url, headers: requestHeaders, body: mascota.toJson())
           .timeout(const Duration(seconds: 10));
@@ -73,10 +73,10 @@ class MascotaFormController extends GetxController {
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
 
-      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/mascota');
+      final url = Uri.https(
+          _baseUrl, '${_baseUrlVersion}/mascota', {'Authorization': token});
       final response = await http
           .post(url, headers: requestHeaders, body: mascota.toJson())
           .timeout(const Duration(seconds: 10));
@@ -109,10 +109,10 @@ class MascotaFormController extends GetxController {
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
 
-      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/mascota/uploadImg');
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/mascota/uploadImg',
+          {'Authorization': token});
 
       final imageUploadRequest = http.MultipartRequest('POST', url);
 

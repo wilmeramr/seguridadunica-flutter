@@ -1,9 +1,7 @@
+export 'package:Unica/widgets/paquete_card.dart';
 export 'package:Unica/widgets/boton_gordo_eme_tipo.dart';
-
 export 'package:Unica/widgets/ExpandedText.dart';
-
 export 'package:Unica/widgets/AnimatedExpandingContainer.dart';
-
 export 'package:Unica/widgets/auth_background.dart';
 export 'package:Unica/widgets/card_container.dart';
 export 'package:Unica/widgets/mascota_card.dart';

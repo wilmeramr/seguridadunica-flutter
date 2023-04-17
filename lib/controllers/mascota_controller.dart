@@ -39,9 +39,9 @@ class MascotaController extends GetxController {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
     };
-    final url = Uri.https(_baseUrl, endpoint, {'page': '$page'});
+    final url = Uri.https(
+        _baseUrl, endpoint, {'page': '$page', 'Authorization': token});
     final response = await http
         .get(url, headers: requestHeaders)
         .timeout(const Duration(seconds: 10));
@@ -120,9 +120,9 @@ class MascotaController extends GetxController {
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
-      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/mascota/especies');
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/mascota/especies',
+          {'Authorization': token});
       final response = await http
           .get(url, headers: requestHeaders)
           .timeout(const Duration(seconds: 10));
@@ -149,9 +149,9 @@ class MascotaController extends GetxController {
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
-      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/mascota/generos');
+      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/mascota/generos',
+          {'Authorization': token});
       final response = await http
           .get(url, headers: requestHeaders)
           .timeout(const Duration(seconds: 10));

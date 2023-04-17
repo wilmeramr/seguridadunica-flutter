@@ -49,11 +49,13 @@ class InfoController extends GetxController {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
     };
-    final url = Uri.https(_baseUrl, endpoint);
+    final url = Uri.https(_baseUrl, endpoint, {'Authorization': token});
     final response = await http
-        .get(url, headers: requestHeaders)
+        .get(
+          url,
+          headers: requestHeaders,
+        )
         .timeout(const Duration(seconds: 10));
 
     return response.body;
@@ -87,12 +89,12 @@ class InfoController extends GetxController {
 
       final Map<String, dynamic> auhtData = {
         'info_titulo': '$titulo',
-        'info_body': '$body'
+        'info_body': '$body',
+        'Authorization': token
       };
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
       final url = Uri.https(_baseUrl, '${_baseUrlVersion}/info');
       isSaving.value = true;

@@ -18,14 +18,13 @@ class SelfieController extends GetConnect {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
     };
     try {
       isLoading.value = true;
       var response = await get(
-              'https://${_baseUrl}${_baseUrlVersion}/selfieurl',
-              headers: requestHeaders)
-          .timeout(const Duration(seconds: 10));
+          'https://${_baseUrl}${_baseUrlVersion}/selfieurl',
+          headers: requestHeaders,
+          query: {'Authorization': token}).timeout(const Duration(seconds: 10));
       isLoading.value = false;
 
       final selfie = SelfieResponse.fromMap(response.body);

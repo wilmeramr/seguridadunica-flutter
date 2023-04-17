@@ -33,9 +33,9 @@ class EventoController extends GetxController {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
     };
-    final url = Uri.https(_baseUrl, endpoint, {'page': '$page'});
+    final url = Uri.https(
+        _baseUrl, endpoint, {'page': '$page', 'Authorization': token});
     final response = await http
         .get(url, headers: requestHeaders)
         .timeout(const Duration(seconds: 10));
@@ -123,12 +123,12 @@ class EventoController extends GetxController {
         'aut_fecha_evento': desde.toString(),
         'aut_fecha_evento_hasta': hasta.toString(),
         'aut_nombre': autorizoA,
-        'aut_comentario': comentarios
+        'aut_comentario': comentarios,
+        'Authorization': token
       };
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
       final url = Uri.https(_baseUrl, '${_baseUrlVersion}/autorizacion');
       final response = await http

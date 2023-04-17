@@ -21,12 +21,12 @@ class EmeController extends GetxController {
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
       };
       final url = Uri.https(_baseUrl, '$_baseUrlVersion/eme');
       final response = await http
           .post(url,
-              headers: requestHeaders, body: json.encode({'eme_tipo_id': tipo}))
+              headers: requestHeaders,
+              body: json.encode({'eme_tipo_id': tipo, 'Authorization': token}))
           .timeout(const Duration(seconds: 10));
       if (response.statusCode == 201) {
         isLoading.value = false;

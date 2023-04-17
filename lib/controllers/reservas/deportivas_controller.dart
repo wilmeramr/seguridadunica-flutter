@@ -59,9 +59,9 @@ class DeportivasController extends GetxController {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
     };
-    final url = Uri.https(_baseUrl, endpoint, {'page': '$page'});
+    final url = Uri.https(
+        _baseUrl, endpoint, {'page': '$page', 'Authorization': token});
     final response = await http
         .get(url, headers: requestHeaders)
         .timeout(const Duration(seconds: 10));
@@ -76,10 +76,10 @@ class DeportivasController extends GetxController {
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
       print(fechaSelected.value);
       final url = Uri.https(_baseUrl, '${_baseUrlVersion}/horarios', {
+        'Authorization': token,
         'tresr_tipo_horarios': '${tipoReservaSelected.tipoHorarioId}',
         'lugar': '${ubicacionSelected.value}',
         'fecha':
@@ -184,9 +184,9 @@ class DeportivasController extends GetxController {
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
-      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/noticias');
+      final url = Uri.https(
+          _baseUrl, '${_baseUrlVersion}/noticias', {'Authorization': token});
       isSaving.value = true;
       final response = await http
           .post(url, headers: requestHeaders, body: json.encode(auhtData))
@@ -231,6 +231,7 @@ class DeportivasController extends GetxController {
 
       String token = await storage.read(key: 'token') ?? '';
       final Map<String, dynamic> resrData = {
+        'Authorization': token,
         'resr_tipo_id': tipoReservaSelected.id,
         'horarioId': hor.id,
         'cant_lugar': ubicacionSelected.value,
@@ -240,7 +241,6 @@ class DeportivasController extends GetxController {
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
       final url = Uri.https(_baseUrl, '${_baseUrlVersion}/reservas');
       isSaving.value = true;
@@ -280,6 +280,7 @@ class DeportivasController extends GetxController {
       String token = await storage.read(key: 'token') ?? '';
       print('reserva');
       final Map<String, dynamic> resrData = {
+        'Authorization': token,
         'resr_tipo_id': tipoReservaSelected.id,
         'horarioId': hor.id,
         'cant_lugar': ubicacionSelected.value,
@@ -289,7 +290,6 @@ class DeportivasController extends GetxController {
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
       final url = Uri.https(_baseUrl, '${_baseUrlVersion}/reservashorarios');
       isSaving.value = true;
@@ -330,11 +330,11 @@ class DeportivasController extends GetxController {
       print('reserva');
       final Map<String, dynamic> resrData = {
         'resr_id': id,
+        'Authorization': token
       };
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
       final url = Uri.https(_baseUrl, '${_baseUrlVersion}/reservas');
       isSaving.value = true;

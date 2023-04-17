@@ -50,9 +50,9 @@ class TReservaController extends GetxController {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
     };
-    final url = Uri.https(_baseUrl, endpoint, {'tipo': '$tipo'});
+    final url = Uri.https(
+        _baseUrl, endpoint, {'tipo': '$tipo', 'Authorization': token});
     final response = await http
         .get(url, headers: requestHeaders)
         .timeout(const Duration(seconds: 10));
@@ -90,12 +90,12 @@ class TReservaController extends GetxController {
 
       final Map<String, dynamic> auhtData = {
         'titulo': '$titulo',
-        'body': '$body'
+        'body': '$body',
+        'Authorization': token
       };
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
       final url = Uri.https(_baseUrl, '${_baseUrlVersion}/noticias');
       isSaving.value = true;
@@ -131,11 +131,11 @@ class TReservaController extends GetxController {
       print('reserva');
       final Map<String, dynamic> resrData = {
         'resr_id': id,
+        'Authorization': token
       };
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
       final url = Uri.https(_baseUrl, '${_baseUrlVersion}/reservas');
       isSaving.value = true;

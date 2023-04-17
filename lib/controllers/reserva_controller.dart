@@ -52,9 +52,9 @@ class ReservaController extends GetxController {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
     };
-    final url = Uri.https(_baseUrl, endpoint, {'page': '$page'});
+    final url = Uri.https(
+        _baseUrl, endpoint, {'page': '$page', 'Authorization': token});
     final response = await http
         .get(url, headers: requestHeaders)
         .timeout(const Duration(seconds: 10));
@@ -135,9 +135,9 @@ class ReservaController extends GetxController {
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
-      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/noticias');
+      final url = Uri.https(
+          _baseUrl, '${_baseUrlVersion}/noticias', {'Authorization': token});
       isSaving.value = true;
       final response = await http
           .post(url, headers: requestHeaders, body: json.encode(auhtData))
@@ -175,9 +175,9 @@ class ReservaController extends GetxController {
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
-      final url = Uri.https(_baseUrl, '${_baseUrlVersion}/reservas');
+      final url = Uri.https(
+          _baseUrl, '${_baseUrlVersion}/reservas', {'Authorization': token});
       isSaving.value = true;
       final response = await http
           .delete(url, headers: requestHeaders, body: json.encode(resrData))

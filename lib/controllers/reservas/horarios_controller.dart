@@ -57,12 +57,12 @@ class HorariosController extends GetxController {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
     };
     final url = Uri.https(_baseUrl, endpoint, {
       'tipo': '$tipo',
       'lugar': '${lugar.value}',
-      'fecha': '${fecha.value}'
+      'fecha': '${fecha.value}',
+      'Authorization': token
     });
     final response = await http
         .get(url, headers: requestHeaders)
@@ -101,12 +101,12 @@ class HorariosController extends GetxController {
 
       final Map<String, dynamic> auhtData = {
         'titulo': '$titulo',
-        'body': '$body'
+        'body': '$body',
+        'Authorization': token
       };
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
       final url = Uri.https(_baseUrl, '${_baseUrlVersion}/noticias');
       isSaving.value = true;
@@ -142,11 +142,11 @@ class HorariosController extends GetxController {
       print('reserva');
       final Map<String, dynamic> resrData = {
         'resr_id': id,
+        'Authorization': token
       };
       Map<String, String> requestHeaders = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer ${token}'
       };
       final url = Uri.https(_baseUrl, '${_baseUrlVersion}/reservas');
       isSaving.value = true;
