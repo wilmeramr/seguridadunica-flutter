@@ -53,10 +53,10 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.seguridadUnica.Unica"
-        minSdkVersion 21
-        targetSdkVersion 33
-        versionCode 10
-        versionName "1.4.0"
+        minSdkVersion 25
+        targetSdkVersion 35
+        versionCode 14
+        versionName "1.4.4"
         
     }
 

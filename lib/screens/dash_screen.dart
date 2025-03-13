@@ -123,7 +123,7 @@ class _DashScreenState extends State<DashScreen> with RouteAware {
       }),
       ItemBoton(
           FontAwesomeIcons.recycle,
-          'Vistas recurrentes',
+          'Visitas recurrentes',
           const Color(0xff317183),
           const Color.fromARGB(255, 152, 70, 153), () async {
         var conx = await authService.internetConnectivity();
@@ -138,7 +138,7 @@ class _DashScreenState extends State<DashScreen> with RouteAware {
       }),
       ItemBoton(
           FontAwesomeIcons.taxi,
-          'Entregas Inmediatas, otros',
+          'Entregas inmediatas, otros',
           const Color.fromARGB(255, 215, 8, 8),
           const Color.fromARGB(255, 129, 95, 232), () async {
         var conx = await authService.internetConnectivity();
@@ -153,7 +153,7 @@ class _DashScreenState extends State<DashScreen> with RouteAware {
       }),
       ItemBoton(
           FontAwesomeIcons.box,
-          'Paqueteria / Mercado Libre',
+          'Paquetería / Mercado Libre',
           Color.fromARGB(255, 2, 6, 244),
           Color.fromARGB(255, 246, 218, 12), () async {
         var conx = await authService.internetConnectivity();
@@ -213,7 +213,7 @@ class _DashScreenState extends State<DashScreen> with RouteAware {
       }),
       ItemBoton(
           FontAwesomeIcons.ruler,
-          'Reglemantos',
+          'Reglamentos',
           Color.fromARGB(255, 207, 172, 45),
           const Color.fromARGB(255, 39, 142, 108), () async {
         var conx = await authService.internetConnectivity();

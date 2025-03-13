@@ -45,3 +45,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 key.properties
+lib/bundletool build-apks --connected-device.txt

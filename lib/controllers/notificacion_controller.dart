@@ -190,12 +190,12 @@ class NotificacionController extends GetxController {
 
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ${token}'
+      'Accept': 'application/json'
     };
 
     final Map<String, dynamic> sendData = {
       'query': '$query',
+      'Authorization': '${token}',
     };
 
     final url = Uri.https(_baseUrl, '${_baseUrlVersion}/users', sendData);
